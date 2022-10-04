@@ -14,7 +14,7 @@ class LanguageManager {
   final ar = const Locale("ar");
   final fr = const Locale("fr");
 
-  final path = AssetConstants.translations;
+  final path = AppAssets.translations;
 
   List<Locale> get supportedLocales => [en, fr, ar];
 }

@@ -32,7 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final user = _authRepository.currentUser;
 
     // for display splash screen
-    await Future.delayed(5.seconds);
+    await Future.delayed(3.seconds);
     if (user.isNotEmpty) {
       emit(Authenticated(user: user));
     } else {

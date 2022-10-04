@@ -6,6 +6,8 @@ import '../../../application_layer/application_layer.dart';
 enum AppRoutes {
   auth('/auth', 'Auth', AuthPage()),
   login('login', 'LOGIN', LoginPage()),
+  forgotPasswort('forgotPassword', 'FORGOTPASSWORD', ForgotPasswordPage()),
+  resetPasswort('resetPassword', 'ResetPASSWORD', ResetPasswordPage()),
   register('register', 'REGISTER', RegisterPage()),
   phoneOTP('phoneOTP', 'PHONEOTP', PhoneOTPPage()),
   splash("/splash", "SPLASH", SplashPage()),

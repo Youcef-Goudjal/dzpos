@@ -19,7 +19,10 @@ abstract class AppRouter {
           AppRoutes.home.goRoute(),
           AppRoutes.auth.goRoute([
             AppRoutes.phoneOTP.goRoute(),
-            AppRoutes.login.goRoute(),
+            AppRoutes.login.goRoute([
+              AppRoutes.forgotPasswort.goRoute(),
+              AppRoutes.resetPasswort.goRoute(),
+            ]),
             AppRoutes.register.goRoute(),
           ]),
           AppRoutes.splash.goRoute(),
@@ -30,19 +33,19 @@ abstract class AppRouter {
         ),
         redirect: (context, state) {
           if (authBloc.state is Unauthenticated) {
-            if (state.subloc != AppRoutes.auth.routePath) {
+            if (!state.subloc.startsWith(AppRoutes.auth.routePath)) {
               return AppRoutes.auth.routePath;
             }
           }
           if (authBloc.state is Authenticated) {
-            if (state.subloc != AppRoutes.home.routePath) {
+            if (state.subloc.startsWith(AppRoutes.home.routePath)) {
               return AppRoutes.home.routePath;
             }
           }
           // splash screen
           if (authBloc.state is Authenticating ||
               applicationBloc.state is ApplicationInitial) {
-            if (state.subloc != AppRoutes.splash.routePath) {
+            if (state.subloc.startsWith(AppRoutes.splash.routePath)) {
               return AppRoutes.splash.routePath;
             }
           }
