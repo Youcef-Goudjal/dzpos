@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
+
 class AppAssets {
-  static const String assets = "assets";
+  static const String assets = !kIsWeb ? "assets" : "";
   static const String translations = "assets/translations";
 
   static const String images = "$assets/images";

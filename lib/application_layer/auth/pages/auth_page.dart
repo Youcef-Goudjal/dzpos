@@ -19,66 +19,67 @@ class AuthPage extends StatelessWidget {
           left: 24.w,
           right: 24.w,
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image(
-                width: context.width,
-                height: 250.h,
-                fit: BoxFit.contain,
-                image: const AssetImage(AppAssets.login),
-              ),
-              Text(
-                "Pick Login Option".toUpperCase(),
-                style: Theme.of(context).textTheme.headline3,
-              ),
-              10.h.heightBox,
-              Column(
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 64,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.goNamed(AppRoutes.login.routeName);
-                      },
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Spacer(),
+            Image(
+              width: context.width,
+              height: 250.h,
+              fit: BoxFit.contain,
+              image: const AssetImage(AppAssets.login),
+            ),
+            const Spacer(flex: 2),
+            Text(
+              "Pick Login Option".toUpperCase(),
+              style: Theme.of(context).textTheme.headline3,
+            ),
+            const Spacer(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50.h,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.goNamed(AppRoutes.login.routeName);
+                    },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: const Text("Login with email And Password"),
                     ),
+                    child: const Text("Login with email And Password"),
                   ),
-                  10.heightBox,
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: 64,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.goNamed(AppRoutes.phoneOTP.routeName);
-                      },
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                ),
+                10.heightBox,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50.h,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.goNamed(AppRoutes.loginPhone.routeName);
+                    },
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: const Text("Login With Phone number"),
                     ),
+                    child: const Text("Login With Phone number"),
                   ),
-                ],
-              ),
-              const SizedBox()
-            ],
-          ),
+                ),
+              ],
+            ),
+            const Spacer(),
+          ],
         ),
       ),
     );

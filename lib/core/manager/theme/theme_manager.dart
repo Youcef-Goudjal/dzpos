@@ -19,6 +19,7 @@ class ThemeManager {
         subThemesData: const FlexSubThemesData(
           blendOnLevel: 30,
           cardRadius: 18.0,
+          inputDecoratorRadius: 16,
         ),
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
         useMaterial3: true,

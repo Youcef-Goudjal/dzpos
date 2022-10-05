@@ -6,12 +6,13 @@ import '../../../application_layer/application_layer.dart';
 enum AppRoutes {
   auth('/auth', 'Auth', AuthPage()),
   login('login', 'LOGIN', LoginPage()),
+  loginPhone('loginPhone', 'LoginPhone', LoginPhonePage()),
   forgotPasswort('forgotPassword', 'FORGOTPASSWORD', ForgotPasswordPage()),
   resetPasswort('resetPassword', 'ResetPASSWORD', ResetPasswordPage()),
   register('register', 'REGISTER', RegisterPage()),
-  phoneOTP('phoneOTP', 'PHONEOTP', PhoneOTPPage()),
+  verifyOtp('verifyOtp', 'VerifyOtp', VerifyOTPPage()),
   splash("/splash", "SPLASH", SplashPage()),
-  home('/home', 'HOME', HomePage());
+  home('/', 'HOME', HomePage());
 
   const AppRoutes(this.routePath, this.routeName, this.routeView);
   final String routePath;
@@ -21,17 +22,21 @@ enum AppRoutes {
   @override
   String toString() => '$name: [$routePath][$routeName][$routeView]';
 
-  GoRoute goRoute([List<RouteBase>? routes]) {
+  GoRoute goRoute([
+    List<RouteBase>? routes,
+    Page<dynamic> Function(BuildContext, GoRouterState)? pageBuilder,
+  ]) {
     return GoRoute(
       path: routePath,
       name: routeName,
       routes: routes ?? [],
-      pageBuilder: (context, state) {
-        return MaterialPage(
-          key: state.pageKey,
-          child: routeView,
-        );
-      },
+      pageBuilder: pageBuilder ??
+          (context, state) {
+            return MaterialPage(
+              key: state.pageKey,
+              child: routeView,
+            );
+          },
     );
   }
 }

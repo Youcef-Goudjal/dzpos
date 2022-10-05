@@ -1,12 +1,14 @@
 import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/product/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/manager/route/routes.dart';
+import '../../../product/product.dart';
 import '../../application_layer.dart';
 
-class ResetPasswordPage extends StatelessWidget {
-  const ResetPasswordPage({super.key});
+class LoginPhonePage extends StatelessWidget {
+  const LoginPhonePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class ResetPasswordPage extends StatelessWidget {
           },
           icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
-            color: Colors.black,
+            // color: Colors.black,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -34,46 +36,43 @@ class ResetPasswordPage extends StatelessWidget {
             right: 24.w,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image(
                 width: MediaQuery.of(context).size.width,
-                height: 300.h,
+                height: 250.h,
                 fit: BoxFit.contain,
-                image: const AssetImage(AppAssets.resetPassword),
+                image: const AssetImage(AppAssets.otp),
               ),
+              24.h.heightBox,
               Text(
-                "Reset\nPassword",
+                "Enter Ur Phone number",
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-              15.h.heightBox,
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const AppTextField(
-                    obscureText: true,
-                    prefix: Icon(Icons.lock_outline_rounded),
-                    hint: "New Password",
-                    suffix: Icon(Icons.remove_red_eye_outlined),
-                    textInputAction: TextInputAction.done,
-                  ),
-                  SizedBox(height: 15.h),
-                  const AppTextField(
-                    obscureText: true,
-                    prefix: Icon(Icons.lock_outline_rounded),
-                    hint: "Confirm new Password",
-                    suffix: Icon(Icons.remove_red_eye_outlined),
-                    textInputAction: TextInputAction.done,
-                  ),
-                ],
+              10.h.heightBox,
+              Text(
+                "a 6 Digit code will be sent to ur phone number",
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium
+                    ?.copyWith(color: Colors.grey),
               ),
-              15.h.heightBox,
+              10.h.heightBox,
+              const AppTextField(
+                prefix: Icon(Icons.phone),
+                keyboardType: TextInputType.number,
+                hint: "Phone Number",
+                textInputAction: TextInputAction.done,
+              ),
+              24.h.heightBox,
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 50.h,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.goNamed(AppRoutes.verifyOtp.routeName);
+                  },
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
@@ -81,7 +80,7 @@ class ResetPasswordPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const Text("Submit"),
+                  child: const Text("Sent"),
                 ),
               ),
               const SizedBox(),

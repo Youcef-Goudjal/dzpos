@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../application_layer/application_layer.dart';
@@ -18,7 +19,19 @@ abstract class AppRouter {
         routes: [
           AppRoutes.home.goRoute(),
           AppRoutes.auth.goRoute([
-            AppRoutes.phoneOTP.goRoute(),
+            AppRoutes.loginPhone.goRoute(
+              [],
+              (context, state) {
+                return MaterialPage(
+                  key: state.pageKey,
+                  child: BlocProvider(
+                    create: (context) => PhoneAuthBloc(authBloc.authRepository),
+                    child: AppRoutes.loginPhone.routeView,
+                  ),
+                );
+              },
+            ),
+            AppRoutes.verifyOtp.goRoute(),
             AppRoutes.login.goRoute([
               AppRoutes.forgotPasswort.goRoute(),
               AppRoutes.resetPasswort.goRoute(),

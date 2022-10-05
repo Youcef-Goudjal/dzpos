@@ -42,6 +42,7 @@ class LoginPage extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const AppTextField(
+                      keyboardType: TextInputType.emailAddress,
                       prefix: Icon(Icons.alternate_email_rounded),
                       hint: "Email Address",
                       textInputAction: TextInputAction.done,
@@ -67,7 +68,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: 64.h,
+                  height: 50.h,
                   child: ElevatedButton(
                     onPressed: () {
                       print("LOGIN");

@@ -1,6 +1,7 @@
+import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   const AppTextField({
     super.key,
     this.controller,
@@ -21,29 +22,56 @@ class AppTextField extends StatelessWidget {
   final String? hint;
 
   @override
+  State<AppTextField> createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  bool _isObscure = true;
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        if (prefix != null) ...[
-          prefix!,
+        if (widget.prefix != null) ...[
+          widget.prefix!,
           const SizedBox(width: 10),
         ],
         Expanded(
           child: TextField(
-            controller: controller,
-            keyboardType: keyboardType,
-            textInputAction: textInputAction,
-            obscureText: obscureText,
+            controller: widget.controller,
+            keyboardType: widget.keyboardType,
+            textInputAction: widget.textInputAction,
+            obscureText: widget.obscureText && _isObscure,
             decoration: InputDecoration(
-              suffixIcon: suffix,
-              hintText: hint,
-              hintStyle: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(color: Colors.grey),
+              suffixIcon: widget.obscureText
+                  ? IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _isObscure = !_isObscure;
+                        });
+                      },
+                      icon: widget.obscureText
+                          ? Icon(
+                              _isObscure
+                                  ? Icons.remove_red_eye_outlined
+                                  : Icons.remove_red_eye,
+                            )
+                          : widget.suffix ?? const SizedBox(),
+                    )
+                  : widget.suffix,
+              hintText: widget.hint,
+              errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: context.theme.errorColor),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: context.theme.primaryColor),
+              ),
+              hintStyle:
+                  context.textTheme.bodyLarge?.copyWith(color: Colors.grey),
             ),
           ),
         ),

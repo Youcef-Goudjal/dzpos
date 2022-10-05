@@ -10,15 +10,15 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final AuthRepository _authRepository;
+  final AuthRepository authRepository;
   late final StreamSubscription<UserEntity> _userSubscription;
-  AuthBloc(this._authRepository) : super(const Authenticating()) {
+  AuthBloc(this.authRepository) : super(const Authenticating()) {
     on<AuthenticationStarted>(_onAuthenticationStarted);
     on<UserStateChanged>(_onUserStateChanged);
     on<SignInRequested>(_signIn);
     on<AuthFailed>(_authFailed);
     on<SignOutRequested>(_signOut);
-    _userSubscription = _authRepository.user.listen((user) {
+    _userSubscription = authRepository.user.listen((user) {
       if (i != 0) {
         add(UserStateChanged(user));
       } else {
@@ -29,7 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   int i = 0;
   FutureOr<void> _onAuthenticationStarted(
       AuthenticationStarted event, Emitter<AuthState> emit) async {
-    final user = _authRepository.currentUser;
+    final user = authRepository.currentUser;
 
     // for display splash screen
     await Future.delayed(3.seconds);
@@ -44,7 +44,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const Authenticating());
 
     try {
-      final user = await _authRepository.logInWithEmailAndPassword(
+      final user = await authRepository.logInWithEmailAndPassword(
         email: event.email,
         password: event.password,
       );
@@ -68,7 +68,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _signOut(SignOutRequested event, Emitter emit) async {
     try {
-      await _authRepository.logOut();
+      await authRepository.logOut();
 
       emit(const Unauthenticated());
     } catch (e) {
