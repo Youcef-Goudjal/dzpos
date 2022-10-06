@@ -118,6 +118,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       CommonBloc.phoneAuthBloc.add(SendOtpToPhoneEvent(
         phoneNumber: event.phone,
       ));
+      
     } catch (e) {
       add(AuthFailed(exception: Exception(e)));
     }

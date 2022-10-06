@@ -39,6 +39,10 @@ abstract class AppRouter {
             }
           }
           if (authBloc.state is Authenticated) {
+            if (state.subloc.contains(AppRoutes.register.routePath) ||
+                state.subloc.contains(AppRoutes.verifyOtp.routePath)) {
+              return null;
+            }
             if (!state.subloc.startsWith(AppRoutes.home.routePath)) {
               return AppRoutes.home.routePath;
             }

@@ -27,6 +27,8 @@ class RegisterPage extends StatelessWidget {
             },
           ),
           BlocListener<RegisterCubit, RegisterState>(
+            listenWhen: (previous, current) =>
+                previous.status != current.status,
             listener: (context, state) {
               statusHandler(context, state.status, msg: state.msg);
             },
@@ -143,6 +145,7 @@ class _RegisterBody extends StatelessWidget {
                     );
                   },
                 ),
+                20.h.heightBox,
                 BlocBuilder<RegisterCubit, RegisterState>(
                   buildWhen: (previous, current) =>
                       previous.confirmedPassword != current.confirmedPassword,

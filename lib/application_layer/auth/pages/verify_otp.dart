@@ -1,8 +1,10 @@
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:dzpos/core/manager/route/routes.dart';
 import 'package:dzpos/product/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../application_layer.dart';
@@ -27,8 +29,8 @@ class VerifyOTPPage extends StatelessWidget {
             );
           }
           if (state is PhoneAuthVerified) {
-            //TODO: implement
-            print("phone is verified");
+            
+            context.goNamed(AppRoutes.home.routeName);
           }
         },
         child: const Scaffold(
