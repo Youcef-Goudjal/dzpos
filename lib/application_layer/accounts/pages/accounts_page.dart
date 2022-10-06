@@ -5,6 +5,8 @@ class AccountsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox();
+    return Container(
+      color: Colors.blue,
+    );
   }
 }

@@ -63,6 +63,7 @@ dependencies:
   pinput: ^2.2.13
   formz: ^0.4.1
   cloud_firestore: ^3.5.0
+  settings_ui: ^2.0.2
  
 
 

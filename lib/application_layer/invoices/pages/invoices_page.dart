@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class InvoicesPage extends StatelessWidget {
-  const InvoicesPage ({Key? key}) : super(key: key);
+  const InvoicesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox();
+    return Container(
+      color: Colors.amber,
+    );
   }
 }
