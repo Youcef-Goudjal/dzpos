@@ -69,3 +69,7 @@ class SingUpRequested extends AuthEvent {
   @override
   List<Object> get props => [username, email, password, phone];
 }
+
+class LinkCrede {
+  
+}

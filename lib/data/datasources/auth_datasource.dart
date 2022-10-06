@@ -18,7 +18,7 @@ abstract class AuthDataSource {
   /// creates a new user with the provided [email] and [password].
   ///
   /// Throw a [signUpWithEmailAndPasswordFailure] if an exceptionoccurs.
-  Future<void> signUp({
+  Future<String> signUp({
     required String email,
     required String password,
   });
@@ -150,12 +150,16 @@ class AuthDataSourceImpl implements AuthDataSource {
   }
 
   @override
-  Future<void> signUp({required String email, required String password}) async {
+  Future<String> signUp(
+      {required String email, required String password}) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      final UserCredential credential =
+          await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      return credential.user!.uid;
     } on FirebaseAuthException catch (e) {
       throw SignUpWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {

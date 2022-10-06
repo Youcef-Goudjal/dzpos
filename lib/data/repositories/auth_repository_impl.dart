@@ -40,7 +40,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<void> logOut() => authDataSource.logOut();
 
   @override
-  Future<void> signUp({required String email, required String password}) =>
+  Future<String> signUp({required String email, required String password}) =>
       authDataSource.signUp(email: email, password: password);
 
   @override

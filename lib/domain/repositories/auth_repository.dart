@@ -17,7 +17,7 @@ abstract class AuthRepository {
   /// creates a new user with the provided [email] and [password].
   ///
   /// Throw a [signUpWithEmailAndPasswordFailure] if an exceptionoccurs.
-  Future<void> signUp({
+  Future<String> signUp({
     required String email,
     required String password,
   });

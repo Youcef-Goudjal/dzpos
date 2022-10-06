@@ -30,6 +30,7 @@ class VerifyOTPPage extends StatelessWidget {
           }
           if (state is PhoneAuthVerified) {
             
+            
             context.goNamed(AppRoutes.home.routeName);
           }
         },

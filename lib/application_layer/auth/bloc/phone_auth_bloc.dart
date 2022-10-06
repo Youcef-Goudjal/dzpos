@@ -76,11 +76,16 @@ class PhoneAuthBloc extends Bloc<PhoneAuthEvent, PhoneAuthState> {
       Emitter<PhoneAuthState> emit) async {
     // After receiving the credential from the event, we will login with the credential and then will emit the [PhoneAuthVerified] state after successful login
     try {
-      final user = await _authenticationRepository.logInWithCredential(
-        credential: event.credential,
-      );
-      if (user != null) {
-        emit(PhoneAuthVerified());
+      if (_authenticationRepository.currentUser.isEmpty) {
+        final user = await _authenticationRepository.logInWithCredential(
+          credential: event.credential,
+        );
+        if (user != null) {
+          emit(PhoneAuthVerified(event.credential));
+        }
+      } else {
+        await _authenticationRepository.linkCredentials(event.credential);
+        emit(PhoneAuthVerified(event.credential));
       }
     } on LogInWithCredentialFailure catch (e) {
       emit(PhoneAuthError(error: e.message));

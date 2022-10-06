@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:dzpos/data/models/models.dart';
 import 'package:dzpos/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,8 +15,12 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
+  final UserRepository userRepository;
   late final StreamSubscription<UserEntity> _userSubscription;
-  AuthBloc(this.authRepository) : super(const Authenticating()) {
+  AuthBloc(
+    this.authRepository,
+    this.userRepository,
+  ) : super(const Authenticating()) {
     on<AuthenticationStarted>(_onAuthenticationStarted);
     on<UserStateChanged>(_onUserStateChanged);
     on<SignInRequested>(_signIn);
@@ -113,12 +118,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _onSingUp(SingUpRequested event, Emitter<AuthState> emit) async {
     try {
-      await authRepository.signUp(email: event.email, password: event.password);
-      // TODO register client in firestore
+      final uid = await authRepository.signUp(
+          email: event.email, password: event.password);
+      await userRepository.addUserData(UserModel(
+        uid: uid,
+        email: event.email,
+        phoneNumber: event.phone, 
+        userName: event.username,
+      ));
       CommonBloc.phoneAuthBloc.add(SendOtpToPhoneEvent(
         phoneNumber: event.phone,
       ));
-      
     } catch (e) {
       add(AuthFailed(exception: Exception(e)));
     }

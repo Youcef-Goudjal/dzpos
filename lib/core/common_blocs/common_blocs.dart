@@ -10,10 +10,11 @@ export 'theme/theme_bloc.dart';
 
 class CommonBloc {
   // Blocs
-  static final authIml = AuthRepositoryImpl();
+  static final userImpl = UserRepositoryImpl();
+  static final authImpl = AuthRepositoryImpl();
   static final applicationBloc = ApplicationBloc();
-  static final authBloc = AuthBloc(authIml);
-  static final phoneAuthBloc = PhoneAuthBloc(authIml);
+  static final authBloc = AuthBloc(authImpl,userImpl);
+  static final phoneAuthBloc = PhoneAuthBloc(authImpl);
   static final themeBloc = ThemeBloc();
 
   static final List<BlocProvider> blocProviders = [

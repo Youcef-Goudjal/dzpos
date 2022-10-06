@@ -39,11 +39,11 @@ class UserModel extends UserEntity {
   @override
   List<Object?> get props => [uid];
 
-  static UserEntity fromMap(Map<String, dynamic>? data) {
+  static UserModel fromMap(Map<String, dynamic>? data) {
     if (data == null) {
-      return UserEntity.empty;
+      return UserModel.empty;
     } else {
-      return UserEntity(
+      return UserModel(
         uid: data["uid"],
         userName: data["name"],
         email: data["email"],

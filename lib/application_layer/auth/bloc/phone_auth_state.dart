@@ -23,7 +23,14 @@ class PhoneAuthError extends PhoneAuthState {
 }
 
 // This state indicates that verification is completed and the user is being redirected to the home page.
-class PhoneAuthVerified extends PhoneAuthState {}
+class PhoneAuthVerified extends PhoneAuthState {
+  final AuthCredential credential;
+
+  const PhoneAuthVerified(this.credential);
+
+  @override
+  List<Object> get props => [credential];
+}
 
 // This state is used to show the OTP widget in which the user enters the OTP sent to his/her phone number.
 class PhoneAuthCodeSentSuccess extends PhoneAuthState {
