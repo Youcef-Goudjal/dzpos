@@ -20,7 +20,7 @@ class LoginPhonePage extends StatelessWidget {
           BlocListener<PhoneAuthBloc, PhoneAuthState>(
             listener: (context, state) {
               if (state is PhoneAuthCodeSentSuccess) {
-                context.goNamed(AppRoutes.verifyOtp.routeName);
+                context.goNamed(AppRoutes.verifyOtp.name);
               }
               if (state is PhoneAuthError) {
                 ScaffoldMessenger.of(context).showSnackBar(

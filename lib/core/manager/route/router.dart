@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:dzpos/core/common_blocs/profile/profile_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../application_layer/application_layer.dart';
@@ -14,15 +16,33 @@ abstract class AppRouter {
   }) =>
       GoRouter(
         observers: [GoRouterObserver()],
-        initialLocation: AppRoutes.splash.routePath,
+        initialLocation: AppRoutes.splash.path,
         routes: [
-          AppRoutes.home.goRoute(),
+          AppRoutes.home.goRoute([
+            AppRoutes.invoices.goRoute(),
+            AppRoutes.accounts.goRoute(),
+            AppRoutes.reports.goRoute(),
+            AppRoutes.settings.goRoute(),
+          ], (context, state) {
+            return MaterialPage(
+              key: state.pageKey,
+              child: BlocBuilder<ProfileBloc, ProfileState>(
+                builder: (context, state) {
+                  if (state is ProfileLoaded) {
+                    // TODO: handel if the client profile is activate
+                    return AppRoutes.home.view;
+                  }
+                  return AppRoutes.splash.view;
+                },
+              ),
+            );
+          }),
           AppRoutes.auth.goRoute([
             AppRoutes.loginPhone.goRoute(),
             AppRoutes.verifyOtp.goRoute(),
             AppRoutes.login.goRoute([
-              AppRoutes.forgotPasswort.goRoute(),
-              AppRoutes.resetPasswort.goRoute()
+              AppRoutes.forgotPassword.goRoute(),
+              AppRoutes.resetPassword.goRoute()
             ]),
             AppRoutes.register.goRoute(),
           ]),
@@ -34,17 +54,18 @@ abstract class AppRouter {
         ),
         redirect: (context, state) {
           if (authBloc.state is Unauthenticated) {
-            if (!state.subloc.startsWith(AppRoutes.auth.routePath)) {
-              return AppRoutes.auth.routePath;
+            if (!state.subloc.startsWith(AppRoutes.auth.path)) {
+              return AppRoutes.auth.path;
             }
           }
           if (authBloc.state is Authenticated) {
-            if (state.subloc.contains(AppRoutes.register.routePath) ||
-                state.subloc.contains(AppRoutes.verifyOtp.routePath)) {
+            if (state.subloc.contains(AppRoutes.register.path) ||
+                state.subloc.contains(AppRoutes.verifyOtp.path)) {
               return null;
             }
-            if (!state.subloc.startsWith(AppRoutes.home.routePath)) {
-              return AppRoutes.home.routePath;
+            if (!state.subloc.startsWith(AppRoutes.home.path)) {
+              CommonBloc.profileBloc.add(LoadProfile());
+              return AppRoutes.home.path;
             }
           }
           if (authBloc.state is AuthError) {

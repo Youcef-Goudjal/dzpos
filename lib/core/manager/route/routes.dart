@@ -7,34 +7,38 @@ enum AppRoutes {
   auth('/auth', 'Auth', AuthPage()),
   login('login', 'LOGIN', LoginPage()),
   loginPhone('loginPhone', 'LoginPhone', LoginPhonePage()),
-  forgotPasswort('forgotPassword', 'FORGOTPASSWORD', ForgotPasswordPage()),
-  resetPasswort('resetPassword', 'ResetPASSWORD', ResetPasswordPage()),
+  forgotPassword('forgotPassword', 'FORGOTPASSWORD', ForgotPasswordPage()),
+  resetPassword('resetPassword', 'ResetPASSWORD', ResetPasswordPage()),
   register('register', 'REGISTER', RegisterPage()),
   verifyOtp('verifyOtp', 'VerifyOtp', VerifyOTPPage()),
   splash("/splash", "SPLASH", SplashPage()),
-  home('/home', 'HOME', HomePage());
+  home('/home', 'HOME', HomePage()),
+  invoices("invoices", "Invoices", InvoicesPage()),
+  settings("settings", "Settings", SettingsPage()),
+  accounts("accounts", "Accounts", AccountsPage()),
+  reports("reports", "Reports", ReportsPage());
 
-  const AppRoutes(this.routePath, this.routeName, this.routeView);
-  final String routePath;
-  final String routeName;
-  final Widget routeView;
+  const AppRoutes(this.path, this.name, this.view);
+  final String path;
+  final String name;
+  final Widget view;
 
   @override
-  String toString() => '$name: [$routePath][$routeName][$routeView]';
+  String toString() => '$name: [$path][$name][$view]';
 
   GoRoute goRoute([
     List<RouteBase>? routes,
     Page<dynamic> Function(BuildContext, GoRouterState)? pageBuilder,
   ]) {
     return GoRoute(
-      path: routePath,
-      name: routeName,
+      path: path,
+      name: name,
       routes: routes ?? [],
       pageBuilder: pageBuilder ??
           (context, state) {
             return MaterialPage(
               key: state.pageKey,
-              child: routeView,
+              child: view,
             );
           },
     );

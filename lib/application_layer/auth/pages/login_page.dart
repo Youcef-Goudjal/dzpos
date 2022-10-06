@@ -103,7 +103,7 @@ class _LoginForm extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      context.goNamed(AppRoutes.forgotPasswort.routeName);
+                      context.goNamed(AppRoutes.forgotPassword.name);
                     },
                     child: const Text("Forgot Password ?"),
                   ),
@@ -143,7 +143,7 @@ class _LoginForm extends StatelessWidget {
                               ?.copyWith(color: context.theme.primaryColor),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
-                              context.goNamed(AppRoutes.register.routeName);
+                              context.goNamed(AppRoutes.register.name);
                             },
                         ),
                       ],

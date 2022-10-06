@@ -1,4 +1,5 @@
 import 'package:dzpos/core/common_blocs/application/application_bloc.dart';
+import 'package:dzpos/core/common_blocs/profile/profile_bloc.dart';
 import 'package:dzpos/core/common_blocs/theme/theme_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -13,9 +14,10 @@ class CommonBloc {
   static final userImpl = UserRepositoryImpl();
   static final authImpl = AuthRepositoryImpl();
   static final applicationBloc = ApplicationBloc();
-  static final authBloc = AuthBloc(authImpl,userImpl);
+  static final authBloc = AuthBloc(authImpl, userImpl);
   static final phoneAuthBloc = PhoneAuthBloc(authImpl);
   static final themeBloc = ThemeBloc();
+  static final profileBloc = ProfileBloc(authImpl, userImpl);
 
   static final List<BlocProvider> blocProviders = [
     BlocProvider<ApplicationBloc>(
@@ -30,6 +32,9 @@ class CommonBloc {
     BlocProvider<PhoneAuthBloc>(
       create: (context) => phoneAuthBloc,
     ),
+    BlocProvider<ProfileBloc>(
+      create: (context) => profileBloc,
+    ),
   ];
 
   /// Dispose
@@ -38,6 +43,7 @@ class CommonBloc {
     themeBloc.close();
     authBloc.close();
     phoneAuthBloc.close();
+    profileBloc.close();
   }
 
   /// Singleton factory

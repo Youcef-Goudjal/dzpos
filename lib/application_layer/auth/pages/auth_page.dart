@@ -59,7 +59,7 @@ class AuthPage extends StatelessWidget {
                     height: 50.h,
                     child: ElevatedButton(
                       onPressed: () {
-                        context.goNamed(AppRoutes.login.routeName);
+                        context.goNamed(AppRoutes.login.name);
                       },
                       style: ButtonStyle(
                         shape:
@@ -78,7 +78,7 @@ class AuthPage extends StatelessWidget {
                     height: 50.h,
                     child: ElevatedButton(
                       onPressed: () {
-                        context.goNamed(AppRoutes.loginPhone.routeName);
+                        context.goNamed(AppRoutes.loginPhone.name);
                       },
                       style: ButtonStyle(
                         shape:

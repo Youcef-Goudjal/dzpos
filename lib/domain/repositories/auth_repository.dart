@@ -1,3 +1,4 @@
+import 'package:dzpos/data/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../domain.dart';
@@ -12,7 +13,7 @@ abstract class AuthRepository {
 
   /// Returns the current cached user
   /// Defaults to [user.empty] if there is no cached user.
-  UserEntity get currentUser;
+  UserModel get currentUser;
 
   /// creates a new user with the provided [email] and [password].
   ///

@@ -22,7 +22,7 @@ class RegisterPage extends StatelessWidget {
             listener: (context, state) {
               if (state is PhoneAuthCodeSentSuccess) {
                 // navigate to otp page to verify the phone
-                context.goNamed(AppRoutes.verifyOtp.routeName);
+                context.goNamed(AppRoutes.verifyOtp.name);
               }
             },
           ),

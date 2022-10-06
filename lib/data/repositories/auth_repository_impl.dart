@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource authDataSource = AuthDataSourceImpl();
   @override
-  UserEntity get currentUser => authDataSource.currentUser;
+  UserModel get currentUser => authDataSource.currentUser;
 
   @override
   bool isLoggedIn() => authDataSource.isLoggedIn();
