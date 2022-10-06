@@ -58,4 +58,9 @@ abstract class AuthRepository {
 
   /// link credential to a user
   Future<void> linkCredentials(AuthCredential credential);
+
+  /// forgot password
+  Future<void> forgotPassword(String email);
+
+  Future<void> confirmePasswordReset(String code, String newPassword);
 }

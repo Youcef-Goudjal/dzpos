@@ -1,5 +1,6 @@
 export 'bloc/auth_bloc.dart';
 export 'bloc/phone_auth_bloc.dart';
+export 'cubit/cubit.dart';
 export 'pages/auth_page.dart';
 export 'pages/forgot_password_page.dart';
 export 'pages/login_page.dart';
@@ -7,3 +8,4 @@ export 'pages/login_phone_page.dart';
 export 'pages/register_page.dart';
 export 'pages/reset_password_page.dart';
 export 'pages/verify_otp.dart';
+export 'widgets/k_app_bar.dart';

@@ -49,4 +49,12 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> linkCredentials(AuthCredential credential) =>
       authDataSource.linkCredentials(credential);
+
+  @override
+  Future<void> forgotPassword(String email) =>
+      authDataSource.forgotPassword(email);
+
+  @override
+  Future<void> confirmePasswordReset(String code, String newPassword) =>
+      authDataSource.confirmPasswordReset(code, newPassword);
 }

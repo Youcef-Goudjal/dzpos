@@ -34,6 +34,11 @@ class SignUpWithEmailAndPasswordFailure implements Exception {
         return const SignUpWithEmailAndPasswordFailure();
     }
   }
+
+  @override
+  String toString() {
+    return message;
+  }
 }
 
 ///  log_in_with_email_and_password_failure
@@ -41,6 +46,11 @@ class SignUpWithEmailAndPasswordFailure implements Exception {
 /// https://pub.dev/documentation/firebase_auth/latest/firebase_auth/FirebaseAuth/signInWithEmailAndPassword.html
 ///
 class LogInWithEmailAndPasswordFailure implements Exception {
+  @override
+  String toString() {
+    return message;
+  }
+
   const LogInWithEmailAndPasswordFailure([
     this.message = 'An unknown exception occurred.',
   ]);
@@ -74,10 +84,20 @@ class LogInWithEmailAndPasswordFailure implements Exception {
 }
 
 /// Thrown during the logout process if a failure occurs.
-class LogOutFailure implements Exception {}
+class LogOutFailure implements Exception {
+  @override
+  String toString() {
+    return "LogOut error";
+  }
+}
 
 /// Throw during the sign in with phone number if a failure occurs.
 class LogInWithPhoneNumberFailure implements Exception {
+  @override
+  String toString() {
+    return message;
+  }
+
   const LogInWithPhoneNumberFailure({
     this.message = "An unknown exception occurred.",
   });
@@ -98,6 +118,11 @@ class LogInWithPhoneNumberFailure implements Exception {
 
 /// Throw during the sign in with Credential if a failure occurs.
 class LogInWithCredentialFailure implements Exception {
+  @override
+  String toString() {
+    return message;
+  }
+
   const LogInWithCredentialFailure({
     this.message = "An unknown exception occurred.",
   });
@@ -154,6 +179,11 @@ class LogInWithCredentialFailure implements Exception {
 }
 
 class LinkWithCredentialFailure implements Exception {
+  @override
+  String toString() {
+    return message;
+  }
+
   final String message;
 
   LinkWithCredentialFailure({

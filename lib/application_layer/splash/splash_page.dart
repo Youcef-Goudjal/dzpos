@@ -8,15 +8,17 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: context.theme.primaryColor,
+      backgroundColor: context.theme.splashColor,
       body: Center(
           child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             "DZPos",
             style: TextStyle(
               color: context.theme.colorScheme.onPrimary,
               fontSize: 35.sp,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

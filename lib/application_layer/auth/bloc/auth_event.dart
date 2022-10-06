@@ -43,3 +43,29 @@ class UserStateChanged extends AuthEvent {
 
   const UserStateChanged(this.user);
 }
+
+class ForgotPasswordRequested extends AuthEvent {
+  final String email;
+
+  const ForgotPasswordRequested(this.email);
+
+  @override
+  List<Object> get props => [email];
+}
+
+class ConfirmPasswordResetRequested extends AuthEvent {
+  final String code;
+  final String newPassword;
+  const ConfirmPasswordResetRequested(this.code, this.newPassword);
+  @override
+  List<Object> get props => [code, newPassword];
+}
+
+class SingUpRequested extends AuthEvent {
+  final String username, email, password, phone;
+
+  const SingUpRequested(this.username, this.email, this.password, this.phone);
+
+  @override
+  List<Object> get props => [username, email, password, phone];
+}

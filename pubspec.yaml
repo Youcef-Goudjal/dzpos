@@ -53,12 +53,15 @@ dependencies:
 
   cache:
     path: packages/cache
+  form_inputs:
+    path: packages/form_inputs
   firebase_auth: ^3.11.1
   firebase_core: ^1.24.0
   flex_color_scheme: ^6.0.1
   google_fonts: ^3.0.1
   flutter_screenutil: ^5.5.4
   pinput: ^2.2.13
+  formz: ^0.4.1
  
 
 

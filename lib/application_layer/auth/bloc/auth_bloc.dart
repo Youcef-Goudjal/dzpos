@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../application_layer.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -18,6 +21,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignInRequested>(_signIn);
     on<AuthFailed>(_authFailed);
     on<SignOutRequested>(_signOut);
+    on<ForgotPasswordRequested>(_onForgotPassword);
+    on<ConfirmPasswordResetRequested>(_confirmPasswordReset);
+    on<SingUpRequested>(_onSingUp);
     _userSubscription = authRepository.user.listen((user) {
       if (i != 0) {
         add(UserStateChanged(user));
@@ -84,6 +90,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Authenticated(
         user: event.user,
       ));
+    }
+  }
+
+  Future<void> _onForgotPassword(
+      ForgotPasswordRequested event, Emitter<AuthState> emit) async {
+    try {
+      await authRepository.forgotPassword(event.email);
+    } catch (e) {
+      add(AuthFailed(exception: Exception(e)));
+    }
+  }
+
+  Future<void> _confirmPasswordReset(
+      ConfirmPasswordResetRequested event, Emitter<AuthState> emit) async {
+    try {
+      await authRepository.confirmePasswordReset(event.code, event.newPassword);
+    } catch (e) {
+      add(AuthFailed(exception: Exception(e)));
+    }
+  }
+
+  Future<void> _onSingUp(SingUpRequested event, Emitter<AuthState> emit) async {
+    try {
+      await authRepository.signUp(email: event.email, password: event.password);
+      // TODO register client in firestore
+      CommonBloc.phoneAuthBloc.add(SendOtpToPhoneEvent(
+        phoneNumber: event.phone,
+      ));
+    } catch (e) {
+      add(AuthFailed(exception: Exception(e)));
     }
   }
 }

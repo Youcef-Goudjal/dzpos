@@ -2,7 +2,7 @@ import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatefulWidget {
-  const AppTextField({
+  AppTextField({
     super.key,
     this.controller,
     this.hint,
@@ -10,7 +10,9 @@ class AppTextField extends StatefulWidget {
     this.obscureText = false,
     this.prefix,
     this.suffix,
+    this.onChanged,
     this.textInputAction,
+    this.errorText,
   });
 
   final TextEditingController? controller;
@@ -20,6 +22,8 @@ class AppTextField extends StatefulWidget {
   final Widget? prefix;
   final Widget? suffix;
   final String? hint;
+  String? errorText;
+  final void Function(String input)? onChanged;
 
   @override
   State<AppTextField> createState() => _AppTextFieldState();
@@ -40,11 +44,13 @@ class _AppTextFieldState extends State<AppTextField> {
         ],
         Expanded(
           child: TextField(
+            onChanged: widget.onChanged,
             controller: widget.controller,
             keyboardType: widget.keyboardType,
             textInputAction: widget.textInputAction,
             obscureText: widget.obscureText && _isObscure,
             decoration: InputDecoration(
+              errorText: widget.errorText,
               suffixIcon: widget.obscureText
                   ? IconButton(
                       onPressed: () {

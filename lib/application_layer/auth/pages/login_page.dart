@@ -3,16 +3,39 @@ import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/product/product.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/manager/route/routes.dart';
+import '../utils.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => LoginCubit(context.read<AuthBloc>()),
+      child: BlocListener<LoginCubit, LoginState>(
+        listenWhen: (previous, current) => previous.status != current.status,
+        listener: (context, state) {
+          statusHandler(context, state.status, msg: state.msg);
+        },
+        child: const _LoginForm(),
+      ),
+    );
+  }
+}
+
+class _LoginForm extends StatelessWidget {
+  const _LoginForm({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final loginCubit = context.read<LoginCubit>();
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(
@@ -41,19 +64,38 @@ class LoginPage extends StatelessWidget {
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const AppTextField(
-                      keyboardType: TextInputType.emailAddress,
-                      prefix: Icon(Icons.alternate_email_rounded),
-                      hint: "Email Address",
-                      textInputAction: TextInputAction.done,
+                    BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) =>
+                          previous.email != current.email,
+                      builder: (context, state) {
+                        return AppTextField(
+                          errorText:
+                              state.email.invalid ? "invalid email" : null,
+                          onChanged: loginCubit.emailChanged,
+                          keyboardType: TextInputType.emailAddress,
+                          prefix: const Icon(Icons.alternate_email_rounded),
+                          hint: "Email Address",
+                          textInputAction: TextInputAction.next,
+                        );
+                      },
                     ),
                     SizedBox(height: 24.h),
-                    const AppTextField(
-                      obscureText: true,
-                      prefix: Icon(Icons.lock_outline_rounded),
-                      suffix: Icon(Icons.remove_red_eye_outlined),
-                      hint: "Password",
-                      textInputAction: TextInputAction.done,
+                    BlocBuilder<LoginCubit, LoginState>(
+                      buildWhen: (previous, current) =>
+                          previous.password != current.password,
+                      builder: (context, state) {
+                        return AppTextField(
+                          onChanged: loginCubit.passwordChanged,
+                          errorText: state.password.invalid
+                              ? "${state.password.error}"
+                              : null,
+                          obscureText: true,
+                          prefix: const Icon(Icons.lock_outline_rounded),
+                          suffix: const Icon(Icons.remove_red_eye_outlined),
+                          hint: "Password",
+                          textInputAction: TextInputAction.done,
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -71,7 +113,7 @@ class LoginPage extends StatelessWidget {
                   height: 50.h,
                   child: ElevatedButton(
                     onPressed: () {
-                      print("LOGIN");
+                      loginCubit.loggingTaped();
                     },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -12,7 +12,7 @@ enum AppRoutes {
   register('register', 'REGISTER', RegisterPage()),
   verifyOtp('verifyOtp', 'VerifyOtp', VerifyOTPPage()),
   splash("/splash", "SPLASH", SplashPage()),
-  home('/', 'HOME', HomePage());
+  home('/home', 'HOME', HomePage());
 
   const AppRoutes(this.routePath, this.routeName, this.routeView);
   final String routePath;

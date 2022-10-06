@@ -59,6 +59,9 @@ abstract class AuthDataSource {
 
   /// link credential to a user
   Future<void> linkCredentials(AuthCredential credential);
+
+  Future<void> forgotPassword(String email);
+  Future<void> confirmPasswordReset(String code, String newPassword);
 }
 
 class AuthDataSourceImpl implements AuthDataSource {
@@ -160,6 +163,8 @@ class AuthDataSourceImpl implements AuthDataSource {
     }
   }
 
+  //TODO: handel errors
+
   @override
   Stream<UserModel> get user {
     return _auth.authStateChanges().map((firebaseUser) {
@@ -169,5 +174,15 @@ class AuthDataSourceImpl implements AuthDataSource {
       _cache.write(key: userCacheKey, value: user);
       return user;
     });
+  }
+
+  @override
+  Future<void> forgotPassword(String email) async {
+    return _auth.sendPasswordResetEmail(email: email);
+  }
+
+  @override
+  Future<void> confirmPasswordReset(String code, String newPassword) async {
+    return _auth.confirmPasswordReset(code: code, newPassword: newPassword);
   }
 }

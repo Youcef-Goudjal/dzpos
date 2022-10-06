@@ -10,8 +10,10 @@ export 'theme/theme_bloc.dart';
 
 class CommonBloc {
   // Blocs
+  static final authIml = AuthRepositoryImpl();
   static final applicationBloc = ApplicationBloc();
-  static final authBloc = AuthBloc(AuthRepositoryImpl());
+  static final authBloc = AuthBloc(authIml);
+  static final phoneAuthBloc = PhoneAuthBloc(authIml);
   static final themeBloc = ThemeBloc();
 
   static final List<BlocProvider> blocProviders = [
@@ -24,6 +26,9 @@ class CommonBloc {
     BlocProvider<ThemeBloc>(
       create: (context) => themeBloc,
     ),
+    BlocProvider<PhoneAuthBloc>(
+      create: (context) => phoneAuthBloc,
+    ),
   ];
 
   /// Dispose
@@ -31,6 +36,7 @@ class CommonBloc {
     applicationBloc.close();
     themeBloc.close();
     authBloc.close();
+    phoneAuthBloc.close();
   }
 
   /// Singleton factory
