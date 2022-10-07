@@ -3,6 +3,9 @@ import 'package:dzpos/product/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/manager/route/routes.dart';
 
 class InvoicesPage extends StatelessWidget {
   const InvoicesPage({Key? key}) : super(key: key);
@@ -27,7 +30,7 @@ class InvoicesPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 12),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => Invoices.values[index].onPressed(context),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -54,7 +57,8 @@ class InvoicesPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 12),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () =>
+                        Invoices.values[index + 2].onPressed(context),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -83,7 +87,7 @@ class InvoicesPage extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 alignment: Alignment.centerLeft,
               ),
-              onPressed: () {},
+              onPressed: () => Invoices.values[index + 4].onPressed(context),
               icon: SvgPicture.asset(
                 Invoices.values[index + 4].iconPath!,
               ),
@@ -97,8 +101,8 @@ class InvoicesPage extends StatelessWidget {
 }
 
 enum Invoices {
-  newSaleInvoice("New Sale Invoice", AppAssets.addShoppingCart),
-  newPurchaseInvoice("New Purchase Invoice", AppAssets.buying),
+  newSaleInvoice("New Sale Invoice", AppAssets.addShoppingCart), //
+  newPurchaseInvoice("New Purchase Invoice", AppAssets.buying), //
   storeInventory("Store Inventory", AppAssets.trolley),
   returnedDamaged("Returned-Damaged", AppAssets.returnSvg),
   showInvoices("Show Invoices", AppAssets.check),
@@ -109,7 +113,7 @@ enum Invoices {
   inventoryInvoice("Inventory Invoice", AppAssets.trolley),
   storeReconciliationAndRepair(
       "Store Reconciliation And Repair", AppAssets.maintenance),
-  listOfMaterials("List Of Materials", AppAssets.box),
+  listOfMaterials("List Of Materials", AppAssets.box), //
   barCodeDesigner("Barcode Designer", AppAssets.qrCode);
 
   final String name;
@@ -117,5 +121,16 @@ enum Invoices {
 
   const Invoices(this.name, [this.iconPath]);
 
-  void onPressed(BuildContext context) {}
+  void onPressed(BuildContext context) {
+    if (routeName != null) {
+      context.pushNamed(routeName!);
+    }
+  }
+
+  String? get routeName {
+    try {
+      return AppRoutes.values.byName(toString().split(".").last).name;
+    } catch (e) {}
+    return null;
+  }
 }

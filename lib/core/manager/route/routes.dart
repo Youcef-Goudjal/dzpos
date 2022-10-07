@@ -14,6 +14,10 @@ enum AppRoutes {
   splash("/splash", "SPLASH", SplashPage()),
   home('/home', 'HOME', HomePage()),
   invoices("invoices", "Invoices", InvoicesPage()),
+  newSaleInvoice("newSale", "NewSale", NewSalePage()),
+  newPurchaseInvoice("newPurchase", "NewPurchase", NewPurchasePage()),
+  listOfMaterials("listOfMaterials", "ListOfMaterials", ListOfMaterialsPage()),
+  product("product", "Product", ProductPage()),
   settings("settings", "Settings", SettingsPage()),
   accounts("accounts", "Accounts", AccountsPage()),
   reports("reports", "Reports", ReportsPage());

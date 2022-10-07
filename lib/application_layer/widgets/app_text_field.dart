@@ -8,6 +8,7 @@ class AppTextField extends StatefulWidget {
     this.hint,
     this.keyboardType,
     this.obscureText = false,
+    this.maxLine = 1,
     this.prefix,
     this.suffix,
     this.onChanged,
@@ -21,6 +22,7 @@ class AppTextField extends StatefulWidget {
   final bool obscureText;
   final Widget? prefix;
   final Widget? suffix;
+  final int? maxLine;
   final String? hint;
   String? errorText;
   final void Function(String input)? onChanged;
@@ -44,6 +46,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ],
         Expanded(
           child: TextField(
+            maxLines: widget.maxLine,
             onChanged: widget.onChanged,
             controller: widget.controller,
             keyboardType: widget.keyboardType,

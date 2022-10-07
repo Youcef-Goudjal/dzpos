@@ -19,7 +19,12 @@ abstract class AppRouter {
         initialLocation: AppRoutes.splash.path,
         routes: [
           AppRoutes.home.goRoute([
-            AppRoutes.invoices.goRoute(),
+            AppRoutes.invoices.goRoute([
+              AppRoutes.newSaleInvoice.goRoute(),
+              AppRoutes.newPurchaseInvoice.goRoute(),
+              AppRoutes.listOfMaterials.goRoute(),
+              AppRoutes.product.goRoute(),
+            ]),
             AppRoutes.accounts.goRoute(),
             AppRoutes.reports.goRoute(),
             AppRoutes.settings.goRoute(),
