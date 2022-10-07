@@ -1,8 +1,10 @@
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/manager/theme/theme_manager.dart';
+import 'package:dzpos/product/product.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -11,14 +13,17 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingsList(
+      physics: const BouncingScrollPhysics(),
+      platform: DevicePlatform.android,
       lightTheme: SettingsThemeData(
+        settingsListBackground: context.theme.backgroundColor,
         dividerColor: context.theme.dividerColor,
         settingsSectionBackground: context.theme.cardColor,
       ),
       sections: [
         SettingsSection(
           title: const Text("General Settings"),
-          margin: EdgeInsetsDirectional.all(5.w),
+          margin: EdgeInsetsDirectional.all(15.w),
           tiles: [
             SettingsTile.navigation(
               title: const Text("Display System information"),
@@ -46,23 +51,24 @@ class SettingsPage extends StatelessWidget {
           title: const Text("Language"),
           tiles: [
             SettingsTile(
-              leading: const Icon(Icons.language_rounded),
+              leading: SvgPicture.asset(AppAssets.algeria),
               title: const Text("العربية"),
               onPressed: (context) {},
             ),
             SettingsTile(
-              leading: const Icon(Icons.language_rounded),
+              leading: SvgPicture.asset(AppAssets.usa),
               title: const Text("English"),
               onPressed: (context) {},
             ),
             SettingsTile(
-              leading: const Icon(Icons.language_rounded),
+              leading: SvgPicture.asset(AppAssets.france),
               title: const Text("Français"),
               onPressed: (context) {},
             ),
           ],
         ),
         SettingsSection(
+          title: const Text("Theme Settings"),
           tiles: [
             SettingsTile(
               title: DropdownButton(
@@ -107,12 +113,17 @@ class SettingsPage extends StatelessWidget {
               title: Row(
                 children: [
                   const Text("Font Size"),
+                  20.w.widthBox,
                   Expanded(
                     child: TextField(
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.zero,
+                      ),
                       keyboardType: TextInputType.number,
                       onChanged: (value) {},
                     ),
                   ),
+                  10.w.widthBox,
                   ElevatedButton(
                     onPressed: () {},
                     child: const Text("Save"),
@@ -122,84 +133,90 @@ class SettingsPage extends StatelessWidget {
             ),
           ],
         ),
-        SettingsSection(tiles: [
-          SettingsTile.switchTile(
-            initialValue: false,
-            onToggle: (value) {},
-            title: const Text(
-                "Increase the quantity of the product in the invoice"),
-          ),
-          SettingsTile.switchTile(
-            initialValue: false,
-            onToggle: (value) {},
-            title: const Text("Selling at less than cost"),
-          ),
-          SettingsTile.switchTile(
-            initialValue: false,
-            onToggle: (value) {},
-            title: const Text("Activate minimum quantities alert"),
-          ),
-          SettingsTile.switchTile(
-            initialValue: false,
-            onToggle: (value) {},
-            title: const Text("Allow selling while stocks last"),
-          ),
-          SettingsTile.switchTile(
-            initialValue: false,
-            onToggle: (value) {},
-            title: const Text(
-                "Separate customer and supplier accounts in invoices"),
-          ),
-          SettingsTile.switchTile(
-            initialValue: false,
-            onToggle: (value) {},
-            title: const Text("Open the list of items on sale immediately"),
-          ),
-          SettingsTile.switchTile(
-            initialValue: false,
-            onToggle: (value) {},
-            title:
-                const Text("The default billing accounts is General Customer"),
-          ),
-          SettingsTile.switchTile(
-            initialValue: false,
-            onToggle: (value) {},
-            title: const Text("Show items frozen in new invoices"),
-          ),
-          SettingsTile.switchTile(
-            initialValue: false,
-            onToggle: (value) {},
-            title: const Text("Display frozen accounts in new invoices"),
-          ),
-        ]),
-        SettingsSection(tiles: [
-          SettingsTile(
-            title: const Text("Repair invoices"),
-            onPressed: (context) {},
-          ),
-          SettingsTile(
-            title: const Text("Fix permissions"),
-            onPressed: (context) {},
-          ),
-          SettingsTile.navigation(
-            title: Text(
-              "Modify and manage databases",
-              style: TextStyle(
-                color: context.theme.errorColor,
-              ),
+        SettingsSection(
+          title: const Text("Billing settings"),
+          tiles: [
+            SettingsTile.switchTile(
+              initialValue: false,
+              onToggle: (value) {},
+              title: const Text(
+                  "Increase the quantity of the product in the invoice"),
             ),
-            onPressed: (context) {},
-          ),
-          SettingsTile(
-            title: Text(
-              "SignOut",
-              style: TextStyle(
-                color: context.theme.errorColor,
-              ),
+            SettingsTile.switchTile(
+              initialValue: false,
+              onToggle: (value) {},
+              title: const Text("Selling at less than cost"),
             ),
-            onPressed: (context) {},
-          ),
-        ])
+            SettingsTile.switchTile(
+              initialValue: false,
+              onToggle: (value) {},
+              title: const Text("Activate minimum quantities alert"),
+            ),
+            SettingsTile.switchTile(
+              initialValue: false,
+              onToggle: (value) {},
+              title: const Text("Allow selling while stocks last"),
+            ),
+            SettingsTile.switchTile(
+              initialValue: false,
+              onToggle: (value) {},
+              title: const Text(
+                  "Separate customer and supplier accounts in invoices"),
+            ),
+            SettingsTile.switchTile(
+              initialValue: false,
+              onToggle: (value) {},
+              title: const Text("Open the list of items on sale immediately"),
+            ),
+            SettingsTile.switchTile(
+              initialValue: false,
+              onToggle: (value) {},
+              title: const Text(
+                  "The default billing accounts is General Customer"),
+            ),
+            SettingsTile.switchTile(
+              initialValue: false,
+              onToggle: (value) {},
+              title: const Text("Show items frozen in new invoices"),
+            ),
+            SettingsTile.switchTile(
+              initialValue: false,
+              onToggle: (value) {},
+              title: const Text("Display frozen accounts in new invoices"),
+            ),
+          ],
+        ),
+        SettingsSection(
+          title: const Text("Maintenance"),
+          tiles: [
+            SettingsTile(
+              title: const Text("Repair invoices"),
+              onPressed: (context) {},
+            ),
+            SettingsTile(
+              title: const Text("Fix permissions"),
+              onPressed: (context) {},
+            ),
+            SettingsTile.navigation(
+              title: Text(
+                "Modify and manage databases",
+                style: TextStyle(
+                  color: context.theme.errorColor,
+                ),
+              ),
+              onPressed: (context) {},
+            ),
+            SettingsTile(
+              title: Text(
+                "SignOut",
+                style: TextStyle(
+                  color: context.theme.errorColor,
+                ),
+              ),
+              onPressed: (context) {},
+            ),
+          ],
+        )
       ],
     );
   }

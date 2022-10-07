@@ -14,7 +14,7 @@ enum AppTabs {
   invoices("Invoices", InvoicesPage()),
   accounts("Accounts", AccountsPage()),
   reports("Reports", ReportsPage()),
-  settings("Setting", SettingsPage());
+  settings("Settings", SettingsPage());
 
   const AppTabs(this.name, this.page);
 
@@ -54,7 +54,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ];
         },
         body: TabBarView(
-          
           controller: _tabController,
           children: AppTabs.values.map((e) => e.page).toList(),
         ),
