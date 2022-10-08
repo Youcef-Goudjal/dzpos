@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:dzpos/data/data.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+
+import '../enums.dart';
 
 part 'database.g.dart';
 
@@ -17,10 +20,9 @@ part 'database.g.dart';
 /// (4) designation refers to the position of the user in the company,
 /// (5) contact is to the contact number of the user,
 /// (6) account_type refers to the access type of the user to the system (admin has full access, cashier is only for POS module, and inventory officer for purchase and receiving of items.)
-enum AccountType { admin, cashier, inventory }
 
 @DataClassName("User")
-class User extends Table {
+class Users extends Table {
   IntColumn get userId => integer().autoIncrement()();
   TextColumn get firebaseUid => text()();
   TextColumn get username => text().withLength(max: 30)();
@@ -43,19 +45,19 @@ class User extends Table {
 /// reorder_level: is the number that will notify the system if the item or products needs to be reorder
 /// user_id:  refers to the user who encoded the item information.
 @DataClassName("Product")
-class Product extends Table {
+class Products extends Table {
   IntColumn get productId => integer().named("product_id").autoIncrement()();
   TextColumn get productCode => text().named("product_code")();
   TextColumn get productName => text().named("product_name")();
-  IntColumn get unitId => integer().references(ProductUnit, #unitId)();
+  IntColumn get unitId => integer().references(ProductUnits, #unitId)();
   IntColumn get categoryId =>
-      integer().references(ProductCategory, #categoryId)();
+      integer().references(ProductCategories, #categoryId)();
   RealColumn get unitInStock => real().check(unitInStock.isNotNull())();
   RealColumn get unitPrice => real().check(unitPrice.isNotNull())();
   RealColumn get discountPercentage =>
       real().check(discountPercentage.isNotNull())();
   RealColumn get reorderLevel => real().check(reorderLevel.isNotNull())();
-  IntColumn get userId => integer().references(User, #userId)();
+  IntColumn get userId => integer().references(Users, #userId)();
 }
 
 /// productUnit (unit_id, unit_name)
@@ -64,7 +66,7 @@ class Product extends Table {
 /// unit_id: is the primary key of the table,
 /// unit_name: or the name of the unit.
 @DataClassName("ProductUnit")
-class ProductUnit extends Table {
+class ProductUnits extends Table {
   IntColumn get unitId => integer().autoIncrement()();
   TextColumn get unitName => text().check(unitName.isNotNull())();
 }
@@ -75,7 +77,7 @@ class ProductUnit extends Table {
 /// category_id is the primary key or unique key of the table,
 /// category_name or the name of the category.
 @DataClassName("ProductCategory")
-class ProductCategory extends Table {
+class ProductCategories extends Table {
   IntColumn get categoryId => integer().autoIncrement()();
   TextColumn get categoryName => text().check(categoryName.isNotNull())();
 }
@@ -89,7 +91,7 @@ class ProductCategory extends Table {
 ///(4) contact is to the contact number or mobile number of the customer and,
 ///(5) address is to the complete address of the customer.
 @DataClassName("Customer")
-class Customer extends Table {
+class Customers extends Table {
   IntColumn get customerId => integer().autoIncrement()();
   TextColumn get customerCode => text().withLength(max: 25)();
   TextColumn get customerName => text().withLength(max: 50)();
@@ -106,7 +108,7 @@ class Customer extends Table {
 /// (4) quantity refers to the number of items bought by the customer,
 /// (5) unit_price is the price per item, and
 /// (6) sub_total is equals to the number of quantity multiply by the unit price.
-@DataClassName("Sales")
+@DataClassName("Sale")
 class Sales extends Table {
   IntColumn get salesId => integer().autoIncrement()();
   IntColumn get invoiceId => integer().check(invoiceId.isNotNull())();
@@ -127,7 +129,7 @@ class Sales extends Table {
 ///(5) supplier_address states the complete address of the supplier or company,
 ///(6) supplier_email stores the email address of the supplier or company.
 @DataClassName("Supplier")
-class Supplier extends Table {
+class Suppliers extends Table {
   IntColumn get supplierId => integer().autoIncrement()();
   TextColumn get supplierCode => text().withLength(max: 25)();
   TextColumn get supplierName => text().withLength(max: 50)();
@@ -146,17 +148,16 @@ class Supplier extends Table {
 /// (5) amount_tendered is the payment made by the customer,
 /// (6) date_recorded the date of transaction,
 /// (7) user_id is a foreign key that links to the tbl user, it refers to the user who conducted the transaction.
-enum PaymentType { cache, credit }
 
 @DataClassName("Invoice")
-class Invoice extends Table {
+class Invoices extends Table {
   IntColumn get invoiceId => integer().autoIncrement()();
-  IntColumn get customerId => integer().references(Customer, #customerId)();
+  IntColumn get customerId => integer().references(Customers, #customerId)();
   IntColumn get paymentType => intEnum<PaymentType>()();
   RealColumn get totalAmount => real().check(totalAmount.isNotNull())();
   RealColumn get amountTendered => real().check(amountTendered.isNotNull())();
   DateTimeColumn get dateRecorded => dateTime()();
-  IntColumn get userId => integer().references(User, #userId)();
+  IntColumn get userId => integer().references(Users, #userId)();
 }
 
 ///purchaseOrder (purchase_order_id, product_id, quantity, unit_price, sub_total, supplier_id, order_date, user_id)
@@ -171,15 +172,15 @@ class Invoice extends Table {
 ///(7) the date of process is the order_date,
 ///(8) user_id is a foreign key that refers to the user who processed the purchase order.
 @DataClassName("PurchaseOrder")
-class PurchaseOrder extends Table {
+class PurchaseOrders extends Table {
   IntColumn get purchaseOrderId => integer().autoIncrement()();
-  IntColumn get productId => integer().references(Product, #productId)();
+  IntColumn get productId => integer().references(Products, #productId)();
   RealColumn get quantity => real().check(quantity.isNotNull())();
   RealColumn get unitPrice => real().check(unitPrice.isNotNull())();
   RealColumn get subTotal => real().generatedAs(quantity * unitPrice)();
-  IntColumn get supplierId => integer().references(Supplier, #supplierId)();
+  IntColumn get supplierId => integer().references(Suppliers, #supplierId)();
   DateTimeColumn get orderDate => dateTime().check(orderDate.isNotNull())();
-  IntColumn get userId => integer().references(User, #userId)();
+  IntColumn get userId => integer().references(Users, #userId)();
 }
 
 /// receiveProduct (receive_product_id, product_id, quantity, unit_price, sub_total, supplier_id, received_date, user_id)
@@ -194,30 +195,33 @@ class PurchaseOrder extends Table {
 /// (7) received_date refers to the delivery date,
 /// (8) user_id is a foreign key that refers to the user who received the delivery.
 @DataClassName("ReceiveProduct")
-class ReceiveProduct extends Table {
+class ReceiveProducts extends Table {
   IntColumn get receiveProductId => integer().autoIncrement()();
-  IntColumn get productId => integer().references(Product, #productId)();
+  IntColumn get productId => integer().references(Products, #productId)();
   RealColumn get quantity => real().check(quantity.isNotNull())();
   RealColumn get unitPrice => real().check(unitPrice.isNotNull())();
   RealColumn get subTotal => real().generatedAs(quantity * unitPrice)();
-  IntColumn get supplierId => integer().references(Supplier, #supplierId)();
+  IntColumn get supplierId => integer().references(Suppliers, #supplierId)();
   DateTimeColumn get receivedDate =>
       dateTime().check(receivedDate.isNotNull())();
-  IntColumn get userId => integer().references(User, #userId)();
+  IntColumn get userId => integer().references(Users, #userId)();
 }
 
-@DriftDatabase(tables: [
-  User,
-  Product,
-  ProductUnit,
-  ProductCategory,
-  Sales,
-  Invoice,
-  Customer,
-  ReceiveProduct,
-  PurchaseOrder,
-  Supplier,
-])
+@DriftDatabase(
+  tables: [
+    Users,
+    Products,
+    ProductUnits,
+    ProductCategories,
+    Sales,
+    Invoices,
+    Customers,
+    ReceiveProducts,
+    PurchaseOrders,
+    Suppliers,
+  ],
+  daos: [InvoicesDao],
+)
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());
 

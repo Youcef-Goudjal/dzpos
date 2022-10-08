@@ -30,14 +30,14 @@ class User extends DataClass implements Insertable<User> {
     map['password'] = Variable<String>(password);
     map['phone'] = Variable<String>(phone);
     {
-      final converter = $UserTable.$converter0;
+      final converter = $UsersTable.$converter0;
       map['account_type'] = Variable<int>(converter.toSql(accountType));
     }
     return map;
   }
 
-  UserCompanion toCompanion(bool nullToAbsent) {
-    return UserCompanion(
+  UsersCompanion toCompanion(bool nullToAbsent) {
+    return UsersCompanion(
       userId: Value(userId),
       firebaseUid: Value(firebaseUid),
       username: Value(username),
@@ -115,14 +115,14 @@ class User extends DataClass implements Insertable<User> {
           other.accountType == this.accountType);
 }
 
-class UserCompanion extends UpdateCompanion<User> {
+class UsersCompanion extends UpdateCompanion<User> {
   final Value<int> userId;
   final Value<String> firebaseUid;
   final Value<String> username;
   final Value<String> password;
   final Value<String> phone;
   final Value<AccountType> accountType;
-  const UserCompanion({
+  const UsersCompanion({
     this.userId = const Value.absent(),
     this.firebaseUid = const Value.absent(),
     this.username = const Value.absent(),
@@ -130,7 +130,7 @@ class UserCompanion extends UpdateCompanion<User> {
     this.phone = const Value.absent(),
     this.accountType = const Value.absent(),
   });
-  UserCompanion.insert({
+  UsersCompanion.insert({
     this.userId = const Value.absent(),
     required String firebaseUid,
     required String username,
@@ -160,14 +160,14 @@ class UserCompanion extends UpdateCompanion<User> {
     });
   }
 
-  UserCompanion copyWith(
+  UsersCompanion copyWith(
       {Value<int>? userId,
       Value<String>? firebaseUid,
       Value<String>? username,
       Value<String>? password,
       Value<String>? phone,
       Value<AccountType>? accountType}) {
-    return UserCompanion(
+    return UsersCompanion(
       userId: userId ?? this.userId,
       firebaseUid: firebaseUid ?? this.firebaseUid,
       username: username ?? this.username,
@@ -196,7 +196,7 @@ class UserCompanion extends UpdateCompanion<User> {
       map['phone'] = Variable<String>(phone.value);
     }
     if (accountType.present) {
-      final converter = $UserTable.$converter0;
+      final converter = $UsersTable.$converter0;
       map['account_type'] = Variable<int>(converter.toSql(accountType.value));
     }
     return map;
@@ -204,7 +204,7 @@ class UserCompanion extends UpdateCompanion<User> {
 
   @override
   String toString() {
-    return (StringBuffer('UserCompanion(')
+    return (StringBuffer('UsersCompanion(')
           ..write('userId: $userId, ')
           ..write('firebaseUid: $firebaseUid, ')
           ..write('username: $username, ')
@@ -216,11 +216,11 @@ class UserCompanion extends UpdateCompanion<User> {
   }
 }
 
-class $UserTable extends User with TableInfo<$UserTable, User> {
+class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $UserTable(this.attachedDatabase, [this._alias]);
+  $UsersTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
@@ -261,14 +261,14 @@ class $UserTable extends User with TableInfo<$UserTable, User> {
   late final GeneratedColumnWithTypeConverter<AccountType, int> accountType =
       GeneratedColumn<int>('account_type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
-          .withConverter<AccountType>($UserTable.$converter0);
+          .withConverter<AccountType>($UsersTable.$converter0);
   @override
   List<GeneratedColumn> get $columns =>
       [userId, firebaseUid, username, password, phone, accountType];
   @override
-  String get aliasedName => _alias ?? 'user';
+  String get aliasedName => _alias ?? 'users';
   @override
-  String get actualTableName => 'user';
+  String get actualTableName => 'users';
   @override
   VerificationContext validateIntegrity(Insertable<User> instance,
       {bool isInserting = false}) {
@@ -324,14 +324,15 @@ class $UserTable extends User with TableInfo<$UserTable, User> {
           .read(DriftSqlType.string, data['${effectivePrefix}password'])!,
       phone: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}phone'])!,
-      accountType: $UserTable.$converter0.fromSql(attachedDatabase.options.types
+      accountType: $UsersTable.$converter0.fromSql(attachedDatabase
+          .options.types
           .read(DriftSqlType.int, data['${effectivePrefix}account_type'])!),
     );
   }
 
   @override
-  $UserTable createAlias(String alias) {
-    return $UserTable(attachedDatabase, alias);
+  $UsersTable createAlias(String alias) {
+    return $UsersTable(attachedDatabase, alias);
   }
 
   static TypeConverter<AccountType, int> $converter0 =
@@ -350,8 +351,8 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
     return map;
   }
 
-  ProductUnitCompanion toCompanion(bool nullToAbsent) {
-    return ProductUnitCompanion(
+  ProductUnitsCompanion toCompanion(bool nullToAbsent) {
+    return ProductUnitsCompanion(
       unitId: Value(unitId),
       unitName: Value(unitName),
     );
@@ -397,14 +398,14 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
           other.unitName == this.unitName);
 }
 
-class ProductUnitCompanion extends UpdateCompanion<ProductUnit> {
+class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
   final Value<int> unitId;
   final Value<String> unitName;
-  const ProductUnitCompanion({
+  const ProductUnitsCompanion({
     this.unitId = const Value.absent(),
     this.unitName = const Value.absent(),
   });
-  ProductUnitCompanion.insert({
+  ProductUnitsCompanion.insert({
     this.unitId = const Value.absent(),
     required String unitName,
   }) : unitName = Value(unitName);
@@ -418,8 +419,9 @@ class ProductUnitCompanion extends UpdateCompanion<ProductUnit> {
     });
   }
 
-  ProductUnitCompanion copyWith({Value<int>? unitId, Value<String>? unitName}) {
-    return ProductUnitCompanion(
+  ProductUnitsCompanion copyWith(
+      {Value<int>? unitId, Value<String>? unitName}) {
+    return ProductUnitsCompanion(
       unitId: unitId ?? this.unitId,
       unitName: unitName ?? this.unitName,
     );
@@ -439,7 +441,7 @@ class ProductUnitCompanion extends UpdateCompanion<ProductUnit> {
 
   @override
   String toString() {
-    return (StringBuffer('ProductUnitCompanion(')
+    return (StringBuffer('ProductUnitsCompanion(')
           ..write('unitId: $unitId, ')
           ..write('unitName: $unitName')
           ..write(')'))
@@ -447,12 +449,12 @@ class ProductUnitCompanion extends UpdateCompanion<ProductUnit> {
   }
 }
 
-class $ProductUnitTable extends ProductUnit
-    with TableInfo<$ProductUnitTable, ProductUnit> {
+class $ProductUnitsTable extends ProductUnits
+    with TableInfo<$ProductUnitsTable, ProductUnit> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ProductUnitTable(this.attachedDatabase, [this._alias]);
+  $ProductUnitsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _unitIdMeta = const VerificationMeta('unitId');
   @override
   late final GeneratedColumn<int> unitId = GeneratedColumn<int>(
@@ -470,9 +472,9 @@ class $ProductUnitTable extends ProductUnit
   @override
   List<GeneratedColumn> get $columns => [unitId, unitName];
   @override
-  String get aliasedName => _alias ?? 'product_unit';
+  String get aliasedName => _alias ?? 'product_units';
   @override
-  String get actualTableName => 'product_unit';
+  String get actualTableName => 'product_units';
   @override
   VerificationContext validateIntegrity(Insertable<ProductUnit> instance,
       {bool isInserting = false}) {
@@ -505,8 +507,8 @@ class $ProductUnitTable extends ProductUnit
   }
 
   @override
-  $ProductUnitTable createAlias(String alias) {
-    return $ProductUnitTable(attachedDatabase, alias);
+  $ProductUnitsTable createAlias(String alias) {
+    return $ProductUnitsTable(attachedDatabase, alias);
   }
 }
 
@@ -522,8 +524,8 @@ class ProductCategory extends DataClass implements Insertable<ProductCategory> {
     return map;
   }
 
-  ProductCategoryCompanion toCompanion(bool nullToAbsent) {
-    return ProductCategoryCompanion(
+  ProductCategoriesCompanion toCompanion(bool nullToAbsent) {
+    return ProductCategoriesCompanion(
       categoryId: Value(categoryId),
       categoryName: Value(categoryName),
     );
@@ -570,14 +572,14 @@ class ProductCategory extends DataClass implements Insertable<ProductCategory> {
           other.categoryName == this.categoryName);
 }
 
-class ProductCategoryCompanion extends UpdateCompanion<ProductCategory> {
+class ProductCategoriesCompanion extends UpdateCompanion<ProductCategory> {
   final Value<int> categoryId;
   final Value<String> categoryName;
-  const ProductCategoryCompanion({
+  const ProductCategoriesCompanion({
     this.categoryId = const Value.absent(),
     this.categoryName = const Value.absent(),
   });
-  ProductCategoryCompanion.insert({
+  ProductCategoriesCompanion.insert({
     this.categoryId = const Value.absent(),
     required String categoryName,
   }) : categoryName = Value(categoryName);
@@ -591,9 +593,9 @@ class ProductCategoryCompanion extends UpdateCompanion<ProductCategory> {
     });
   }
 
-  ProductCategoryCompanion copyWith(
+  ProductCategoriesCompanion copyWith(
       {Value<int>? categoryId, Value<String>? categoryName}) {
-    return ProductCategoryCompanion(
+    return ProductCategoriesCompanion(
       categoryId: categoryId ?? this.categoryId,
       categoryName: categoryName ?? this.categoryName,
     );
@@ -613,7 +615,7 @@ class ProductCategoryCompanion extends UpdateCompanion<ProductCategory> {
 
   @override
   String toString() {
-    return (StringBuffer('ProductCategoryCompanion(')
+    return (StringBuffer('ProductCategoriesCompanion(')
           ..write('categoryId: $categoryId, ')
           ..write('categoryName: $categoryName')
           ..write(')'))
@@ -621,12 +623,12 @@ class ProductCategoryCompanion extends UpdateCompanion<ProductCategory> {
   }
 }
 
-class $ProductCategoryTable extends ProductCategory
-    with TableInfo<$ProductCategoryTable, ProductCategory> {
+class $ProductCategoriesTable extends ProductCategories
+    with TableInfo<$ProductCategoriesTable, ProductCategory> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ProductCategoryTable(this.attachedDatabase, [this._alias]);
+  $ProductCategoriesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _categoryIdMeta = const VerificationMeta('categoryId');
   @override
   late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
@@ -645,9 +647,9 @@ class $ProductCategoryTable extends ProductCategory
   @override
   List<GeneratedColumn> get $columns => [categoryId, categoryName];
   @override
-  String get aliasedName => _alias ?? 'product_category';
+  String get aliasedName => _alias ?? 'product_categories';
   @override
-  String get actualTableName => 'product_category';
+  String get actualTableName => 'product_categories';
   @override
   VerificationContext validateIntegrity(Insertable<ProductCategory> instance,
       {bool isInserting = false}) {
@@ -684,8 +686,8 @@ class $ProductCategoryTable extends ProductCategory
   }
 
   @override
-  $ProductCategoryTable createAlias(String alias) {
-    return $ProductCategoryTable(attachedDatabase, alias);
+  $ProductCategoriesTable createAlias(String alias) {
+    return $ProductCategoriesTable(attachedDatabase, alias);
   }
 }
 
@@ -727,8 +729,8 @@ class Product extends DataClass implements Insertable<Product> {
     return map;
   }
 
-  ProductCompanion toCompanion(bool nullToAbsent) {
-    return ProductCompanion(
+  ProductsCompanion toCompanion(bool nullToAbsent) {
+    return ProductsCompanion(
       productId: Value(productId),
       productCode: Value(productCode),
       productName: Value(productName),
@@ -844,7 +846,7 @@ class Product extends DataClass implements Insertable<Product> {
           other.userId == this.userId);
 }
 
-class ProductCompanion extends UpdateCompanion<Product> {
+class ProductsCompanion extends UpdateCompanion<Product> {
   final Value<int> productId;
   final Value<String> productCode;
   final Value<String> productName;
@@ -855,7 +857,7 @@ class ProductCompanion extends UpdateCompanion<Product> {
   final Value<double> discountPercentage;
   final Value<double> reorderLevel;
   final Value<int> userId;
-  const ProductCompanion({
+  const ProductsCompanion({
     this.productId = const Value.absent(),
     this.productCode = const Value.absent(),
     this.productName = const Value.absent(),
@@ -867,7 +869,7 @@ class ProductCompanion extends UpdateCompanion<Product> {
     this.reorderLevel = const Value.absent(),
     this.userId = const Value.absent(),
   });
-  ProductCompanion.insert({
+  ProductsCompanion.insert({
     this.productId = const Value.absent(),
     required String productCode,
     required String productName,
@@ -913,7 +915,7 @@ class ProductCompanion extends UpdateCompanion<Product> {
     });
   }
 
-  ProductCompanion copyWith(
+  ProductsCompanion copyWith(
       {Value<int>? productId,
       Value<String>? productCode,
       Value<String>? productName,
@@ -924,7 +926,7 @@ class ProductCompanion extends UpdateCompanion<Product> {
       Value<double>? discountPercentage,
       Value<double>? reorderLevel,
       Value<int>? userId}) {
-    return ProductCompanion(
+    return ProductsCompanion(
       productId: productId ?? this.productId,
       productCode: productCode ?? this.productCode,
       productName: productName ?? this.productName,
@@ -976,7 +978,7 @@ class ProductCompanion extends UpdateCompanion<Product> {
 
   @override
   String toString() {
-    return (StringBuffer('ProductCompanion(')
+    return (StringBuffer('ProductsCompanion(')
           ..write('productId: $productId, ')
           ..write('productCode: $productCode, ')
           ..write('productName: $productName, ')
@@ -992,11 +994,11 @@ class ProductCompanion extends UpdateCompanion<Product> {
   }
 }
 
-class $ProductTable extends Product with TableInfo<$ProductTable, Product> {
+class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ProductTable(this.attachedDatabase, [this._alias]);
+  $ProductsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _productIdMeta = const VerificationMeta('productId');
   @override
   late final GeneratedColumn<int> productId = GeneratedColumn<int>(
@@ -1022,14 +1024,14 @@ class $ProductTable extends Product with TableInfo<$ProductTable, Product> {
       'unit_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "product_unit" ("unit_id")');
+      defaultConstraints: 'REFERENCES "product_units" ("unit_id")');
   final VerificationMeta _categoryIdMeta = const VerificationMeta('categoryId');
   @override
   late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
       'category_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "product_category" ("category_id")');
+      defaultConstraints: 'REFERENCES "product_categories" ("category_id")');
   final VerificationMeta _unitInStockMeta =
       const VerificationMeta('unitInStock');
   @override
@@ -1067,7 +1069,7 @@ class $ProductTable extends Product with TableInfo<$ProductTable, Product> {
       'user_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "user" ("user_id")');
+      defaultConstraints: 'REFERENCES "users" ("user_id")');
   @override
   List<GeneratedColumn> get $columns => [
         productId,
@@ -1082,9 +1084,9 @@ class $ProductTable extends Product with TableInfo<$ProductTable, Product> {
         userId
       ];
   @override
-  String get aliasedName => _alias ?? 'product';
+  String get aliasedName => _alias ?? 'products';
   @override
-  String get actualTableName => 'product';
+  String get actualTableName => 'products';
   @override
   VerificationContext validateIntegrity(Insertable<Product> instance,
       {bool isInserting = false}) {
@@ -1193,19 +1195,19 @@ class $ProductTable extends Product with TableInfo<$ProductTable, Product> {
   }
 
   @override
-  $ProductTable createAlias(String alias) {
-    return $ProductTable(attachedDatabase, alias);
+  $ProductsTable createAlias(String alias) {
+    return $ProductsTable(attachedDatabase, alias);
   }
 }
 
-class Sales extends DataClass implements Insertable<Sales> {
+class Sale extends DataClass implements Insertable<Sale> {
   final int salesId;
   final int invoiceId;
   final int productId;
   final double quantity;
   final double unitPrice;
   final double subTotal;
-  const Sales(
+  const Sale(
       {required this.salesId,
       required this.invoiceId,
       required this.productId,
@@ -1233,10 +1235,10 @@ class Sales extends DataClass implements Insertable<Sales> {
     );
   }
 
-  factory Sales.fromJson(Map<String, dynamic> json,
+  factory Sale.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Sales(
+    return Sale(
       salesId: serializer.fromJson<int>(json['salesId']),
       invoiceId: serializer.fromJson<int>(json['invoiceId']),
       productId: serializer.fromJson<int>(json['productId']),
@@ -1258,14 +1260,14 @@ class Sales extends DataClass implements Insertable<Sales> {
     };
   }
 
-  Sales copyWith(
+  Sale copyWith(
           {int? salesId,
           int? invoiceId,
           int? productId,
           double? quantity,
           double? unitPrice,
           double? subTotal}) =>
-      Sales(
+      Sale(
         salesId: salesId ?? this.salesId,
         invoiceId: invoiceId ?? this.invoiceId,
         productId: productId ?? this.productId,
@@ -1275,7 +1277,7 @@ class Sales extends DataClass implements Insertable<Sales> {
       );
   @override
   String toString() {
-    return (StringBuffer('Sales(')
+    return (StringBuffer('Sale(')
           ..write('salesId: $salesId, ')
           ..write('invoiceId: $invoiceId, ')
           ..write('productId: $productId, ')
@@ -1292,7 +1294,7 @@ class Sales extends DataClass implements Insertable<Sales> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Sales &&
+      (other is Sale &&
           other.salesId == this.salesId &&
           other.invoiceId == this.invoiceId &&
           other.productId == this.productId &&
@@ -1301,7 +1303,7 @@ class Sales extends DataClass implements Insertable<Sales> {
           other.subTotal == this.subTotal);
 }
 
-class SalesCompanion extends UpdateCompanion<Sales> {
+class SalesCompanion extends UpdateCompanion<Sale> {
   final Value<int> salesId;
   final Value<int> invoiceId;
   final Value<int> productId;
@@ -1324,7 +1326,7 @@ class SalesCompanion extends UpdateCompanion<Sales> {
         productId = Value(productId),
         quantity = Value(quantity),
         unitPrice = Value(unitPrice);
-  static Insertable<Sales> custom({
+  static Insertable<Sale> custom({
     Expression<int>? salesId,
     Expression<int>? invoiceId,
     Expression<int>? productId,
@@ -1389,7 +1391,7 @@ class SalesCompanion extends UpdateCompanion<Sales> {
   }
 }
 
-class $SalesTable extends Sales with TableInfo<$SalesTable, Sales> {
+class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -1444,7 +1446,7 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sales> {
   @override
   String get actualTableName => 'sales';
   @override
-  VerificationContext validateIntegrity(Insertable<Sales> instance,
+  VerificationContext validateIntegrity(Insertable<Sale> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1486,9 +1488,9 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sales> {
   @override
   Set<GeneratedColumn> get $primaryKey => {salesId};
   @override
-  Sales map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Sale map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Sales(
+    return Sale(
       salesId: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}sales_id'])!,
       invoiceId: attachedDatabase.options.types
@@ -1533,8 +1535,8 @@ class Customer extends DataClass implements Insertable<Customer> {
     return map;
   }
 
-  CustomerCompanion toCompanion(bool nullToAbsent) {
-    return CustomerCompanion(
+  CustomersCompanion toCompanion(bool nullToAbsent) {
+    return CustomersCompanion(
       customerId: Value(customerId),
       customerCode: Value(customerCode),
       customerName: Value(customerName),
@@ -1605,20 +1607,20 @@ class Customer extends DataClass implements Insertable<Customer> {
           other.address == this.address);
 }
 
-class CustomerCompanion extends UpdateCompanion<Customer> {
+class CustomersCompanion extends UpdateCompanion<Customer> {
   final Value<int> customerId;
   final Value<String> customerCode;
   final Value<String> customerName;
   final Value<String> contact;
   final Value<String> address;
-  const CustomerCompanion({
+  const CustomersCompanion({
     this.customerId = const Value.absent(),
     this.customerCode = const Value.absent(),
     this.customerName = const Value.absent(),
     this.contact = const Value.absent(),
     this.address = const Value.absent(),
   });
-  CustomerCompanion.insert({
+  CustomersCompanion.insert({
     this.customerId = const Value.absent(),
     required String customerCode,
     required String customerName,
@@ -1644,13 +1646,13 @@ class CustomerCompanion extends UpdateCompanion<Customer> {
     });
   }
 
-  CustomerCompanion copyWith(
+  CustomersCompanion copyWith(
       {Value<int>? customerId,
       Value<String>? customerCode,
       Value<String>? customerName,
       Value<String>? contact,
       Value<String>? address}) {
-    return CustomerCompanion(
+    return CustomersCompanion(
       customerId: customerId ?? this.customerId,
       customerCode: customerCode ?? this.customerCode,
       customerName: customerName ?? this.customerName,
@@ -1682,7 +1684,7 @@ class CustomerCompanion extends UpdateCompanion<Customer> {
 
   @override
   String toString() {
-    return (StringBuffer('CustomerCompanion(')
+    return (StringBuffer('CustomersCompanion(')
           ..write('customerId: $customerId, ')
           ..write('customerCode: $customerCode, ')
           ..write('customerName: $customerName, ')
@@ -1693,11 +1695,12 @@ class CustomerCompanion extends UpdateCompanion<Customer> {
   }
 }
 
-class $CustomerTable extends Customer with TableInfo<$CustomerTable, Customer> {
+class $CustomersTable extends Customers
+    with TableInfo<$CustomersTable, Customer> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $CustomerTable(this.attachedDatabase, [this._alias]);
+  $CustomersTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _customerIdMeta = const VerificationMeta('customerId');
   @override
   late final GeneratedColumn<int> customerId = GeneratedColumn<int>(
@@ -1739,9 +1742,9 @@ class $CustomerTable extends Customer with TableInfo<$CustomerTable, Customer> {
   List<GeneratedColumn> get $columns =>
       [customerId, customerCode, customerName, contact, address];
   @override
-  String get aliasedName => _alias ?? 'customer';
+  String get aliasedName => _alias ?? 'customers';
   @override
-  String get actualTableName => 'customer';
+  String get actualTableName => 'customers';
   @override
   VerificationContext validateIntegrity(Insertable<Customer> instance,
       {bool isInserting = false}) {
@@ -1804,8 +1807,8 @@ class $CustomerTable extends Customer with TableInfo<$CustomerTable, Customer> {
   }
 
   @override
-  $CustomerTable createAlias(String alias) {
-    return $CustomerTable(attachedDatabase, alias);
+  $CustomersTable createAlias(String alias) {
+    return $CustomersTable(attachedDatabase, alias);
   }
 }
 
@@ -1831,7 +1834,7 @@ class Invoice extends DataClass implements Insertable<Invoice> {
     map['invoice_id'] = Variable<int>(invoiceId);
     map['customer_id'] = Variable<int>(customerId);
     {
-      final converter = $InvoiceTable.$converter0;
+      final converter = $InvoicesTable.$converter0;
       map['payment_type'] = Variable<int>(converter.toSql(paymentType));
     }
     map['total_amount'] = Variable<double>(totalAmount);
@@ -1841,8 +1844,8 @@ class Invoice extends DataClass implements Insertable<Invoice> {
     return map;
   }
 
-  InvoiceCompanion toCompanion(bool nullToAbsent) {
-    return InvoiceCompanion(
+  InvoicesCompanion toCompanion(bool nullToAbsent) {
+    return InvoicesCompanion(
       invoiceId: Value(invoiceId),
       customerId: Value(customerId),
       paymentType: Value(paymentType),
@@ -1927,7 +1930,7 @@ class Invoice extends DataClass implements Insertable<Invoice> {
           other.userId == this.userId);
 }
 
-class InvoiceCompanion extends UpdateCompanion<Invoice> {
+class InvoicesCompanion extends UpdateCompanion<Invoice> {
   final Value<int> invoiceId;
   final Value<int> customerId;
   final Value<PaymentType> paymentType;
@@ -1935,7 +1938,7 @@ class InvoiceCompanion extends UpdateCompanion<Invoice> {
   final Value<double> amountTendered;
   final Value<DateTime> dateRecorded;
   final Value<int> userId;
-  const InvoiceCompanion({
+  const InvoicesCompanion({
     this.invoiceId = const Value.absent(),
     this.customerId = const Value.absent(),
     this.paymentType = const Value.absent(),
@@ -1944,7 +1947,7 @@ class InvoiceCompanion extends UpdateCompanion<Invoice> {
     this.dateRecorded = const Value.absent(),
     this.userId = const Value.absent(),
   });
-  InvoiceCompanion.insert({
+  InvoicesCompanion.insert({
     this.invoiceId = const Value.absent(),
     required int customerId,
     required PaymentType paymentType,
@@ -1978,7 +1981,7 @@ class InvoiceCompanion extends UpdateCompanion<Invoice> {
     });
   }
 
-  InvoiceCompanion copyWith(
+  InvoicesCompanion copyWith(
       {Value<int>? invoiceId,
       Value<int>? customerId,
       Value<PaymentType>? paymentType,
@@ -1986,7 +1989,7 @@ class InvoiceCompanion extends UpdateCompanion<Invoice> {
       Value<double>? amountTendered,
       Value<DateTime>? dateRecorded,
       Value<int>? userId}) {
-    return InvoiceCompanion(
+    return InvoicesCompanion(
       invoiceId: invoiceId ?? this.invoiceId,
       customerId: customerId ?? this.customerId,
       paymentType: paymentType ?? this.paymentType,
@@ -2007,7 +2010,7 @@ class InvoiceCompanion extends UpdateCompanion<Invoice> {
       map['customer_id'] = Variable<int>(customerId.value);
     }
     if (paymentType.present) {
-      final converter = $InvoiceTable.$converter0;
+      final converter = $InvoicesTable.$converter0;
       map['payment_type'] = Variable<int>(converter.toSql(paymentType.value));
     }
     if (totalAmount.present) {
@@ -2027,7 +2030,7 @@ class InvoiceCompanion extends UpdateCompanion<Invoice> {
 
   @override
   String toString() {
-    return (StringBuffer('InvoiceCompanion(')
+    return (StringBuffer('InvoicesCompanion(')
           ..write('invoiceId: $invoiceId, ')
           ..write('customerId: $customerId, ')
           ..write('paymentType: $paymentType, ')
@@ -2040,11 +2043,11 @@ class InvoiceCompanion extends UpdateCompanion<Invoice> {
   }
 }
 
-class $InvoiceTable extends Invoice with TableInfo<$InvoiceTable, Invoice> {
+class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $InvoiceTable(this.attachedDatabase, [this._alias]);
+  $InvoicesTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _invoiceIdMeta = const VerificationMeta('invoiceId');
   @override
   late final GeneratedColumn<int> invoiceId = GeneratedColumn<int>(
@@ -2058,14 +2061,14 @@ class $InvoiceTable extends Invoice with TableInfo<$InvoiceTable, Invoice> {
       'customer_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "customer" ("customer_id")');
+      defaultConstraints: 'REFERENCES "customers" ("customer_id")');
   final VerificationMeta _paymentTypeMeta =
       const VerificationMeta('paymentType');
   @override
   late final GeneratedColumnWithTypeConverter<PaymentType, int> paymentType =
       GeneratedColumn<int>('payment_type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
-          .withConverter<PaymentType>($InvoiceTable.$converter0);
+          .withConverter<PaymentType>($InvoicesTable.$converter0);
   final VerificationMeta _totalAmountMeta =
       const VerificationMeta('totalAmount');
   @override
@@ -2094,7 +2097,7 @@ class $InvoiceTable extends Invoice with TableInfo<$InvoiceTable, Invoice> {
       'user_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "user" ("user_id")');
+      defaultConstraints: 'REFERENCES "users" ("user_id")');
   @override
   List<GeneratedColumn> get $columns => [
         invoiceId,
@@ -2106,9 +2109,9 @@ class $InvoiceTable extends Invoice with TableInfo<$InvoiceTable, Invoice> {
         userId
       ];
   @override
-  String get aliasedName => _alias ?? 'invoice';
+  String get aliasedName => _alias ?? 'invoices';
   @override
-  String get actualTableName => 'invoice';
+  String get actualTableName => 'invoices';
   @override
   VerificationContext validateIntegrity(Insertable<Invoice> instance,
       {bool isInserting = false}) {
@@ -2170,7 +2173,7 @@ class $InvoiceTable extends Invoice with TableInfo<$InvoiceTable, Invoice> {
           .read(DriftSqlType.int, data['${effectivePrefix}invoice_id'])!,
       customerId: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}customer_id'])!,
-      paymentType: $InvoiceTable.$converter0.fromSql(attachedDatabase
+      paymentType: $InvoicesTable.$converter0.fromSql(attachedDatabase
           .options.types
           .read(DriftSqlType.int, data['${effectivePrefix}payment_type'])!),
       totalAmount: attachedDatabase.options.types
@@ -2185,8 +2188,8 @@ class $InvoiceTable extends Invoice with TableInfo<$InvoiceTable, Invoice> {
   }
 
   @override
-  $InvoiceTable createAlias(String alias) {
-    return $InvoiceTable(attachedDatabase, alias);
+  $InvoicesTable createAlias(String alias) {
+    return $InvoicesTable(attachedDatabase, alias);
   }
 
   static TypeConverter<PaymentType, int> $converter0 =
@@ -2219,8 +2222,8 @@ class Supplier extends DataClass implements Insertable<Supplier> {
     return map;
   }
 
-  SupplierCompanion toCompanion(bool nullToAbsent) {
-    return SupplierCompanion(
+  SuppliersCompanion toCompanion(bool nullToAbsent) {
+    return SuppliersCompanion(
       supplierId: Value(supplierId),
       supplierCode: Value(supplierCode),
       supplierName: Value(supplierName),
@@ -2298,14 +2301,14 @@ class Supplier extends DataClass implements Insertable<Supplier> {
           other.supplierEmail == this.supplierEmail);
 }
 
-class SupplierCompanion extends UpdateCompanion<Supplier> {
+class SuppliersCompanion extends UpdateCompanion<Supplier> {
   final Value<int> supplierId;
   final Value<String> supplierCode;
   final Value<String> supplierName;
   final Value<String> supplierContact;
   final Value<String> supplierAddress;
   final Value<String> supplierEmail;
-  const SupplierCompanion({
+  const SuppliersCompanion({
     this.supplierId = const Value.absent(),
     this.supplierCode = const Value.absent(),
     this.supplierName = const Value.absent(),
@@ -2313,7 +2316,7 @@ class SupplierCompanion extends UpdateCompanion<Supplier> {
     this.supplierAddress = const Value.absent(),
     this.supplierEmail = const Value.absent(),
   });
-  SupplierCompanion.insert({
+  SuppliersCompanion.insert({
     this.supplierId = const Value.absent(),
     required String supplierCode,
     required String supplierName,
@@ -2343,14 +2346,14 @@ class SupplierCompanion extends UpdateCompanion<Supplier> {
     });
   }
 
-  SupplierCompanion copyWith(
+  SuppliersCompanion copyWith(
       {Value<int>? supplierId,
       Value<String>? supplierCode,
       Value<String>? supplierName,
       Value<String>? supplierContact,
       Value<String>? supplierAddress,
       Value<String>? supplierEmail}) {
-    return SupplierCompanion(
+    return SuppliersCompanion(
       supplierId: supplierId ?? this.supplierId,
       supplierCode: supplierCode ?? this.supplierCode,
       supplierName: supplierName ?? this.supplierName,
@@ -2386,7 +2389,7 @@ class SupplierCompanion extends UpdateCompanion<Supplier> {
 
   @override
   String toString() {
-    return (StringBuffer('SupplierCompanion(')
+    return (StringBuffer('SuppliersCompanion(')
           ..write('supplierId: $supplierId, ')
           ..write('supplierCode: $supplierCode, ')
           ..write('supplierName: $supplierName, ')
@@ -2398,11 +2401,12 @@ class SupplierCompanion extends UpdateCompanion<Supplier> {
   }
 }
 
-class $SupplierTable extends Supplier with TableInfo<$SupplierTable, Supplier> {
+class $SuppliersTable extends Suppliers
+    with TableInfo<$SuppliersTable, Supplier> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $SupplierTable(this.attachedDatabase, [this._alias]);
+  $SuppliersTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _supplierIdMeta = const VerificationMeta('supplierId');
   @override
   late final GeneratedColumn<int> supplierId = GeneratedColumn<int>(
@@ -2460,9 +2464,9 @@ class $SupplierTable extends Supplier with TableInfo<$SupplierTable, Supplier> {
         supplierEmail
       ];
   @override
-  String get aliasedName => _alias ?? 'supplier';
+  String get aliasedName => _alias ?? 'suppliers';
   @override
-  String get actualTableName => 'supplier';
+  String get actualTableName => 'suppliers';
   @override
   VerificationContext validateIntegrity(Insertable<Supplier> instance,
       {bool isInserting = false}) {
@@ -2539,8 +2543,8 @@ class $SupplierTable extends Supplier with TableInfo<$SupplierTable, Supplier> {
   }
 
   @override
-  $SupplierTable createAlias(String alias) {
-    return $SupplierTable(attachedDatabase, alias);
+  $SuppliersTable createAlias(String alias) {
+    return $SuppliersTable(attachedDatabase, alias);
   }
 }
 
@@ -2575,8 +2579,8 @@ class ReceiveProduct extends DataClass implements Insertable<ReceiveProduct> {
     return map;
   }
 
-  ReceiveProductCompanion toCompanion(bool nullToAbsent) {
-    return ReceiveProductCompanion(
+  ReceiveProductsCompanion toCompanion(bool nullToAbsent) {
+    return ReceiveProductsCompanion(
       receiveProductId: Value(receiveProductId),
       productId: Value(productId),
       quantity: Value(quantity),
@@ -2667,7 +2671,7 @@ class ReceiveProduct extends DataClass implements Insertable<ReceiveProduct> {
           other.userId == this.userId);
 }
 
-class ReceiveProductCompanion extends UpdateCompanion<ReceiveProduct> {
+class ReceiveProductsCompanion extends UpdateCompanion<ReceiveProduct> {
   final Value<int> receiveProductId;
   final Value<int> productId;
   final Value<double> quantity;
@@ -2675,7 +2679,7 @@ class ReceiveProductCompanion extends UpdateCompanion<ReceiveProduct> {
   final Value<int> supplierId;
   final Value<DateTime> receivedDate;
   final Value<int> userId;
-  const ReceiveProductCompanion({
+  const ReceiveProductsCompanion({
     this.receiveProductId = const Value.absent(),
     this.productId = const Value.absent(),
     this.quantity = const Value.absent(),
@@ -2684,7 +2688,7 @@ class ReceiveProductCompanion extends UpdateCompanion<ReceiveProduct> {
     this.receivedDate = const Value.absent(),
     this.userId = const Value.absent(),
   });
-  ReceiveProductCompanion.insert({
+  ReceiveProductsCompanion.insert({
     this.receiveProductId = const Value.absent(),
     required int productId,
     required double quantity,
@@ -2718,7 +2722,7 @@ class ReceiveProductCompanion extends UpdateCompanion<ReceiveProduct> {
     });
   }
 
-  ReceiveProductCompanion copyWith(
+  ReceiveProductsCompanion copyWith(
       {Value<int>? receiveProductId,
       Value<int>? productId,
       Value<double>? quantity,
@@ -2726,7 +2730,7 @@ class ReceiveProductCompanion extends UpdateCompanion<ReceiveProduct> {
       Value<int>? supplierId,
       Value<DateTime>? receivedDate,
       Value<int>? userId}) {
-    return ReceiveProductCompanion(
+    return ReceiveProductsCompanion(
       receiveProductId: receiveProductId ?? this.receiveProductId,
       productId: productId ?? this.productId,
       quantity: quantity ?? this.quantity,
@@ -2766,7 +2770,7 @@ class ReceiveProductCompanion extends UpdateCompanion<ReceiveProduct> {
 
   @override
   String toString() {
-    return (StringBuffer('ReceiveProductCompanion(')
+    return (StringBuffer('ReceiveProductsCompanion(')
           ..write('receiveProductId: $receiveProductId, ')
           ..write('productId: $productId, ')
           ..write('quantity: $quantity, ')
@@ -2779,12 +2783,12 @@ class ReceiveProductCompanion extends UpdateCompanion<ReceiveProduct> {
   }
 }
 
-class $ReceiveProductTable extends ReceiveProduct
-    with TableInfo<$ReceiveProductTable, ReceiveProduct> {
+class $ReceiveProductsTable extends ReceiveProducts
+    with TableInfo<$ReceiveProductsTable, ReceiveProduct> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ReceiveProductTable(this.attachedDatabase, [this._alias]);
+  $ReceiveProductsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _receiveProductIdMeta =
       const VerificationMeta('receiveProductId');
   @override
@@ -2799,7 +2803,7 @@ class $ReceiveProductTable extends ReceiveProduct
       'product_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "product" ("product_id")');
+      defaultConstraints: 'REFERENCES "products" ("product_id")');
   final VerificationMeta _quantityMeta = const VerificationMeta('quantity');
   @override
   late final GeneratedColumn<double> quantity = GeneratedColumn<double>(
@@ -2827,7 +2831,7 @@ class $ReceiveProductTable extends ReceiveProduct
       'supplier_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "supplier" ("supplier_id")');
+      defaultConstraints: 'REFERENCES "suppliers" ("supplier_id")');
   final VerificationMeta _receivedDateMeta =
       const VerificationMeta('receivedDate');
   @override
@@ -2842,7 +2846,7 @@ class $ReceiveProductTable extends ReceiveProduct
       'user_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "user" ("user_id")');
+      defaultConstraints: 'REFERENCES "users" ("user_id")');
   @override
   List<GeneratedColumn> get $columns => [
         receiveProductId,
@@ -2855,9 +2859,9 @@ class $ReceiveProductTable extends ReceiveProduct
         userId
       ];
   @override
-  String get aliasedName => _alias ?? 'receive_product';
+  String get aliasedName => _alias ?? 'receive_products';
   @override
-  String get actualTableName => 'receive_product';
+  String get actualTableName => 'receive_products';
   @override
   VerificationContext validateIntegrity(Insertable<ReceiveProduct> instance,
       {bool isInserting = false}) {
@@ -2942,8 +2946,8 @@ class $ReceiveProductTable extends ReceiveProduct
   }
 
   @override
-  $ReceiveProductTable createAlias(String alias) {
-    return $ReceiveProductTable(attachedDatabase, alias);
+  $ReceiveProductsTable createAlias(String alias) {
+    return $ReceiveProductsTable(attachedDatabase, alias);
   }
 }
 
@@ -2978,8 +2982,8 @@ class PurchaseOrder extends DataClass implements Insertable<PurchaseOrder> {
     return map;
   }
 
-  PurchaseOrderCompanion toCompanion(bool nullToAbsent) {
-    return PurchaseOrderCompanion(
+  PurchaseOrdersCompanion toCompanion(bool nullToAbsent) {
+    return PurchaseOrdersCompanion(
       purchaseOrderId: Value(purchaseOrderId),
       productId: Value(productId),
       quantity: Value(quantity),
@@ -3070,7 +3074,7 @@ class PurchaseOrder extends DataClass implements Insertable<PurchaseOrder> {
           other.userId == this.userId);
 }
 
-class PurchaseOrderCompanion extends UpdateCompanion<PurchaseOrder> {
+class PurchaseOrdersCompanion extends UpdateCompanion<PurchaseOrder> {
   final Value<int> purchaseOrderId;
   final Value<int> productId;
   final Value<double> quantity;
@@ -3078,7 +3082,7 @@ class PurchaseOrderCompanion extends UpdateCompanion<PurchaseOrder> {
   final Value<int> supplierId;
   final Value<DateTime> orderDate;
   final Value<int> userId;
-  const PurchaseOrderCompanion({
+  const PurchaseOrdersCompanion({
     this.purchaseOrderId = const Value.absent(),
     this.productId = const Value.absent(),
     this.quantity = const Value.absent(),
@@ -3087,7 +3091,7 @@ class PurchaseOrderCompanion extends UpdateCompanion<PurchaseOrder> {
     this.orderDate = const Value.absent(),
     this.userId = const Value.absent(),
   });
-  PurchaseOrderCompanion.insert({
+  PurchaseOrdersCompanion.insert({
     this.purchaseOrderId = const Value.absent(),
     required int productId,
     required double quantity,
@@ -3121,7 +3125,7 @@ class PurchaseOrderCompanion extends UpdateCompanion<PurchaseOrder> {
     });
   }
 
-  PurchaseOrderCompanion copyWith(
+  PurchaseOrdersCompanion copyWith(
       {Value<int>? purchaseOrderId,
       Value<int>? productId,
       Value<double>? quantity,
@@ -3129,7 +3133,7 @@ class PurchaseOrderCompanion extends UpdateCompanion<PurchaseOrder> {
       Value<int>? supplierId,
       Value<DateTime>? orderDate,
       Value<int>? userId}) {
-    return PurchaseOrderCompanion(
+    return PurchaseOrdersCompanion(
       purchaseOrderId: purchaseOrderId ?? this.purchaseOrderId,
       productId: productId ?? this.productId,
       quantity: quantity ?? this.quantity,
@@ -3169,7 +3173,7 @@ class PurchaseOrderCompanion extends UpdateCompanion<PurchaseOrder> {
 
   @override
   String toString() {
-    return (StringBuffer('PurchaseOrderCompanion(')
+    return (StringBuffer('PurchaseOrdersCompanion(')
           ..write('purchaseOrderId: $purchaseOrderId, ')
           ..write('productId: $productId, ')
           ..write('quantity: $quantity, ')
@@ -3182,12 +3186,12 @@ class PurchaseOrderCompanion extends UpdateCompanion<PurchaseOrder> {
   }
 }
 
-class $PurchaseOrderTable extends PurchaseOrder
-    with TableInfo<$PurchaseOrderTable, PurchaseOrder> {
+class $PurchaseOrdersTable extends PurchaseOrders
+    with TableInfo<$PurchaseOrdersTable, PurchaseOrder> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $PurchaseOrderTable(this.attachedDatabase, [this._alias]);
+  $PurchaseOrdersTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _purchaseOrderIdMeta =
       const VerificationMeta('purchaseOrderId');
   @override
@@ -3202,7 +3206,7 @@ class $PurchaseOrderTable extends PurchaseOrder
       'product_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "product" ("product_id")');
+      defaultConstraints: 'REFERENCES "products" ("product_id")');
   final VerificationMeta _quantityMeta = const VerificationMeta('quantity');
   @override
   late final GeneratedColumn<double> quantity = GeneratedColumn<double>(
@@ -3230,7 +3234,7 @@ class $PurchaseOrderTable extends PurchaseOrder
       'supplier_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "supplier" ("supplier_id")');
+      defaultConstraints: 'REFERENCES "suppliers" ("supplier_id")');
   final VerificationMeta _orderDateMeta = const VerificationMeta('orderDate');
   @override
   late final GeneratedColumn<DateTime> orderDate = GeneratedColumn<DateTime>(
@@ -3244,7 +3248,7 @@ class $PurchaseOrderTable extends PurchaseOrder
       'user_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "user" ("user_id")');
+      defaultConstraints: 'REFERENCES "users" ("user_id")');
   @override
   List<GeneratedColumn> get $columns => [
         purchaseOrderId,
@@ -3257,9 +3261,9 @@ class $PurchaseOrderTable extends PurchaseOrder
         userId
       ];
   @override
-  String get aliasedName => _alias ?? 'purchase_order';
+  String get aliasedName => _alias ?? 'purchase_orders';
   @override
-  String get actualTableName => 'purchase_order';
+  String get actualTableName => 'purchase_orders';
   @override
   VerificationContext validateIntegrity(Insertable<PurchaseOrder> instance,
       {bool isInserting = false}) {
@@ -3342,38 +3346,40 @@ class $PurchaseOrderTable extends PurchaseOrder
   }
 
   @override
-  $PurchaseOrderTable createAlias(String alias) {
-    return $PurchaseOrderTable(attachedDatabase, alias);
+  $PurchaseOrdersTable createAlias(String alias) {
+    return $PurchaseOrdersTable(attachedDatabase, alias);
   }
 }
 
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(e);
-  late final $UserTable user = $UserTable(this);
-  late final $ProductUnitTable productUnit = $ProductUnitTable(this);
-  late final $ProductCategoryTable productCategory =
-      $ProductCategoryTable(this);
-  late final $ProductTable product = $ProductTable(this);
+  late final $UsersTable users = $UsersTable(this);
+  late final $ProductUnitsTable productUnits = $ProductUnitsTable(this);
+  late final $ProductCategoriesTable productCategories =
+      $ProductCategoriesTable(this);
+  late final $ProductsTable products = $ProductsTable(this);
   late final $SalesTable sales = $SalesTable(this);
-  late final $CustomerTable customer = $CustomerTable(this);
-  late final $InvoiceTable invoice = $InvoiceTable(this);
-  late final $SupplierTable supplier = $SupplierTable(this);
-  late final $ReceiveProductTable receiveProduct = $ReceiveProductTable(this);
-  late final $PurchaseOrderTable purchaseOrder = $PurchaseOrderTable(this);
+  late final $CustomersTable customers = $CustomersTable(this);
+  late final $InvoicesTable invoices = $InvoicesTable(this);
+  late final $SuppliersTable suppliers = $SuppliersTable(this);
+  late final $ReceiveProductsTable receiveProducts =
+      $ReceiveProductsTable(this);
+  late final $PurchaseOrdersTable purchaseOrders = $PurchaseOrdersTable(this);
+  late final InvoicesDao invoicesDao = InvoicesDao(this as MyDatabase);
   @override
   Iterable<TableInfo<Table, dynamic>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-        user,
-        productUnit,
-        productCategory,
-        product,
+        users,
+        productUnits,
+        productCategories,
+        products,
         sales,
-        customer,
-        invoice,
-        supplier,
-        receiveProduct,
-        purchaseOrder
+        customers,
+        invoices,
+        suppliers,
+        receiveProducts,
+        purchaseOrders
       ];
 }

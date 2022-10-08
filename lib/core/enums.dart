@@ -9,3 +9,7 @@ enum Status {
   bool get isSuccess => this == Status.success;
   bool get isLoading => this == Status.loading;
 }
+
+enum PaymentType { cache, credit }
+
+enum AccountType { admin, cashier, inventory }

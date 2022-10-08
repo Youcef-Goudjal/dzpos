@@ -1,5 +1,11 @@
 export 'accounts_entity.dart';
+export 'customer_entity.dart';
 export 'invoices_entity.dart';
+export 'product_entity.dart';
+export 'purchase_order_entity.dart';
+export 'receive_product_entity.dart';
 export 'reports_entity.dart';
+export 'sales_entity.dart';
 export 'settings_entity.dart';
+export 'supplier_entity.dart';
 export 'user_entity.dart';
