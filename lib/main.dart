@@ -21,23 +21,19 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    RepositoryProvider(
-      create: (context) => MyDatabase(),
-      
-      child: MultiBlocProvider(
-        providers: CommonBloc.blocProviders,
-        child: EasyLocalization(
-          supportedLocales: LanguageManager.instance.supportedLocales,
-          path: LanguageManager.instance.path,
-          fallbackLocale: LanguageManager.instance.defaultLanguage,
-          saveLocale: true,
-          useOnlyLangCode: true,
-          child: ScreenUtilInit(
-            builder: (context, child) {
-              return child!;
-            },
-            child: const Dzpos(),
-          ),
+    MultiBlocProvider(
+      providers: CommonBloc.blocProviders,
+      child: EasyLocalization(
+        supportedLocales: LanguageManager.instance.supportedLocales,
+        path: LanguageManager.instance.path,
+        fallbackLocale: LanguageManager.instance.defaultLanguage,
+        saveLocale: true,
+        useOnlyLangCode: true,
+        child: ScreenUtilInit(
+          builder: (context, child) {
+            return child!;
+          },
+          child: const Dzpos(),
         ),
       ),
     ),

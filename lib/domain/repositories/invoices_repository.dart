@@ -1,15 +1,19 @@
-import 'package:dzpos/domain/domain.dart';
+import 'package:dzpos/core/services/database.dart';
 
 abstract class InvoicesRepository {
   /// get or watch all materials
   /// return list of products
-  Future<List<ProductEntity>> getAllMaterials();
-  Stream<List<ProductEntity>> watchAllMaterials();
+  Future<List<Product>> getAllMaterials();
+  Stream<List<Product>> watchAllMaterials();
 
   /// get product By id
-  Future<ProductEntity> getProductById(int id);
-
-  Future<void> insertProduct(ProductEntity product);
-  Future<void> updateProduct(ProductEntity product);
+  Future<Product> getProductById(int id);
+  // crud product
+  Future<void> insertProduct(Product product);
+  Future<void> updateProduct(Product product);
   Future<void> deleteProduct(int id);
+
+  /// product categories
+  Stream<List<ProductCategory>> getCategories();
+  Future<void> insertCategory(String name);
 }

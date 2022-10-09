@@ -1,6 +1,7 @@
 import 'package:dzpos/core/common_blocs/application/application_bloc.dart';
 import 'package:dzpos/core/common_blocs/profile/profile_bloc.dart';
 import 'package:dzpos/core/common_blocs/theme/theme_bloc.dart';
+import 'package:dzpos/core/services/database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../application_layer/application_layer.dart';
@@ -10,6 +11,8 @@ export 'application/application_bloc.dart';
 export 'theme/theme_bloc.dart';
 
 class CommonBloc {
+  static final db = MyDatabase();
+  static final invoicesDao = InvoicesDao(db);
   // Blocs
   static final userImpl = UserRepositoryImpl();
   static final authImpl = AuthRepositoryImpl();

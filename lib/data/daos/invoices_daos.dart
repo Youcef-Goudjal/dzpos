@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:dzpos/data/data.dart';
-import 'package:dzpos/domain/domain.dart';
 
 part 'invoices_daos.g.dart';
 
@@ -21,9 +20,9 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   InvoicesDao(super.attachedDatabase);
 
   @override
-  Future<void> deleteProduct(ProductModel product) {
+  Future<void> deleteProduct(int id) {
     return transaction(() async {
-      await products.deleteOne(product.product);
+      await products.deleteWhere((tbl) => tbl.productId.equals(id));
     });
   }
 
@@ -46,26 +45,18 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Future<void> insertProduct(ProductModel product) {
+  Future<void> insertProduct(Product product) {
     return transaction(() async {
-      final categoryId = await (into(productCategories)
-          .insert(product.category, mode: InsertMode.insertOrIgnore));
-      final unitId = await (into(productUnits)
-          .insert(product.unit, mode: InsertMode.insertOrIgnore));
-
-      await into(products).insert(product.product.copyWith(
-        categoryId: categoryId,
-        unitId: unitId,
-      ));
+      await into(products).insert(product);
     });
   }
 
   @override
-  Future<void> updateProduct(ProductModel product) {
+  Future<void> updateProduct(Product product) {
     return transaction(() async {
       await (products.update()
-            ..where((tbl) => tbl.productId.equals(product.product.productId)))
-          .write(product.product);
+            ..where((tbl) => tbl.productId.equals(product.productId)))
+          .write(product);
     });
   }
 
@@ -86,22 +77,17 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       );
     }).watch();
   }
-}
 
-extension CategoryExt on ProductCategory {
-  ProductCategoryEntity get toEntity {
-    return ProductCategoryEntity(
-      id: categoryId,
-      name: categoryName,
-    );
+  Stream<List<ProductCategory>> watchAllCategories() {
+    final query = select(productCategories);
+    return query.watch();
   }
-}
 
-extension UnitExt on ProductUnit {
-  ProductCategoryEntity get toEntity {
-    return ProductCategoryEntity(
-      id: unitId,
-      name: unitName,
-    );
+  Future<void> insertCategory(String name) {
+    return transaction(() async {
+      productCategories.insertOne(
+        ProductCategoriesCompanion.insert(categoryName: name),
+      );
+    });
   }
 }

@@ -66,7 +66,7 @@ class _UnitsBarcode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: 3,
+      itemCount: 1,
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       itemBuilder: (context, index) => const _ProductCard(),
       separatorBuilder: (context, index) => 10.h.heightBox,
@@ -148,11 +148,6 @@ class _ProductInfo extends StatelessWidget {
         20.h.heightBox,
         AppTextField(
           hint: "Product name",
-        ),
-        15.h.heightBox,
-        AppTextField(
-          maxLine: 3,
-          hint: "Description",
         ),
         15.h.heightBox,
         Row(
