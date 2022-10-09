@@ -5,9 +5,16 @@ abstract class InvoicesDataSource {
   /// get or watch all materials
   /// return list of products
   Future<List<ProductModel>> getAllMaterials();
-  Stream<List<ProductModel>> watchAllMaterials();
+  Stream<List<Product>> watchAllMaterials();
 
-  Future<void> insertProduct(Product product);
+  Future<void> insertProduct({
+    required String name,
+    required String barcode,
+    required int categoryId,
+    required double purchasePrice,
+    required double salePrice,
+    required double minInStock,
+  });
   Future<void> updateProduct(Product product);
   Future<void> deleteProduct(int id);
 }
@@ -25,19 +32,25 @@ class InvoicesDataSourceImpl implements InvoicesDataSource {
     throw UnimplementedError();
   }
 
-
   @override
-  Stream<List<ProductModel>> watchAllMaterials() {
+  Stream<List<Product>> watchAllMaterials() {
     // TODO: implement watchAllMaterials
     throw UnimplementedError();
   }
-  
+
   @override
-  Future<void> insertProduct(Product product) {
+  Future<void> insertProduct({
+    required String name,
+    required String barcode,
+    required int categoryId,
+    required double purchasePrice,
+    required double salePrice,
+    required double minInStock,
+  }) {
     // TODO: implement insertProduct
     throw UnimplementedError();
   }
-  
+
   @override
   Future<void> updateProduct(Product product) {
     // TODO: implement updateProduct

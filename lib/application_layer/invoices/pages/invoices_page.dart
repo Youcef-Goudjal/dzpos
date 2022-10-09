@@ -12,6 +12,17 @@ class InvoicesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return const _InvoiceBody();
+  }
+}
+
+class _InvoiceBody extends StatelessWidget {
+  const _InvoiceBody({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return ListView(
       physics: const BouncingScrollPhysics(),
       padding: EdgeInsets.symmetric(

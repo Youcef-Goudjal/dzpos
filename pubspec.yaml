@@ -71,6 +71,7 @@ dependencies:
   cloud_firestore: ^3.5.0
   settings_ui: ^2.0.2
   flutter_svg: ^1.1.5
+  flutter_typeahead: ^4.1.1
  
 
 

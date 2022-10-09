@@ -9,11 +9,18 @@ abstract class InvoicesRepository {
   /// get product By id
   Future<Product> getProductById(int id);
   // crud product
-  Future<void> insertProduct(Product product);
+  Future<void> insertProduct({
+    required String name,
+    required String barcode,
+    required int categoryId,
+    required double purchasePrice,
+    required double salePrice,
+    required double minInStock,
+  });
   Future<void> updateProduct(Product product);
   Future<void> deleteProduct(int id);
 
   /// product categories
-  Stream<List<ProductCategory>> getCategories();
+  Stream<List<ProductCategory>> watchAllCategories();
   Future<void> insertCategory(String name);
 }

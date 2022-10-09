@@ -18,9 +18,22 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   }
 
   @override
-  Future<void> insertProduct(Product product) {
-    // TODO: implement insertProduct
-    throw UnimplementedError();
+  Future<void> insertProduct({
+    required String name,
+    required String barcode,
+    required int categoryId,
+    required double purchasePrice,
+    required double salePrice,
+    required double minInStock,
+  }) {
+    return invoicesDao.insertProduct(
+      barcode: barcode,
+      categoryId: categoryId,
+      minInStock: minInStock,
+      name: name,
+      purchasePrice: purchasePrice,
+      salePrice: salePrice,
+    );
   }
 
   @override
@@ -30,7 +43,7 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   }
 
   @override
-  Stream<List<ProductCategory>> getCategories() {
+  Stream<List<ProductCategory>> watchAllCategories() {
     return invoicesDao.watchAllCategories();
   }
 
