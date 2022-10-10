@@ -14,6 +14,7 @@ class AppTextField extends StatefulWidget {
     this.onChanged,
     this.textInputAction,
     this.errorText,
+    this.enabled,
   });
 
   final TextEditingController? controller;
@@ -24,6 +25,7 @@ class AppTextField extends StatefulWidget {
   final Widget? suffix;
   final int? maxLine;
   final String? hint;
+  final bool? enabled;
   String? errorText;
   final void Function(String input)? onChanged;
 
@@ -46,6 +48,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ],
         Expanded(
           child: TextField(
+            enabled: widget.enabled,
             maxLines: widget.maxLine,
             onChanged: widget.onChanged,
             controller: widget.controller,

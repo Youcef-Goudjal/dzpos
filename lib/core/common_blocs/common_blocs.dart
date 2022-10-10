@@ -12,6 +12,8 @@ export 'theme/theme_bloc.dart';
 
 class CommonBloc {
   static final db = MyDatabase();
+  // Daos
+  static final accountsDao = AccountsDao(db);
   static final invoicesDao = InvoicesDao(db);
   // Blocs
   static final userImpl = UserRepositoryImpl();

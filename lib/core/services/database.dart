@@ -220,7 +220,7 @@ class ReceiveProducts extends Table {
     PurchaseOrders,
     Suppliers,
   ],
-  daos: [InvoicesDao],
+  daos: [InvoicesDao, AccountsDao],
 )
 class MyDatabase extends _$MyDatabase {
   MyDatabase() : super(_openConnection());

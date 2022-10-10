@@ -3366,6 +3366,7 @@ abstract class _$MyDatabase extends GeneratedDatabase {
       $ReceiveProductsTable(this);
   late final $PurchaseOrdersTable purchaseOrders = $PurchaseOrdersTable(this);
   late final InvoicesDao invoicesDao = InvoicesDao(this as MyDatabase);
+  late final AccountsDao accountsDao = AccountsDao(this as MyDatabase);
   @override
   Iterable<TableInfo<Table, dynamic>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
