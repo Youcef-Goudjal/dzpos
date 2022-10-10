@@ -8,27 +8,27 @@ part of 'database.dart';
 
 // ignore_for_file: type=lint
 class User extends DataClass implements Insertable<User> {
-  final int userId;
+  final int id;
   final String firebaseUid;
   final String username;
   final String password;
-  final String phone;
+  final String contact;
   final AccountType accountType;
   const User(
-      {required this.userId,
+      {required this.id,
       required this.firebaseUid,
       required this.username,
       required this.password,
-      required this.phone,
+      required this.contact,
       required this.accountType});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['user_id'] = Variable<int>(userId);
+    map['id'] = Variable<int>(id);
     map['firebase_uid'] = Variable<String>(firebaseUid);
     map['username'] = Variable<String>(username);
     map['password'] = Variable<String>(password);
-    map['phone'] = Variable<String>(phone);
+    map['contact'] = Variable<String>(contact);
     {
       final converter = $UsersTable.$converter0;
       map['account_type'] = Variable<int>(converter.toSql(accountType));
@@ -38,11 +38,11 @@ class User extends DataClass implements Insertable<User> {
 
   UsersCompanion toCompanion(bool nullToAbsent) {
     return UsersCompanion(
-      userId: Value(userId),
+      id: Value(id),
       firebaseUid: Value(firebaseUid),
       username: Value(username),
       password: Value(password),
-      phone: Value(phone),
+      contact: Value(contact),
       accountType: Value(accountType),
     );
   }
@@ -51,11 +51,11 @@ class User extends DataClass implements Insertable<User> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return User(
-      userId: serializer.fromJson<int>(json['userId']),
+      id: serializer.fromJson<int>(json['id']),
       firebaseUid: serializer.fromJson<String>(json['firebaseUid']),
       username: serializer.fromJson<String>(json['username']),
       password: serializer.fromJson<String>(json['password']),
-      phone: serializer.fromJson<String>(json['phone']),
+      contact: serializer.fromJson<String>(json['contact']),
       accountType: serializer.fromJson<AccountType>(json['accountType']),
     );
   }
@@ -63,38 +63,38 @@ class User extends DataClass implements Insertable<User> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'userId': serializer.toJson<int>(userId),
+      'id': serializer.toJson<int>(id),
       'firebaseUid': serializer.toJson<String>(firebaseUid),
       'username': serializer.toJson<String>(username),
       'password': serializer.toJson<String>(password),
-      'phone': serializer.toJson<String>(phone),
+      'contact': serializer.toJson<String>(contact),
       'accountType': serializer.toJson<AccountType>(accountType),
     };
   }
 
   User copyWith(
-          {int? userId,
+          {int? id,
           String? firebaseUid,
           String? username,
           String? password,
-          String? phone,
+          String? contact,
           AccountType? accountType}) =>
       User(
-        userId: userId ?? this.userId,
+        id: id ?? this.id,
         firebaseUid: firebaseUid ?? this.firebaseUid,
         username: username ?? this.username,
         password: password ?? this.password,
-        phone: phone ?? this.phone,
+        contact: contact ?? this.contact,
         accountType: accountType ?? this.accountType,
       );
   @override
   String toString() {
     return (StringBuffer('User(')
-          ..write('userId: $userId, ')
+          ..write('id: $id, ')
           ..write('firebaseUid: $firebaseUid, ')
           ..write('username: $username, ')
           ..write('password: $password, ')
-          ..write('phone: $phone, ')
+          ..write('contact: $contact, ')
           ..write('accountType: $accountType')
           ..write(')'))
         .toString();
@@ -102,77 +102,77 @@ class User extends DataClass implements Insertable<User> {
 
   @override
   int get hashCode =>
-      Object.hash(userId, firebaseUid, username, password, phone, accountType);
+      Object.hash(id, firebaseUid, username, password, contact, accountType);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is User &&
-          other.userId == this.userId &&
+          other.id == this.id &&
           other.firebaseUid == this.firebaseUid &&
           other.username == this.username &&
           other.password == this.password &&
-          other.phone == this.phone &&
+          other.contact == this.contact &&
           other.accountType == this.accountType);
 }
 
 class UsersCompanion extends UpdateCompanion<User> {
-  final Value<int> userId;
+  final Value<int> id;
   final Value<String> firebaseUid;
   final Value<String> username;
   final Value<String> password;
-  final Value<String> phone;
+  final Value<String> contact;
   final Value<AccountType> accountType;
   const UsersCompanion({
-    this.userId = const Value.absent(),
+    this.id = const Value.absent(),
     this.firebaseUid = const Value.absent(),
     this.username = const Value.absent(),
     this.password = const Value.absent(),
-    this.phone = const Value.absent(),
+    this.contact = const Value.absent(),
     this.accountType = const Value.absent(),
   });
   UsersCompanion.insert({
-    this.userId = const Value.absent(),
+    this.id = const Value.absent(),
     required String firebaseUid,
     required String username,
     required String password,
-    required String phone,
+    required String contact,
     required AccountType accountType,
   })  : firebaseUid = Value(firebaseUid),
         username = Value(username),
         password = Value(password),
-        phone = Value(phone),
+        contact = Value(contact),
         accountType = Value(accountType);
   static Insertable<User> custom({
-    Expression<int>? userId,
+    Expression<int>? id,
     Expression<String>? firebaseUid,
     Expression<String>? username,
     Expression<String>? password,
-    Expression<String>? phone,
+    Expression<String>? contact,
     Expression<int>? accountType,
   }) {
     return RawValuesInsertable({
-      if (userId != null) 'user_id': userId,
+      if (id != null) 'id': id,
       if (firebaseUid != null) 'firebase_uid': firebaseUid,
       if (username != null) 'username': username,
       if (password != null) 'password': password,
-      if (phone != null) 'phone': phone,
+      if (contact != null) 'contact': contact,
       if (accountType != null) 'account_type': accountType,
     });
   }
 
   UsersCompanion copyWith(
-      {Value<int>? userId,
+      {Value<int>? id,
       Value<String>? firebaseUid,
       Value<String>? username,
       Value<String>? password,
-      Value<String>? phone,
+      Value<String>? contact,
       Value<AccountType>? accountType}) {
     return UsersCompanion(
-      userId: userId ?? this.userId,
+      id: id ?? this.id,
       firebaseUid: firebaseUid ?? this.firebaseUid,
       username: username ?? this.username,
       password: password ?? this.password,
-      phone: phone ?? this.phone,
+      contact: contact ?? this.contact,
       accountType: accountType ?? this.accountType,
     );
   }
@@ -180,8 +180,8 @@ class UsersCompanion extends UpdateCompanion<User> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (userId.present) {
-      map['user_id'] = Variable<int>(userId.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
     if (firebaseUid.present) {
       map['firebase_uid'] = Variable<String>(firebaseUid.value);
@@ -192,8 +192,8 @@ class UsersCompanion extends UpdateCompanion<User> {
     if (password.present) {
       map['password'] = Variable<String>(password.value);
     }
-    if (phone.present) {
-      map['phone'] = Variable<String>(phone.value);
+    if (contact.present) {
+      map['contact'] = Variable<String>(contact.value);
     }
     if (accountType.present) {
       final converter = $UsersTable.$converter0;
@@ -205,11 +205,11 @@ class UsersCompanion extends UpdateCompanion<User> {
   @override
   String toString() {
     return (StringBuffer('UsersCompanion(')
-          ..write('userId: $userId, ')
+          ..write('id: $id, ')
           ..write('firebaseUid: $firebaseUid, ')
           ..write('username: $username, ')
           ..write('password: $password, ')
-          ..write('phone: $phone, ')
+          ..write('contact: $contact, ')
           ..write('accountType: $accountType')
           ..write(')'))
         .toString();
@@ -221,10 +221,10 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $UsersTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _userIdMeta = const VerificationMeta('userId');
+  final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> userId = GeneratedColumn<int>(
-      'user_id', aliasedName, false,
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
@@ -248,10 +248,10 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 30),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _phoneMeta = const VerificationMeta('phone');
+  final VerificationMeta _contactMeta = const VerificationMeta('contact');
   @override
-  late final GeneratedColumn<String> phone = GeneratedColumn<String>(
-      'phone', aliasedName, false,
+  late final GeneratedColumn<String> contact = GeneratedColumn<String>(
+      'contact', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 10),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
@@ -264,7 +264,7 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
           .withConverter<AccountType>($UsersTable.$converter0);
   @override
   List<GeneratedColumn> get $columns =>
-      [userId, firebaseUid, username, password, phone, accountType];
+      [id, firebaseUid, username, password, contact, accountType];
   @override
   String get aliasedName => _alias ?? 'users';
   @override
@@ -274,9 +274,8 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('user_id')) {
-      context.handle(_userIdMeta,
-          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('firebase_uid')) {
       context.handle(
@@ -298,32 +297,32 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     } else if (isInserting) {
       context.missing(_passwordMeta);
     }
-    if (data.containsKey('phone')) {
-      context.handle(
-          _phoneMeta, phone.isAcceptableOrUnknown(data['phone']!, _phoneMeta));
+    if (data.containsKey('contact')) {
+      context.handle(_contactMeta,
+          contact.isAcceptableOrUnknown(data['contact']!, _contactMeta));
     } else if (isInserting) {
-      context.missing(_phoneMeta);
+      context.missing(_contactMeta);
     }
     context.handle(_accountTypeMeta, const VerificationResult.success());
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {userId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   User map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return User(
-      userId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       firebaseUid: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}firebase_uid'])!,
       username: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}username'])!,
       password: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}password'])!,
-      phone: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}phone'])!,
+      contact: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}contact'])!,
       accountType: $UsersTable.$converter0.fromSql(attachedDatabase
           .options.types
           .read(DriftSqlType.int, data['${effectivePrefix}account_type'])!),
@@ -339,195 +338,22 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
       const EnumIndexConverter<AccountType>(AccountType.values);
 }
 
-class ProductUnit extends DataClass implements Insertable<ProductUnit> {
-  final int unitId;
-  final String unitName;
-  const ProductUnit({required this.unitId, required this.unitName});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['unit_id'] = Variable<int>(unitId);
-    map['unit_name'] = Variable<String>(unitName);
-    return map;
-  }
-
-  ProductUnitsCompanion toCompanion(bool nullToAbsent) {
-    return ProductUnitsCompanion(
-      unitId: Value(unitId),
-      unitName: Value(unitName),
-    );
-  }
-
-  factory ProductUnit.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ProductUnit(
-      unitId: serializer.fromJson<int>(json['unitId']),
-      unitName: serializer.fromJson<String>(json['unitName']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'unitId': serializer.toJson<int>(unitId),
-      'unitName': serializer.toJson<String>(unitName),
-    };
-  }
-
-  ProductUnit copyWith({int? unitId, String? unitName}) => ProductUnit(
-        unitId: unitId ?? this.unitId,
-        unitName: unitName ?? this.unitName,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('ProductUnit(')
-          ..write('unitId: $unitId, ')
-          ..write('unitName: $unitName')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(unitId, unitName);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is ProductUnit &&
-          other.unitId == this.unitId &&
-          other.unitName == this.unitName);
-}
-
-class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
-  final Value<int> unitId;
-  final Value<String> unitName;
-  const ProductUnitsCompanion({
-    this.unitId = const Value.absent(),
-    this.unitName = const Value.absent(),
-  });
-  ProductUnitsCompanion.insert({
-    this.unitId = const Value.absent(),
-    required String unitName,
-  }) : unitName = Value(unitName);
-  static Insertable<ProductUnit> custom({
-    Expression<int>? unitId,
-    Expression<String>? unitName,
-  }) {
-    return RawValuesInsertable({
-      if (unitId != null) 'unit_id': unitId,
-      if (unitName != null) 'unit_name': unitName,
-    });
-  }
-
-  ProductUnitsCompanion copyWith(
-      {Value<int>? unitId, Value<String>? unitName}) {
-    return ProductUnitsCompanion(
-      unitId: unitId ?? this.unitId,
-      unitName: unitName ?? this.unitName,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (unitId.present) {
-      map['unit_id'] = Variable<int>(unitId.value);
-    }
-    if (unitName.present) {
-      map['unit_name'] = Variable<String>(unitName.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('ProductUnitsCompanion(')
-          ..write('unitId: $unitId, ')
-          ..write('unitName: $unitName')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $ProductUnitsTable extends ProductUnits
-    with TableInfo<$ProductUnitsTable, ProductUnit> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ProductUnitsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _unitIdMeta = const VerificationMeta('unitId');
-  @override
-  late final GeneratedColumn<int> unitId = GeneratedColumn<int>(
-      'unit_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _unitNameMeta = const VerificationMeta('unitName');
-  @override
-  late final GeneratedColumn<String> unitName = GeneratedColumn<String>(
-      'unit_name', aliasedName, false,
-      check: () => unitName.isNotNull(),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [unitId, unitName];
-  @override
-  String get aliasedName => _alias ?? 'product_units';
-  @override
-  String get actualTableName => 'product_units';
-  @override
-  VerificationContext validateIntegrity(Insertable<ProductUnit> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('unit_id')) {
-      context.handle(_unitIdMeta,
-          unitId.isAcceptableOrUnknown(data['unit_id']!, _unitIdMeta));
-    }
-    if (data.containsKey('unit_name')) {
-      context.handle(_unitNameMeta,
-          unitName.isAcceptableOrUnknown(data['unit_name']!, _unitNameMeta));
-    } else if (isInserting) {
-      context.missing(_unitNameMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {unitId};
-  @override
-  ProductUnit map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ProductUnit(
-      unitId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}unit_id'])!,
-      unitName: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}unit_name'])!,
-    );
-  }
-
-  @override
-  $ProductUnitsTable createAlias(String alias) {
-    return $ProductUnitsTable(attachedDatabase, alias);
-  }
-}
-
 class ProductCategory extends DataClass implements Insertable<ProductCategory> {
-  final int categoryId;
-  final String categoryName;
-  const ProductCategory({required this.categoryId, required this.categoryName});
+  final int id;
+  final String name;
+  const ProductCategory({required this.id, required this.name});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['category_id'] = Variable<int>(categoryId);
-    map['category_name'] = Variable<String>(categoryName);
+    map['id'] = Variable<int>(id);
+    map['name'] = Variable<String>(name);
     return map;
   }
 
   ProductCategoriesCompanion toCompanion(bool nullToAbsent) {
     return ProductCategoriesCompanion(
-      categoryId: Value(categoryId),
-      categoryName: Value(categoryName),
+      id: Value(id),
+      name: Value(name),
     );
   }
 
@@ -535,80 +361,78 @@ class ProductCategory extends DataClass implements Insertable<ProductCategory> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ProductCategory(
-      categoryId: serializer.fromJson<int>(json['categoryId']),
-      categoryName: serializer.fromJson<String>(json['categoryName']),
+      id: serializer.fromJson<int>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'categoryId': serializer.toJson<int>(categoryId),
-      'categoryName': serializer.toJson<String>(categoryName),
+      'id': serializer.toJson<int>(id),
+      'name': serializer.toJson<String>(name),
     };
   }
 
-  ProductCategory copyWith({int? categoryId, String? categoryName}) =>
-      ProductCategory(
-        categoryId: categoryId ?? this.categoryId,
-        categoryName: categoryName ?? this.categoryName,
+  ProductCategory copyWith({int? id, String? name}) => ProductCategory(
+        id: id ?? this.id,
+        name: name ?? this.name,
       );
   @override
   String toString() {
     return (StringBuffer('ProductCategory(')
-          ..write('categoryId: $categoryId, ')
-          ..write('categoryName: $categoryName')
+          ..write('id: $id, ')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(categoryId, categoryName);
+  int get hashCode => Object.hash(id, name);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ProductCategory &&
-          other.categoryId == this.categoryId &&
-          other.categoryName == this.categoryName);
+          other.id == this.id &&
+          other.name == this.name);
 }
 
 class ProductCategoriesCompanion extends UpdateCompanion<ProductCategory> {
-  final Value<int> categoryId;
-  final Value<String> categoryName;
+  final Value<int> id;
+  final Value<String> name;
   const ProductCategoriesCompanion({
-    this.categoryId = const Value.absent(),
-    this.categoryName = const Value.absent(),
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
   });
   ProductCategoriesCompanion.insert({
-    this.categoryId = const Value.absent(),
-    required String categoryName,
-  }) : categoryName = Value(categoryName);
+    this.id = const Value.absent(),
+    required String name,
+  }) : name = Value(name);
   static Insertable<ProductCategory> custom({
-    Expression<int>? categoryId,
-    Expression<String>? categoryName,
+    Expression<int>? id,
+    Expression<String>? name,
   }) {
     return RawValuesInsertable({
-      if (categoryId != null) 'category_id': categoryId,
-      if (categoryName != null) 'category_name': categoryName,
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
     });
   }
 
-  ProductCategoriesCompanion copyWith(
-      {Value<int>? categoryId, Value<String>? categoryName}) {
+  ProductCategoriesCompanion copyWith({Value<int>? id, Value<String>? name}) {
     return ProductCategoriesCompanion(
-      categoryId: categoryId ?? this.categoryId,
-      categoryName: categoryName ?? this.categoryName,
+      id: id ?? this.id,
+      name: name ?? this.name,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (categoryId.present) {
-      map['category_id'] = Variable<int>(categoryId.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
-    if (categoryName.present) {
-      map['category_name'] = Variable<String>(categoryName.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
     return map;
   }
@@ -616,8 +440,8 @@ class ProductCategoriesCompanion extends UpdateCompanion<ProductCategory> {
   @override
   String toString() {
     return (StringBuffer('ProductCategoriesCompanion(')
-          ..write('categoryId: $categoryId, ')
-          ..write('categoryName: $categoryName')
+          ..write('id: $id, ')
+          ..write('name: $name')
           ..write(')'))
         .toString();
   }
@@ -629,23 +453,22 @@ class $ProductCategoriesTable extends ProductCategories
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ProductCategoriesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _categoryIdMeta = const VerificationMeta('categoryId');
+  final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
-      'category_id', aliasedName, false,
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _categoryNameMeta =
-      const VerificationMeta('categoryName');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> categoryName = GeneratedColumn<String>(
-      'category_name', aliasedName, false,
-      check: () => categoryName.isNotNull(),
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      check: () => name.isNotNull(),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [categoryId, categoryName];
+  List<GeneratedColumn> get $columns => [id, name];
   @override
   String get aliasedName => _alias ?? 'product_categories';
   @override
@@ -655,33 +478,28 @@ class $ProductCategoriesTable extends ProductCategories
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('category_id')) {
-      context.handle(
-          _categoryIdMeta,
-          categoryId.isAcceptableOrUnknown(
-              data['category_id']!, _categoryIdMeta));
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('category_name')) {
+    if (data.containsKey('name')) {
       context.handle(
-          _categoryNameMeta,
-          categoryName.isAcceptableOrUnknown(
-              data['category_name']!, _categoryNameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
-      context.missing(_categoryNameMeta);
+      context.missing(_nameMeta);
     }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {categoryId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   ProductCategory map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ProductCategory(
-      categoryId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
-      categoryName: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}category_name'])!,
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      name: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
     );
   }
 
@@ -692,37 +510,31 @@ class $ProductCategoriesTable extends ProductCategories
 }
 
 class Product extends DataClass implements Insertable<Product> {
-  final int productId;
-  final String productCode;
-  final String productName;
-  final int unitId;
+  final int id;
+  final String code;
+  final String name;
   final int categoryId;
   final double unitInStock;
-  final double unitPrice;
   final double discountPercentage;
   final double reorderLevel;
   final int userId;
   const Product(
-      {required this.productId,
-      required this.productCode,
-      required this.productName,
-      required this.unitId,
+      {required this.id,
+      required this.code,
+      required this.name,
       required this.categoryId,
       required this.unitInStock,
-      required this.unitPrice,
       required this.discountPercentage,
       required this.reorderLevel,
       required this.userId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['product_id'] = Variable<int>(productId);
-    map['product_code'] = Variable<String>(productCode);
-    map['product_name'] = Variable<String>(productName);
-    map['unit_id'] = Variable<int>(unitId);
+    map['product_id'] = Variable<int>(id);
+    map['product_code'] = Variable<String>(code);
+    map['product_name'] = Variable<String>(name);
     map['category_id'] = Variable<int>(categoryId);
     map['unit_in_stock'] = Variable<double>(unitInStock);
-    map['unit_price'] = Variable<double>(unitPrice);
     map['discount_percentage'] = Variable<double>(discountPercentage);
     map['reorder_level'] = Variable<double>(reorderLevel);
     map['user_id'] = Variable<int>(userId);
@@ -731,13 +543,11 @@ class Product extends DataClass implements Insertable<Product> {
 
   ProductsCompanion toCompanion(bool nullToAbsent) {
     return ProductsCompanion(
-      productId: Value(productId),
-      productCode: Value(productCode),
-      productName: Value(productName),
-      unitId: Value(unitId),
+      id: Value(id),
+      code: Value(code),
+      name: Value(name),
       categoryId: Value(categoryId),
       unitInStock: Value(unitInStock),
-      unitPrice: Value(unitPrice),
       discountPercentage: Value(discountPercentage),
       reorderLevel: Value(reorderLevel),
       userId: Value(userId),
@@ -748,13 +558,11 @@ class Product extends DataClass implements Insertable<Product> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Product(
-      productId: serializer.fromJson<int>(json['productId']),
-      productCode: serializer.fromJson<String>(json['productCode']),
-      productName: serializer.fromJson<String>(json['productName']),
-      unitId: serializer.fromJson<int>(json['unitId']),
+      id: serializer.fromJson<int>(json['id']),
+      code: serializer.fromJson<String>(json['code']),
+      name: serializer.fromJson<String>(json['name']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
       unitInStock: serializer.fromJson<double>(json['unitInStock']),
-      unitPrice: serializer.fromJson<double>(json['unitPrice']),
       discountPercentage:
           serializer.fromJson<double>(json['discountPercentage']),
       reorderLevel: serializer.fromJson<double>(json['reorderLevel']),
@@ -765,13 +573,11 @@ class Product extends DataClass implements Insertable<Product> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'productId': serializer.toJson<int>(productId),
-      'productCode': serializer.toJson<String>(productCode),
-      'productName': serializer.toJson<String>(productName),
-      'unitId': serializer.toJson<int>(unitId),
+      'id': serializer.toJson<int>(id),
+      'code': serializer.toJson<String>(code),
+      'name': serializer.toJson<String>(name),
       'categoryId': serializer.toJson<int>(categoryId),
       'unitInStock': serializer.toJson<double>(unitInStock),
-      'unitPrice': serializer.toJson<double>(unitPrice),
       'discountPercentage': serializer.toJson<double>(discountPercentage),
       'reorderLevel': serializer.toJson<double>(reorderLevel),
       'userId': serializer.toJson<int>(userId),
@@ -779,24 +585,20 @@ class Product extends DataClass implements Insertable<Product> {
   }
 
   Product copyWith(
-          {int? productId,
-          String? productCode,
-          String? productName,
-          int? unitId,
+          {int? id,
+          String? code,
+          String? name,
           int? categoryId,
           double? unitInStock,
-          double? unitPrice,
           double? discountPercentage,
           double? reorderLevel,
           int? userId}) =>
       Product(
-        productId: productId ?? this.productId,
-        productCode: productCode ?? this.productCode,
-        productName: productName ?? this.productName,
-        unitId: unitId ?? this.unitId,
+        id: id ?? this.id,
+        code: code ?? this.code,
+        name: name ?? this.name,
         categoryId: categoryId ?? this.categoryId,
         unitInStock: unitInStock ?? this.unitInStock,
-        unitPrice: unitPrice ?? this.unitPrice,
         discountPercentage: discountPercentage ?? this.discountPercentage,
         reorderLevel: reorderLevel ?? this.reorderLevel,
         userId: userId ?? this.userId,
@@ -804,13 +606,11 @@ class Product extends DataClass implements Insertable<Product> {
   @override
   String toString() {
     return (StringBuffer('Product(')
-          ..write('productId: $productId, ')
-          ..write('productCode: $productCode, ')
-          ..write('productName: $productName, ')
-          ..write('unitId: $unitId, ')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('name: $name, ')
           ..write('categoryId: $categoryId, ')
           ..write('unitInStock: $unitInStock, ')
-          ..write('unitPrice: $unitPrice, ')
           ..write('discountPercentage: $discountPercentage, ')
           ..write('reorderLevel: $reorderLevel, ')
           ..write('userId: $userId')
@@ -819,96 +619,72 @@ class Product extends DataClass implements Insertable<Product> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      productId,
-      productCode,
-      productName,
-      unitId,
-      categoryId,
-      unitInStock,
-      unitPrice,
-      discountPercentage,
-      reorderLevel,
-      userId);
+  int get hashCode => Object.hash(id, code, name, categoryId, unitInStock,
+      discountPercentage, reorderLevel, userId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Product &&
-          other.productId == this.productId &&
-          other.productCode == this.productCode &&
-          other.productName == this.productName &&
-          other.unitId == this.unitId &&
+          other.id == this.id &&
+          other.code == this.code &&
+          other.name == this.name &&
           other.categoryId == this.categoryId &&
           other.unitInStock == this.unitInStock &&
-          other.unitPrice == this.unitPrice &&
           other.discountPercentage == this.discountPercentage &&
           other.reorderLevel == this.reorderLevel &&
           other.userId == this.userId);
 }
 
 class ProductsCompanion extends UpdateCompanion<Product> {
-  final Value<int> productId;
-  final Value<String> productCode;
-  final Value<String> productName;
-  final Value<int> unitId;
+  final Value<int> id;
+  final Value<String> code;
+  final Value<String> name;
   final Value<int> categoryId;
   final Value<double> unitInStock;
-  final Value<double> unitPrice;
   final Value<double> discountPercentage;
   final Value<double> reorderLevel;
   final Value<int> userId;
   const ProductsCompanion({
-    this.productId = const Value.absent(),
-    this.productCode = const Value.absent(),
-    this.productName = const Value.absent(),
-    this.unitId = const Value.absent(),
+    this.id = const Value.absent(),
+    this.code = const Value.absent(),
+    this.name = const Value.absent(),
     this.categoryId = const Value.absent(),
     this.unitInStock = const Value.absent(),
-    this.unitPrice = const Value.absent(),
     this.discountPercentage = const Value.absent(),
     this.reorderLevel = const Value.absent(),
     this.userId = const Value.absent(),
   });
   ProductsCompanion.insert({
-    this.productId = const Value.absent(),
-    required String productCode,
-    required String productName,
-    required int unitId,
+    this.id = const Value.absent(),
+    required String code,
+    required String name,
     required int categoryId,
-    required double unitInStock,
-    required double unitPrice,
+    this.unitInStock = const Value.absent(),
     required double discountPercentage,
     required double reorderLevel,
     required int userId,
-  })  : productCode = Value(productCode),
-        productName = Value(productName),
-        unitId = Value(unitId),
+  })  : code = Value(code),
+        name = Value(name),
         categoryId = Value(categoryId),
-        unitInStock = Value(unitInStock),
-        unitPrice = Value(unitPrice),
         discountPercentage = Value(discountPercentage),
         reorderLevel = Value(reorderLevel),
         userId = Value(userId);
   static Insertable<Product> custom({
-    Expression<int>? productId,
-    Expression<String>? productCode,
-    Expression<String>? productName,
-    Expression<int>? unitId,
+    Expression<int>? id,
+    Expression<String>? code,
+    Expression<String>? name,
     Expression<int>? categoryId,
     Expression<double>? unitInStock,
-    Expression<double>? unitPrice,
     Expression<double>? discountPercentage,
     Expression<double>? reorderLevel,
     Expression<int>? userId,
   }) {
     return RawValuesInsertable({
-      if (productId != null) 'product_id': productId,
-      if (productCode != null) 'product_code': productCode,
-      if (productName != null) 'product_name': productName,
-      if (unitId != null) 'unit_id': unitId,
+      if (id != null) 'product_id': id,
+      if (code != null) 'product_code': code,
+      if (name != null) 'product_name': name,
       if (categoryId != null) 'category_id': categoryId,
       if (unitInStock != null) 'unit_in_stock': unitInStock,
-      if (unitPrice != null) 'unit_price': unitPrice,
       if (discountPercentage != null) 'discount_percentage': discountPercentage,
       if (reorderLevel != null) 'reorder_level': reorderLevel,
       if (userId != null) 'user_id': userId,
@@ -916,24 +692,20 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   }
 
   ProductsCompanion copyWith(
-      {Value<int>? productId,
-      Value<String>? productCode,
-      Value<String>? productName,
-      Value<int>? unitId,
+      {Value<int>? id,
+      Value<String>? code,
+      Value<String>? name,
       Value<int>? categoryId,
       Value<double>? unitInStock,
-      Value<double>? unitPrice,
       Value<double>? discountPercentage,
       Value<double>? reorderLevel,
       Value<int>? userId}) {
     return ProductsCompanion(
-      productId: productId ?? this.productId,
-      productCode: productCode ?? this.productCode,
-      productName: productName ?? this.productName,
-      unitId: unitId ?? this.unitId,
+      id: id ?? this.id,
+      code: code ?? this.code,
+      name: name ?? this.name,
       categoryId: categoryId ?? this.categoryId,
       unitInStock: unitInStock ?? this.unitInStock,
-      unitPrice: unitPrice ?? this.unitPrice,
       discountPercentage: discountPercentage ?? this.discountPercentage,
       reorderLevel: reorderLevel ?? this.reorderLevel,
       userId: userId ?? this.userId,
@@ -943,26 +715,20 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (productId.present) {
-      map['product_id'] = Variable<int>(productId.value);
+    if (id.present) {
+      map['product_id'] = Variable<int>(id.value);
     }
-    if (productCode.present) {
-      map['product_code'] = Variable<String>(productCode.value);
+    if (code.present) {
+      map['product_code'] = Variable<String>(code.value);
     }
-    if (productName.present) {
-      map['product_name'] = Variable<String>(productName.value);
-    }
-    if (unitId.present) {
-      map['unit_id'] = Variable<int>(unitId.value);
+    if (name.present) {
+      map['product_name'] = Variable<String>(name.value);
     }
     if (categoryId.present) {
       map['category_id'] = Variable<int>(categoryId.value);
     }
     if (unitInStock.present) {
       map['unit_in_stock'] = Variable<double>(unitInStock.value);
-    }
-    if (unitPrice.present) {
-      map['unit_price'] = Variable<double>(unitPrice.value);
     }
     if (discountPercentage.present) {
       map['discount_percentage'] = Variable<double>(discountPercentage.value);
@@ -979,13 +745,11 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   @override
   String toString() {
     return (StringBuffer('ProductsCompanion(')
-          ..write('productId: $productId, ')
-          ..write('productCode: $productCode, ')
-          ..write('productName: $productName, ')
-          ..write('unitId: $unitId, ')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('name: $name, ')
           ..write('categoryId: $categoryId, ')
           ..write('unitInStock: $unitInStock, ')
-          ..write('unitPrice: $unitPrice, ')
           ..write('discountPercentage: $discountPercentage, ')
           ..write('reorderLevel: $reorderLevel, ')
           ..write('userId: $userId')
@@ -999,54 +763,38 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ProductsTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _productIdMeta = const VerificationMeta('productId');
+  final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> productId = GeneratedColumn<int>(
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'product_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _productCodeMeta =
-      const VerificationMeta('productCode');
+  final VerificationMeta _codeMeta = const VerificationMeta('code');
   @override
-  late final GeneratedColumn<String> productCode = GeneratedColumn<String>(
+  late final GeneratedColumn<String> code = GeneratedColumn<String>(
       'product_code', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _productNameMeta =
-      const VerificationMeta('productName');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> productName = GeneratedColumn<String>(
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'product_name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  final VerificationMeta _unitIdMeta = const VerificationMeta('unitId');
-  @override
-  late final GeneratedColumn<int> unitId = GeneratedColumn<int>(
-      'unit_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "product_units" ("unit_id")');
   final VerificationMeta _categoryIdMeta = const VerificationMeta('categoryId');
   @override
   late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
       'category_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "product_categories" ("category_id")');
+      defaultConstraints: 'REFERENCES "product_categories" ("id")');
   final VerificationMeta _unitInStockMeta =
       const VerificationMeta('unitInStock');
   @override
   late final GeneratedColumn<double> unitInStock = GeneratedColumn<double>(
       'unit_in_stock', aliasedName, false,
-      check: () => unitInStock.isNotNull(),
       type: DriftSqlType.double,
-      requiredDuringInsert: true);
-  final VerificationMeta _unitPriceMeta = const VerificationMeta('unitPrice');
-  @override
-  late final GeneratedColumn<double> unitPrice = GeneratedColumn<double>(
-      'unit_price', aliasedName, false,
-      check: () => unitPrice.isNotNull(),
-      type: DriftSqlType.double,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   final VerificationMeta _discountPercentageMeta =
       const VerificationMeta('discountPercentage');
   @override
@@ -1060,25 +808,21 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   @override
   late final GeneratedColumn<double> reorderLevel = GeneratedColumn<double>(
       'reorder_level', aliasedName, false,
-      check: () => reorderLevel.isNotNull(),
-      type: DriftSqlType.double,
-      requiredDuringInsert: true);
+      type: DriftSqlType.double, requiredDuringInsert: true);
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "users" ("user_id")');
+      defaultConstraints: 'REFERENCES "users" ("id")');
   @override
   List<GeneratedColumn> get $columns => [
-        productId,
-        productCode,
-        productName,
-        unitId,
+        id,
+        code,
+        name,
         categoryId,
         unitInStock,
-        unitPrice,
         discountPercentage,
         reorderLevel,
         userId
@@ -1093,30 +837,20 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('product_id')) {
-      context.handle(_productIdMeta,
-          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
+      context.handle(
+          _idMeta, id.isAcceptableOrUnknown(data['product_id']!, _idMeta));
     }
     if (data.containsKey('product_code')) {
-      context.handle(
-          _productCodeMeta,
-          productCode.isAcceptableOrUnknown(
-              data['product_code']!, _productCodeMeta));
+      context.handle(_codeMeta,
+          code.isAcceptableOrUnknown(data['product_code']!, _codeMeta));
     } else if (isInserting) {
-      context.missing(_productCodeMeta);
+      context.missing(_codeMeta);
     }
     if (data.containsKey('product_name')) {
-      context.handle(
-          _productNameMeta,
-          productName.isAcceptableOrUnknown(
-              data['product_name']!, _productNameMeta));
+      context.handle(_nameMeta,
+          name.isAcceptableOrUnknown(data['product_name']!, _nameMeta));
     } else if (isInserting) {
-      context.missing(_productNameMeta);
-    }
-    if (data.containsKey('unit_id')) {
-      context.handle(_unitIdMeta,
-          unitId.isAcceptableOrUnknown(data['unit_id']!, _unitIdMeta));
-    } else if (isInserting) {
-      context.missing(_unitIdMeta);
+      context.missing(_nameMeta);
     }
     if (data.containsKey('category_id')) {
       context.handle(
@@ -1131,14 +865,6 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
           _unitInStockMeta,
           unitInStock.isAcceptableOrUnknown(
               data['unit_in_stock']!, _unitInStockMeta));
-    } else if (isInserting) {
-      context.missing(_unitInStockMeta);
-    }
-    if (data.containsKey('unit_price')) {
-      context.handle(_unitPriceMeta,
-          unitPrice.isAcceptableOrUnknown(data['unit_price']!, _unitPriceMeta));
-    } else if (isInserting) {
-      context.missing(_unitPriceMeta);
     }
     if (data.containsKey('discount_percentage')) {
       context.handle(
@@ -1166,25 +892,21 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {productId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Product map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Product(
-      productId: attachedDatabase.options.types
+      id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
-      productCode: attachedDatabase.options.types
+      code: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}product_code'])!,
-      productName: attachedDatabase.options.types
+      name: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}product_name'])!,
-      unitId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}unit_id'])!,
       categoryId: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
       unitInStock: attachedDatabase.options.types
           .read(DriftSqlType.double, data['${effectivePrefix}unit_in_stock'])!,
-      unitPrice: attachedDatabase.options.types
-          .read(DriftSqlType.double, data['${effectivePrefix}unit_price'])!,
       discountPercentage: attachedDatabase.options.types.read(
           DriftSqlType.double, data['${effectivePrefix}discount_percentage'])!,
       reorderLevel: attachedDatabase.options.types
@@ -1197,6 +919,310 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   @override
   $ProductsTable createAlias(String alias) {
     return $ProductsTable(attachedDatabase, alias);
+  }
+}
+
+class ProductUnit extends DataClass implements Insertable<ProductUnit> {
+  final int id;
+  final String code;
+  final double price;
+  final double box;
+  final double subTotal;
+  final int productId;
+  const ProductUnit(
+      {required this.id,
+      required this.code,
+      required this.price,
+      required this.box,
+      required this.subTotal,
+      required this.productId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['code'] = Variable<String>(code);
+    map['price'] = Variable<double>(price);
+    map['box'] = Variable<double>(box);
+    map['product_id'] = Variable<int>(productId);
+    return map;
+  }
+
+  ProductUnitsCompanion toCompanion(bool nullToAbsent) {
+    return ProductUnitsCompanion(
+      id: Value(id),
+      code: Value(code),
+      price: Value(price),
+      box: Value(box),
+      productId: Value(productId),
+    );
+  }
+
+  factory ProductUnit.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ProductUnit(
+      id: serializer.fromJson<int>(json['id']),
+      code: serializer.fromJson<String>(json['code']),
+      price: serializer.fromJson<double>(json['price']),
+      box: serializer.fromJson<double>(json['box']),
+      subTotal: serializer.fromJson<double>(json['subTotal']),
+      productId: serializer.fromJson<int>(json['productId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'code': serializer.toJson<String>(code),
+      'price': serializer.toJson<double>(price),
+      'box': serializer.toJson<double>(box),
+      'subTotal': serializer.toJson<double>(subTotal),
+      'productId': serializer.toJson<int>(productId),
+    };
+  }
+
+  ProductUnit copyWith(
+          {int? id,
+          String? code,
+          double? price,
+          double? box,
+          double? subTotal,
+          int? productId}) =>
+      ProductUnit(
+        id: id ?? this.id,
+        code: code ?? this.code,
+        price: price ?? this.price,
+        box: box ?? this.box,
+        subTotal: subTotal ?? this.subTotal,
+        productId: productId ?? this.productId,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('ProductUnit(')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('price: $price, ')
+          ..write('box: $box, ')
+          ..write('subTotal: $subTotal, ')
+          ..write('productId: $productId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, code, price, box, subTotal, productId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ProductUnit &&
+          other.id == this.id &&
+          other.code == this.code &&
+          other.price == this.price &&
+          other.box == this.box &&
+          other.subTotal == this.subTotal &&
+          other.productId == this.productId);
+}
+
+class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
+  final Value<int> id;
+  final Value<String> code;
+  final Value<double> price;
+  final Value<double> box;
+  final Value<int> productId;
+  const ProductUnitsCompanion({
+    this.id = const Value.absent(),
+    this.code = const Value.absent(),
+    this.price = const Value.absent(),
+    this.box = const Value.absent(),
+    this.productId = const Value.absent(),
+  });
+  ProductUnitsCompanion.insert({
+    this.id = const Value.absent(),
+    required String code,
+    required double price,
+    this.box = const Value.absent(),
+    required int productId,
+  })  : code = Value(code),
+        price = Value(price),
+        productId = Value(productId);
+  static Insertable<ProductUnit> custom({
+    Expression<int>? id,
+    Expression<String>? code,
+    Expression<double>? price,
+    Expression<double>? box,
+    Expression<int>? productId,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (price != null) 'price': price,
+      if (box != null) 'box': box,
+      if (productId != null) 'product_id': productId,
+    });
+  }
+
+  ProductUnitsCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? code,
+      Value<double>? price,
+      Value<double>? box,
+      Value<int>? productId}) {
+    return ProductUnitsCompanion(
+      id: id ?? this.id,
+      code: code ?? this.code,
+      price: price ?? this.price,
+      box: box ?? this.box,
+      productId: productId ?? this.productId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (code.present) {
+      map['code'] = Variable<String>(code.value);
+    }
+    if (price.present) {
+      map['price'] = Variable<double>(price.value);
+    }
+    if (box.present) {
+      map['box'] = Variable<double>(box.value);
+    }
+    if (productId.present) {
+      map['product_id'] = Variable<int>(productId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ProductUnitsCompanion(')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('price: $price, ')
+          ..write('box: $box, ')
+          ..write('productId: $productId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ProductUnitsTable extends ProductUnits
+    with TableInfo<$ProductUnitsTable, ProductUnit> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ProductUnitsTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _codeMeta = const VerificationMeta('code');
+  @override
+  late final GeneratedColumn<String> code = GeneratedColumn<String>(
+      'code', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  final VerificationMeta _priceMeta = const VerificationMeta('price');
+  @override
+  late final GeneratedColumn<double> price = GeneratedColumn<double>(
+      'price', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  final VerificationMeta _boxMeta = const VerificationMeta('box');
+  @override
+  late final GeneratedColumn<double> box = GeneratedColumn<double>(
+      'box', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: const Constant(1));
+  final VerificationMeta _subTotalMeta = const VerificationMeta('subTotal');
+  @override
+  late final GeneratedColumn<double> subTotal = GeneratedColumn<double>(
+      'sub_total', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      generatedAs: GeneratedAs(price * box, false));
+  final VerificationMeta _productIdMeta = const VerificationMeta('productId');
+  @override
+  late final GeneratedColumn<int> productId = GeneratedColumn<int>(
+      'product_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES "products" ("product_id")');
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, code, price, box, subTotal, productId];
+  @override
+  String get aliasedName => _alias ?? 'product_units';
+  @override
+  String get actualTableName => 'product_units';
+  @override
+  VerificationContext validateIntegrity(Insertable<ProductUnit> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('code')) {
+      context.handle(
+          _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
+    } else if (isInserting) {
+      context.missing(_codeMeta);
+    }
+    if (data.containsKey('price')) {
+      context.handle(
+          _priceMeta, price.isAcceptableOrUnknown(data['price']!, _priceMeta));
+    } else if (isInserting) {
+      context.missing(_priceMeta);
+    }
+    if (data.containsKey('box')) {
+      context.handle(
+          _boxMeta, box.isAcceptableOrUnknown(data['box']!, _boxMeta));
+    }
+    if (data.containsKey('sub_total')) {
+      context.handle(_subTotalMeta,
+          subTotal.isAcceptableOrUnknown(data['sub_total']!, _subTotalMeta));
+    }
+    if (data.containsKey('product_id')) {
+      context.handle(_productIdMeta,
+          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
+    } else if (isInserting) {
+      context.missing(_productIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ProductUnit map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ProductUnit(
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      code: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
+      price: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}price'])!,
+      box: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}box'])!,
+      subTotal: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}sub_total'])!,
+      productId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
+    );
+  }
+
+  @override
+  $ProductUnitsTable createAlias(String alias) {
+    return $ProductUnitsTable(attachedDatabase, alias);
   }
 }
 
@@ -1513,35 +1539,39 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
 }
 
 class Customer extends DataClass implements Insertable<Customer> {
-  final int customerId;
-  final String customerCode;
-  final String customerName;
+  final int id;
+  final String code;
+  final String name;
   final String contact;
   final String address;
+  final String email;
   const Customer(
-      {required this.customerId,
-      required this.customerCode,
-      required this.customerName,
+      {required this.id,
+      required this.code,
+      required this.name,
       required this.contact,
-      required this.address});
+      required this.address,
+      required this.email});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['customer_id'] = Variable<int>(customerId);
-    map['customer_code'] = Variable<String>(customerCode);
-    map['customer_name'] = Variable<String>(customerName);
+    map['id'] = Variable<int>(id);
+    map['code'] = Variable<String>(code);
+    map['name'] = Variable<String>(name);
     map['contact'] = Variable<String>(contact);
     map['address'] = Variable<String>(address);
+    map['email'] = Variable<String>(email);
     return map;
   }
 
   CustomersCompanion toCompanion(bool nullToAbsent) {
     return CustomersCompanion(
-      customerId: Value(customerId),
-      customerCode: Value(customerCode),
-      customerName: Value(customerName),
+      id: Value(id),
+      code: Value(code),
+      name: Value(name),
       contact: Value(contact),
       address: Value(address),
+      email: Value(email),
     );
   }
 
@@ -1549,129 +1579,142 @@ class Customer extends DataClass implements Insertable<Customer> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Customer(
-      customerId: serializer.fromJson<int>(json['customerId']),
-      customerCode: serializer.fromJson<String>(json['customerCode']),
-      customerName: serializer.fromJson<String>(json['customerName']),
+      id: serializer.fromJson<int>(json['id']),
+      code: serializer.fromJson<String>(json['code']),
+      name: serializer.fromJson<String>(json['name']),
       contact: serializer.fromJson<String>(json['contact']),
       address: serializer.fromJson<String>(json['address']),
+      email: serializer.fromJson<String>(json['email']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'customerId': serializer.toJson<int>(customerId),
-      'customerCode': serializer.toJson<String>(customerCode),
-      'customerName': serializer.toJson<String>(customerName),
+      'id': serializer.toJson<int>(id),
+      'code': serializer.toJson<String>(code),
+      'name': serializer.toJson<String>(name),
       'contact': serializer.toJson<String>(contact),
       'address': serializer.toJson<String>(address),
+      'email': serializer.toJson<String>(email),
     };
   }
 
   Customer copyWith(
-          {int? customerId,
-          String? customerCode,
-          String? customerName,
+          {int? id,
+          String? code,
+          String? name,
           String? contact,
-          String? address}) =>
+          String? address,
+          String? email}) =>
       Customer(
-        customerId: customerId ?? this.customerId,
-        customerCode: customerCode ?? this.customerCode,
-        customerName: customerName ?? this.customerName,
+        id: id ?? this.id,
+        code: code ?? this.code,
+        name: name ?? this.name,
         contact: contact ?? this.contact,
         address: address ?? this.address,
+        email: email ?? this.email,
       );
   @override
   String toString() {
     return (StringBuffer('Customer(')
-          ..write('customerId: $customerId, ')
-          ..write('customerCode: $customerCode, ')
-          ..write('customerName: $customerName, ')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('name: $name, ')
           ..write('contact: $contact, ')
-          ..write('address: $address')
+          ..write('address: $address, ')
+          ..write('email: $email')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(customerId, customerCode, customerName, contact, address);
+  int get hashCode => Object.hash(id, code, name, contact, address, email);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Customer &&
-          other.customerId == this.customerId &&
-          other.customerCode == this.customerCode &&
-          other.customerName == this.customerName &&
+          other.id == this.id &&
+          other.code == this.code &&
+          other.name == this.name &&
           other.contact == this.contact &&
-          other.address == this.address);
+          other.address == this.address &&
+          other.email == this.email);
 }
 
 class CustomersCompanion extends UpdateCompanion<Customer> {
-  final Value<int> customerId;
-  final Value<String> customerCode;
-  final Value<String> customerName;
+  final Value<int> id;
+  final Value<String> code;
+  final Value<String> name;
   final Value<String> contact;
   final Value<String> address;
+  final Value<String> email;
   const CustomersCompanion({
-    this.customerId = const Value.absent(),
-    this.customerCode = const Value.absent(),
-    this.customerName = const Value.absent(),
+    this.id = const Value.absent(),
+    this.code = const Value.absent(),
+    this.name = const Value.absent(),
     this.contact = const Value.absent(),
     this.address = const Value.absent(),
+    this.email = const Value.absent(),
   });
   CustomersCompanion.insert({
-    this.customerId = const Value.absent(),
-    required String customerCode,
-    required String customerName,
+    this.id = const Value.absent(),
+    required String code,
+    required String name,
     required String contact,
     required String address,
-  })  : customerCode = Value(customerCode),
-        customerName = Value(customerName),
+    required String email,
+  })  : code = Value(code),
+        name = Value(name),
         contact = Value(contact),
-        address = Value(address);
+        address = Value(address),
+        email = Value(email);
   static Insertable<Customer> custom({
-    Expression<int>? customerId,
-    Expression<String>? customerCode,
-    Expression<String>? customerName,
+    Expression<int>? id,
+    Expression<String>? code,
+    Expression<String>? name,
     Expression<String>? contact,
     Expression<String>? address,
+    Expression<String>? email,
   }) {
     return RawValuesInsertable({
-      if (customerId != null) 'customer_id': customerId,
-      if (customerCode != null) 'customer_code': customerCode,
-      if (customerName != null) 'customer_name': customerName,
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (name != null) 'name': name,
       if (contact != null) 'contact': contact,
       if (address != null) 'address': address,
+      if (email != null) 'email': email,
     });
   }
 
   CustomersCompanion copyWith(
-      {Value<int>? customerId,
-      Value<String>? customerCode,
-      Value<String>? customerName,
+      {Value<int>? id,
+      Value<String>? code,
+      Value<String>? name,
       Value<String>? contact,
-      Value<String>? address}) {
+      Value<String>? address,
+      Value<String>? email}) {
     return CustomersCompanion(
-      customerId: customerId ?? this.customerId,
-      customerCode: customerCode ?? this.customerCode,
-      customerName: customerName ?? this.customerName,
+      id: id ?? this.id,
+      code: code ?? this.code,
+      name: name ?? this.name,
       contact: contact ?? this.contact,
       address: address ?? this.address,
+      email: email ?? this.email,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (customerId.present) {
-      map['customer_id'] = Variable<int>(customerId.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
-    if (customerCode.present) {
-      map['customer_code'] = Variable<String>(customerCode.value);
+    if (code.present) {
+      map['code'] = Variable<String>(code.value);
     }
-    if (customerName.present) {
-      map['customer_name'] = Variable<String>(customerName.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
     if (contact.present) {
       map['contact'] = Variable<String>(contact.value);
@@ -1679,17 +1722,21 @@ class CustomersCompanion extends UpdateCompanion<Customer> {
     if (address.present) {
       map['address'] = Variable<String>(address.value);
     }
+    if (email.present) {
+      map['email'] = Variable<String>(email.value);
+    }
     return map;
   }
 
   @override
   String toString() {
     return (StringBuffer('CustomersCompanion(')
-          ..write('customerId: $customerId, ')
-          ..write('customerCode: $customerCode, ')
-          ..write('customerName: $customerName, ')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('name: $name, ')
           ..write('contact: $contact, ')
-          ..write('address: $address')
+          ..write('address: $address, ')
+          ..write('email: $email')
           ..write(')'))
         .toString();
   }
@@ -1701,26 +1748,24 @@ class $CustomersTable extends Customers
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $CustomersTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _customerIdMeta = const VerificationMeta('customerId');
+  final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> customerId = GeneratedColumn<int>(
-      'customer_id', aliasedName, false,
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _customerCodeMeta =
-      const VerificationMeta('customerCode');
+  final VerificationMeta _codeMeta = const VerificationMeta('code');
   @override
-  late final GeneratedColumn<String> customerCode = GeneratedColumn<String>(
-      'customer_code', aliasedName, false,
+  late final GeneratedColumn<String> code = GeneratedColumn<String>(
+      'code', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 25),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _customerNameMeta =
-      const VerificationMeta('customerName');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> customerName = GeneratedColumn<String>(
-      'customer_name', aliasedName, false,
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 50),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
@@ -1738,9 +1783,16 @@ class $CustomersTable extends Customers
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 100),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
+  final VerificationMeta _emailMeta = const VerificationMeta('email');
+  @override
+  late final GeneratedColumn<String> email = GeneratedColumn<String>(
+      'email', aliasedName, false,
+      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 50),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns =>
-      [customerId, customerCode, customerName, contact, address];
+      [id, code, name, contact, address, email];
   @override
   String get aliasedName => _alias ?? 'customers';
   @override
@@ -1750,27 +1802,20 @@ class $CustomersTable extends Customers
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('customer_id')) {
-      context.handle(
-          _customerIdMeta,
-          customerId.isAcceptableOrUnknown(
-              data['customer_id']!, _customerIdMeta));
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('customer_code')) {
+    if (data.containsKey('code')) {
       context.handle(
-          _customerCodeMeta,
-          customerCode.isAcceptableOrUnknown(
-              data['customer_code']!, _customerCodeMeta));
+          _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
     } else if (isInserting) {
-      context.missing(_customerCodeMeta);
+      context.missing(_codeMeta);
     }
-    if (data.containsKey('customer_name')) {
+    if (data.containsKey('name')) {
       context.handle(
-          _customerNameMeta,
-          customerName.isAcceptableOrUnknown(
-              data['customer_name']!, _customerNameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
-      context.missing(_customerNameMeta);
+      context.missing(_nameMeta);
     }
     if (data.containsKey('contact')) {
       context.handle(_contactMeta,
@@ -1784,25 +1829,33 @@ class $CustomersTable extends Customers
     } else if (isInserting) {
       context.missing(_addressMeta);
     }
+    if (data.containsKey('email')) {
+      context.handle(
+          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
+    } else if (isInserting) {
+      context.missing(_emailMeta);
+    }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {customerId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Customer map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Customer(
-      customerId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}customer_id'])!,
-      customerCode: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}customer_code'])!,
-      customerName: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}customer_name'])!,
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      code: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
+      name: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       contact: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}contact'])!,
       address: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}address'])!,
+      email: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
     );
   }
 
@@ -1953,13 +2006,12 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
     required PaymentType paymentType,
     required double totalAmount,
     required double amountTendered,
-    required DateTime dateRecorded,
+    this.dateRecorded = const Value.absent(),
     required int userId,
   })  : customerId = Value(customerId),
         paymentType = Value(paymentType),
         totalAmount = Value(totalAmount),
         amountTendered = Value(amountTendered),
-        dateRecorded = Value(dateRecorded),
         userId = Value(userId);
   static Insertable<Invoice> custom({
     Expression<int>? invoiceId,
@@ -2061,7 +2113,7 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
       'customer_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "customers" ("customer_id")');
+      defaultConstraints: 'REFERENCES "customers" ("id")');
   final VerificationMeta _paymentTypeMeta =
       const VerificationMeta('paymentType');
   @override
@@ -2090,14 +2142,16 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
   @override
   late final GeneratedColumn<DateTime> dateRecorded = GeneratedColumn<DateTime>(
       'date_recorded', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+      type: DriftSqlType.dateTime,
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "users" ("user_id")');
+      defaultConstraints: 'REFERENCES "users" ("id")');
   @override
   List<GeneratedColumn> get $columns => [
         invoiceId,
@@ -2151,8 +2205,6 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
           _dateRecordedMeta,
           dateRecorded.isAcceptableOrUnknown(
               data['date_recorded']!, _dateRecordedMeta));
-    } else if (isInserting) {
-      context.missing(_dateRecordedMeta);
     }
     if (data.containsKey('user_id')) {
       context.handle(_userIdMeta,
@@ -2197,39 +2249,39 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
 }
 
 class Supplier extends DataClass implements Insertable<Supplier> {
-  final int supplierId;
-  final String supplierCode;
-  final String supplierName;
-  final String supplierContact;
-  final String supplierAddress;
-  final String supplierEmail;
+  final int id;
+  final String code;
+  final String name;
+  final String contact;
+  final String address;
+  final String email;
   const Supplier(
-      {required this.supplierId,
-      required this.supplierCode,
-      required this.supplierName,
-      required this.supplierContact,
-      required this.supplierAddress,
-      required this.supplierEmail});
+      {required this.id,
+      required this.code,
+      required this.name,
+      required this.contact,
+      required this.address,
+      required this.email});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['supplier_id'] = Variable<int>(supplierId);
-    map['supplier_code'] = Variable<String>(supplierCode);
-    map['supplier_name'] = Variable<String>(supplierName);
-    map['supplier_contact'] = Variable<String>(supplierContact);
-    map['supplier_address'] = Variable<String>(supplierAddress);
-    map['supplier_email'] = Variable<String>(supplierEmail);
+    map['id'] = Variable<int>(id);
+    map['code'] = Variable<String>(code);
+    map['name'] = Variable<String>(name);
+    map['contact'] = Variable<String>(contact);
+    map['address'] = Variable<String>(address);
+    map['email'] = Variable<String>(email);
     return map;
   }
 
   SuppliersCompanion toCompanion(bool nullToAbsent) {
     return SuppliersCompanion(
-      supplierId: Value(supplierId),
-      supplierCode: Value(supplierCode),
-      supplierName: Value(supplierName),
-      supplierContact: Value(supplierContact),
-      supplierAddress: Value(supplierAddress),
-      supplierEmail: Value(supplierEmail),
+      id: Value(id),
+      code: Value(code),
+      name: Value(name),
+      contact: Value(contact),
+      address: Value(address),
+      email: Value(email),
     );
   }
 
@@ -2237,152 +2289,151 @@ class Supplier extends DataClass implements Insertable<Supplier> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Supplier(
-      supplierId: serializer.fromJson<int>(json['supplierId']),
-      supplierCode: serializer.fromJson<String>(json['supplierCode']),
-      supplierName: serializer.fromJson<String>(json['supplierName']),
-      supplierContact: serializer.fromJson<String>(json['supplierContact']),
-      supplierAddress: serializer.fromJson<String>(json['supplierAddress']),
-      supplierEmail: serializer.fromJson<String>(json['supplierEmail']),
+      id: serializer.fromJson<int>(json['id']),
+      code: serializer.fromJson<String>(json['code']),
+      name: serializer.fromJson<String>(json['name']),
+      contact: serializer.fromJson<String>(json['contact']),
+      address: serializer.fromJson<String>(json['address']),
+      email: serializer.fromJson<String>(json['email']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'supplierId': serializer.toJson<int>(supplierId),
-      'supplierCode': serializer.toJson<String>(supplierCode),
-      'supplierName': serializer.toJson<String>(supplierName),
-      'supplierContact': serializer.toJson<String>(supplierContact),
-      'supplierAddress': serializer.toJson<String>(supplierAddress),
-      'supplierEmail': serializer.toJson<String>(supplierEmail),
+      'id': serializer.toJson<int>(id),
+      'code': serializer.toJson<String>(code),
+      'name': serializer.toJson<String>(name),
+      'contact': serializer.toJson<String>(contact),
+      'address': serializer.toJson<String>(address),
+      'email': serializer.toJson<String>(email),
     };
   }
 
   Supplier copyWith(
-          {int? supplierId,
-          String? supplierCode,
-          String? supplierName,
-          String? supplierContact,
-          String? supplierAddress,
-          String? supplierEmail}) =>
+          {int? id,
+          String? code,
+          String? name,
+          String? contact,
+          String? address,
+          String? email}) =>
       Supplier(
-        supplierId: supplierId ?? this.supplierId,
-        supplierCode: supplierCode ?? this.supplierCode,
-        supplierName: supplierName ?? this.supplierName,
-        supplierContact: supplierContact ?? this.supplierContact,
-        supplierAddress: supplierAddress ?? this.supplierAddress,
-        supplierEmail: supplierEmail ?? this.supplierEmail,
+        id: id ?? this.id,
+        code: code ?? this.code,
+        name: name ?? this.name,
+        contact: contact ?? this.contact,
+        address: address ?? this.address,
+        email: email ?? this.email,
       );
   @override
   String toString() {
     return (StringBuffer('Supplier(')
-          ..write('supplierId: $supplierId, ')
-          ..write('supplierCode: $supplierCode, ')
-          ..write('supplierName: $supplierName, ')
-          ..write('supplierContact: $supplierContact, ')
-          ..write('supplierAddress: $supplierAddress, ')
-          ..write('supplierEmail: $supplierEmail')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('name: $name, ')
+          ..write('contact: $contact, ')
+          ..write('address: $address, ')
+          ..write('email: $email')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(supplierId, supplierCode, supplierName,
-      supplierContact, supplierAddress, supplierEmail);
+  int get hashCode => Object.hash(id, code, name, contact, address, email);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Supplier &&
-          other.supplierId == this.supplierId &&
-          other.supplierCode == this.supplierCode &&
-          other.supplierName == this.supplierName &&
-          other.supplierContact == this.supplierContact &&
-          other.supplierAddress == this.supplierAddress &&
-          other.supplierEmail == this.supplierEmail);
+          other.id == this.id &&
+          other.code == this.code &&
+          other.name == this.name &&
+          other.contact == this.contact &&
+          other.address == this.address &&
+          other.email == this.email);
 }
 
 class SuppliersCompanion extends UpdateCompanion<Supplier> {
-  final Value<int> supplierId;
-  final Value<String> supplierCode;
-  final Value<String> supplierName;
-  final Value<String> supplierContact;
-  final Value<String> supplierAddress;
-  final Value<String> supplierEmail;
+  final Value<int> id;
+  final Value<String> code;
+  final Value<String> name;
+  final Value<String> contact;
+  final Value<String> address;
+  final Value<String> email;
   const SuppliersCompanion({
-    this.supplierId = const Value.absent(),
-    this.supplierCode = const Value.absent(),
-    this.supplierName = const Value.absent(),
-    this.supplierContact = const Value.absent(),
-    this.supplierAddress = const Value.absent(),
-    this.supplierEmail = const Value.absent(),
+    this.id = const Value.absent(),
+    this.code = const Value.absent(),
+    this.name = const Value.absent(),
+    this.contact = const Value.absent(),
+    this.address = const Value.absent(),
+    this.email = const Value.absent(),
   });
   SuppliersCompanion.insert({
-    this.supplierId = const Value.absent(),
-    required String supplierCode,
-    required String supplierName,
-    required String supplierContact,
-    required String supplierAddress,
-    required String supplierEmail,
-  })  : supplierCode = Value(supplierCode),
-        supplierName = Value(supplierName),
-        supplierContact = Value(supplierContact),
-        supplierAddress = Value(supplierAddress),
-        supplierEmail = Value(supplierEmail);
+    this.id = const Value.absent(),
+    required String code,
+    required String name,
+    required String contact,
+    required String address,
+    required String email,
+  })  : code = Value(code),
+        name = Value(name),
+        contact = Value(contact),
+        address = Value(address),
+        email = Value(email);
   static Insertable<Supplier> custom({
-    Expression<int>? supplierId,
-    Expression<String>? supplierCode,
-    Expression<String>? supplierName,
-    Expression<String>? supplierContact,
-    Expression<String>? supplierAddress,
-    Expression<String>? supplierEmail,
+    Expression<int>? id,
+    Expression<String>? code,
+    Expression<String>? name,
+    Expression<String>? contact,
+    Expression<String>? address,
+    Expression<String>? email,
   }) {
     return RawValuesInsertable({
-      if (supplierId != null) 'supplier_id': supplierId,
-      if (supplierCode != null) 'supplier_code': supplierCode,
-      if (supplierName != null) 'supplier_name': supplierName,
-      if (supplierContact != null) 'supplier_contact': supplierContact,
-      if (supplierAddress != null) 'supplier_address': supplierAddress,
-      if (supplierEmail != null) 'supplier_email': supplierEmail,
+      if (id != null) 'id': id,
+      if (code != null) 'code': code,
+      if (name != null) 'name': name,
+      if (contact != null) 'contact': contact,
+      if (address != null) 'address': address,
+      if (email != null) 'email': email,
     });
   }
 
   SuppliersCompanion copyWith(
-      {Value<int>? supplierId,
-      Value<String>? supplierCode,
-      Value<String>? supplierName,
-      Value<String>? supplierContact,
-      Value<String>? supplierAddress,
-      Value<String>? supplierEmail}) {
+      {Value<int>? id,
+      Value<String>? code,
+      Value<String>? name,
+      Value<String>? contact,
+      Value<String>? address,
+      Value<String>? email}) {
     return SuppliersCompanion(
-      supplierId: supplierId ?? this.supplierId,
-      supplierCode: supplierCode ?? this.supplierCode,
-      supplierName: supplierName ?? this.supplierName,
-      supplierContact: supplierContact ?? this.supplierContact,
-      supplierAddress: supplierAddress ?? this.supplierAddress,
-      supplierEmail: supplierEmail ?? this.supplierEmail,
+      id: id ?? this.id,
+      code: code ?? this.code,
+      name: name ?? this.name,
+      contact: contact ?? this.contact,
+      address: address ?? this.address,
+      email: email ?? this.email,
     );
   }
 
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (supplierId.present) {
-      map['supplier_id'] = Variable<int>(supplierId.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
-    if (supplierCode.present) {
-      map['supplier_code'] = Variable<String>(supplierCode.value);
+    if (code.present) {
+      map['code'] = Variable<String>(code.value);
     }
-    if (supplierName.present) {
-      map['supplier_name'] = Variable<String>(supplierName.value);
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
     }
-    if (supplierContact.present) {
-      map['supplier_contact'] = Variable<String>(supplierContact.value);
+    if (contact.present) {
+      map['contact'] = Variable<String>(contact.value);
     }
-    if (supplierAddress.present) {
-      map['supplier_address'] = Variable<String>(supplierAddress.value);
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
     }
-    if (supplierEmail.present) {
-      map['supplier_email'] = Variable<String>(supplierEmail.value);
+    if (email.present) {
+      map['email'] = Variable<String>(email.value);
     }
     return map;
   }
@@ -2390,12 +2441,12 @@ class SuppliersCompanion extends UpdateCompanion<Supplier> {
   @override
   String toString() {
     return (StringBuffer('SuppliersCompanion(')
-          ..write('supplierId: $supplierId, ')
-          ..write('supplierCode: $supplierCode, ')
-          ..write('supplierName: $supplierName, ')
-          ..write('supplierContact: $supplierContact, ')
-          ..write('supplierAddress: $supplierAddress, ')
-          ..write('supplierEmail: $supplierEmail')
+          ..write('id: $id, ')
+          ..write('code: $code, ')
+          ..write('name: $name, ')
+          ..write('contact: $contact, ')
+          ..write('address: $address, ')
+          ..write('email: $email')
           ..write(')'))
         .toString();
   }
@@ -2407,62 +2458,51 @@ class $SuppliersTable extends Suppliers
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $SuppliersTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _supplierIdMeta = const VerificationMeta('supplierId');
+  final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> supplierId = GeneratedColumn<int>(
-      'supplier_id', aliasedName, false,
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _supplierCodeMeta =
-      const VerificationMeta('supplierCode');
+  final VerificationMeta _codeMeta = const VerificationMeta('code');
   @override
-  late final GeneratedColumn<String> supplierCode = GeneratedColumn<String>(
-      'supplier_code', aliasedName, false,
+  late final GeneratedColumn<String> code = GeneratedColumn<String>(
+      'code', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 25),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _supplierNameMeta =
-      const VerificationMeta('supplierName');
+  final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<String> supplierName = GeneratedColumn<String>(
-      'supplier_name', aliasedName, false,
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 50),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _supplierContactMeta =
-      const VerificationMeta('supplierContact');
+  final VerificationMeta _contactMeta = const VerificationMeta('contact');
   @override
-  late final GeneratedColumn<String> supplierContact = GeneratedColumn<String>(
-      'supplier_contact', aliasedName, false,
+  late final GeneratedColumn<String> contact = GeneratedColumn<String>(
+      'contact', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 10),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _supplierAddressMeta =
-      const VerificationMeta('supplierAddress');
+  final VerificationMeta _addressMeta = const VerificationMeta('address');
   @override
-  late final GeneratedColumn<String> supplierAddress = GeneratedColumn<String>(
-      'supplier_address', aliasedName, false,
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+      'address', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 100),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-  final VerificationMeta _supplierEmailMeta =
-      const VerificationMeta('supplierEmail');
+  final VerificationMeta _emailMeta = const VerificationMeta('email');
   @override
-  late final GeneratedColumn<String> supplierEmail = GeneratedColumn<String>(
-      'supplier_email', aliasedName, false,
+  late final GeneratedColumn<String> email = GeneratedColumn<String>(
+      'email', aliasedName, false,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 50),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns => [
-        supplierId,
-        supplierCode,
-        supplierName,
-        supplierContact,
-        supplierAddress,
-        supplierEmail
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, code, name, contact, address, email];
   @override
   String get aliasedName => _alias ?? 'suppliers';
   @override
@@ -2472,73 +2512,60 @@ class $SuppliersTable extends Suppliers
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('supplier_id')) {
-      context.handle(
-          _supplierIdMeta,
-          supplierId.isAcceptableOrUnknown(
-              data['supplier_id']!, _supplierIdMeta));
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('supplier_code')) {
+    if (data.containsKey('code')) {
       context.handle(
-          _supplierCodeMeta,
-          supplierCode.isAcceptableOrUnknown(
-              data['supplier_code']!, _supplierCodeMeta));
+          _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
     } else if (isInserting) {
-      context.missing(_supplierCodeMeta);
+      context.missing(_codeMeta);
     }
-    if (data.containsKey('supplier_name')) {
+    if (data.containsKey('name')) {
       context.handle(
-          _supplierNameMeta,
-          supplierName.isAcceptableOrUnknown(
-              data['supplier_name']!, _supplierNameMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
-      context.missing(_supplierNameMeta);
+      context.missing(_nameMeta);
     }
-    if (data.containsKey('supplier_contact')) {
-      context.handle(
-          _supplierContactMeta,
-          supplierContact.isAcceptableOrUnknown(
-              data['supplier_contact']!, _supplierContactMeta));
+    if (data.containsKey('contact')) {
+      context.handle(_contactMeta,
+          contact.isAcceptableOrUnknown(data['contact']!, _contactMeta));
     } else if (isInserting) {
-      context.missing(_supplierContactMeta);
+      context.missing(_contactMeta);
     }
-    if (data.containsKey('supplier_address')) {
-      context.handle(
-          _supplierAddressMeta,
-          supplierAddress.isAcceptableOrUnknown(
-              data['supplier_address']!, _supplierAddressMeta));
+    if (data.containsKey('address')) {
+      context.handle(_addressMeta,
+          address.isAcceptableOrUnknown(data['address']!, _addressMeta));
     } else if (isInserting) {
-      context.missing(_supplierAddressMeta);
+      context.missing(_addressMeta);
     }
-    if (data.containsKey('supplier_email')) {
+    if (data.containsKey('email')) {
       context.handle(
-          _supplierEmailMeta,
-          supplierEmail.isAcceptableOrUnknown(
-              data['supplier_email']!, _supplierEmailMeta));
+          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
     } else if (isInserting) {
-      context.missing(_supplierEmailMeta);
+      context.missing(_emailMeta);
     }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {supplierId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Supplier map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Supplier(
-      supplierId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}supplier_id'])!,
-      supplierCode: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}supplier_code'])!,
-      supplierName: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}supplier_name'])!,
-      supplierContact: attachedDatabase.options.types.read(
-          DriftSqlType.string, data['${effectivePrefix}supplier_contact'])!,
-      supplierAddress: attachedDatabase.options.types.read(
-          DriftSqlType.string, data['${effectivePrefix}supplier_address'])!,
-      supplierEmail: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}supplier_email'])!,
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      code: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
+      name: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
+      contact: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}contact'])!,
+      address: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}address'])!,
+      email: attachedDatabase.options.types
+          .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
     );
   }
 
@@ -2694,13 +2721,12 @@ class ReceiveProductsCompanion extends UpdateCompanion<ReceiveProduct> {
     required double quantity,
     required double unitPrice,
     required int supplierId,
-    required DateTime receivedDate,
+    this.receivedDate = const Value.absent(),
     required int userId,
   })  : productId = Value(productId),
         quantity = Value(quantity),
         unitPrice = Value(unitPrice),
         supplierId = Value(supplierId),
-        receivedDate = Value(receivedDate),
         userId = Value(userId);
   static Insertable<ReceiveProduct> custom({
     Expression<int>? receiveProductId,
@@ -2831,22 +2857,22 @@ class $ReceiveProductsTable extends ReceiveProducts
       'supplier_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "suppliers" ("supplier_id")');
+      defaultConstraints: 'REFERENCES "suppliers" ("id")');
   final VerificationMeta _receivedDateMeta =
       const VerificationMeta('receivedDate');
   @override
   late final GeneratedColumn<DateTime> receivedDate = GeneratedColumn<DateTime>(
       'received_date', aliasedName, false,
-      check: () => receivedDate.isNotNull(),
       type: DriftSqlType.dateTime,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "users" ("user_id")');
+      defaultConstraints: 'REFERENCES "users" ("id")');
   @override
   List<GeneratedColumn> get $columns => [
         receiveProductId,
@@ -2908,8 +2934,6 @@ class $ReceiveProductsTable extends ReceiveProducts
           _receivedDateMeta,
           receivedDate.isAcceptableOrUnknown(
               data['received_date']!, _receivedDateMeta));
-    } else if (isInserting) {
-      context.missing(_receivedDateMeta);
     }
     if (data.containsKey('user_id')) {
       context.handle(_userIdMeta,
@@ -3097,13 +3121,12 @@ class PurchaseOrdersCompanion extends UpdateCompanion<PurchaseOrder> {
     required double quantity,
     required double unitPrice,
     required int supplierId,
-    required DateTime orderDate,
+    this.orderDate = const Value.absent(),
     required int userId,
   })  : productId = Value(productId),
         quantity = Value(quantity),
         unitPrice = Value(unitPrice),
         supplierId = Value(supplierId),
-        orderDate = Value(orderDate),
         userId = Value(userId);
   static Insertable<PurchaseOrder> custom({
     Expression<int>? purchaseOrderId,
@@ -3234,21 +3257,21 @@ class $PurchaseOrdersTable extends PurchaseOrders
       'supplier_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "suppliers" ("supplier_id")');
+      defaultConstraints: 'REFERENCES "suppliers" ("id")');
   final VerificationMeta _orderDateMeta = const VerificationMeta('orderDate');
   @override
   late final GeneratedColumn<DateTime> orderDate = GeneratedColumn<DateTime>(
       'order_date', aliasedName, false,
-      check: () => orderDate.isNotNull(),
       type: DriftSqlType.dateTime,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false,
+      defaultValue: currentDateAndTime);
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
       'user_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "users" ("user_id")');
+      defaultConstraints: 'REFERENCES "users" ("id")');
   @override
   List<GeneratedColumn> get $columns => [
         purchaseOrderId,
@@ -3308,8 +3331,6 @@ class $PurchaseOrdersTable extends PurchaseOrders
     if (data.containsKey('order_date')) {
       context.handle(_orderDateMeta,
           orderDate.isAcceptableOrUnknown(data['order_date']!, _orderDateMeta));
-    } else if (isInserting) {
-      context.missing(_orderDateMeta);
     }
     if (data.containsKey('user_id')) {
       context.handle(_userIdMeta,
@@ -3354,10 +3375,10 @@ class $PurchaseOrdersTable extends PurchaseOrders
 abstract class _$MyDatabase extends GeneratedDatabase {
   _$MyDatabase(QueryExecutor e) : super(e);
   late final $UsersTable users = $UsersTable(this);
-  late final $ProductUnitsTable productUnits = $ProductUnitsTable(this);
   late final $ProductCategoriesTable productCategories =
       $ProductCategoriesTable(this);
   late final $ProductsTable products = $ProductsTable(this);
+  late final $ProductUnitsTable productUnits = $ProductUnitsTable(this);
   late final $SalesTable sales = $SalesTable(this);
   late final $CustomersTable customers = $CustomersTable(this);
   late final $InvoicesTable invoices = $InvoicesTable(this);
@@ -3373,9 +3394,9 @@ abstract class _$MyDatabase extends GeneratedDatabase {
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
         users,
-        productUnits,
         productCategories,
         products,
+        productUnits,
         sales,
         customers,
         invoices,

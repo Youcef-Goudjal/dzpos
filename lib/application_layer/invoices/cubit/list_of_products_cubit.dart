@@ -11,7 +11,5 @@ class ListOfProductsCubit extends Cubit<ListOfProductsState> {
   ListOfProductsCubit() : super(const ListOfProductsState());
   final invoicesDao = CommonBloc.invoicesDao;
 
-  Stream<List<Product>> wachMaterials() {
-    return invoicesDao.watchAllMaterials();
-  }
+  
 }

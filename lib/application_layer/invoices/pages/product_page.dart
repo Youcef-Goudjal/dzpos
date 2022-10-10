@@ -187,7 +187,7 @@ class _ProductInfo extends StatelessWidget {
             const Text("Category :"),
             20.widthBox,
             StreamBuilder<List<ProductCategory>>(
-              stream: productCubit.allCategories(),
+              // stream: productCubit.allCategories(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
@@ -200,12 +200,12 @@ class _ProductInfo extends StatelessWidget {
                       if (pattern.isEmpty) {
                         return snapshot.data!;
                       }
-                      return snapshot.data!.where(
-                          (element) => element.categoryName.contains(pattern));
+                      return snapshot.data!
+                          .where((element) => element.name.contains(pattern));
                     },
                     itemBuilder: (context, item) {
                       return ListTile(
-                        title: Text(item.categoryName),
+                        title: Text(item.name),
                       );
                     },
                     noItemsFoundBuilder: (context) {

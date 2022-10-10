@@ -52,35 +52,14 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   void saveCategory() async {
-    if (state.categoryName.isNotEmpty) {
-      await repository.insertCategory(state.categoryName);
-      emit(state.copyWith(
-        categoryName: "",
-        status: Status.success,
-      ));
-    }
+   
   }
 
   void saveProduct() {
-    if (state.productName.isEmpty ||
-        state.category == null ||
-        state.productCode.isEmpty) {
-      emit(state.copyWith(
-        status: Status.failure,
-      ));
-    } else {
-      repository.insertProduct(
-        barcode: state.productCode,
-        categoryId: state.category!.categoryId,
-        minInStock: state.minimum,
-        name: state.productName,
-        purchasePrice: state.purchasePrice,
-        salePrice: state.salePrice,
-      );
-    }
+  
   }
 
-  Stream<List<ProductCategory>> allCategories() {
-    return repository.watchAllCategories();
-  }
+  // Stream<List<ProductCategory>> allCategories() {
+  //   return repository.watchAllCategories();
+  // }
 }

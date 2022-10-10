@@ -44,7 +44,7 @@ class _MaterialsBody extends StatelessWidget {
               title: const Text("Materials List"),
               actions: [
                 StreamBuilder<List<Product>>(
-                    stream: context.read<ListOfProductsCubit>().wachMaterials(),
+                    // stream: context.read<ListOfProductsCubit>().wachMaterials(),
                     builder: (context, snapshot) {
                       return IconButton(
                         onPressed: () {
@@ -109,7 +109,7 @@ class _MaterialsBody extends StatelessWidget {
               ),
             ),
             StreamBuilder<List<Product>>(
-              stream: context.read<ListOfProductsCubit>().wachMaterials(),
+              // stream: context.read<ListOfProductsCubit>().wachMaterials(),
               builder: (context, state) {
                 if (state.hasData) {
                   return Expanded(
@@ -117,7 +117,7 @@ class _MaterialsBody extends StatelessWidget {
                       itemCount: state.data!.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(state.data![index].productName),
+                          title: Text(state.data![index].name),
                         );
                       },
                     ),
@@ -147,7 +147,7 @@ class _MaterialsBody extends StatelessWidget {
                     ),
                   ),
                   StreamBuilder<List<Product>>(
-                    stream: context.read<ListOfProductsCubit>().wachMaterials(),
+                    // stream: context.read<ListOfProductsCubit>().wachMaterials(),
                     builder: (context, state) {
                       return Text(
                         "${state.data?.length ?? 0}",
@@ -205,13 +205,13 @@ class MaterialSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestions =
-        materials.where((element) => element.productName.contains(query));
+        materials.where((element) => element.name.contains(query));
     return ListView.builder(
       itemCount: query.isEmpty ? materials.length : suggestions.length,
       itemBuilder: (context, index) {
         final name = query.isEmpty
-            ? materials[index].productName
-            : suggestions.elementAt(index).productName;
+            ? materials[index].name
+            : suggestions.elementAt(index).name;
         return ListTile(
           title: Text(name),
           onTap: () {
