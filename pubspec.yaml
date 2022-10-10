@@ -72,6 +72,11 @@ dependencies:
   settings_ui: ^2.0.2
   flutter_svg: ^1.1.5
   flutter_typeahead: ^4.1.1
+  contacts_service: ^0.6.3
+  permission_handler: ^10.1.0
+  barcode: ^2.2.3
+  uuid: ^3.0.6
+  chips_choice: ^2.1.1
  
 
 

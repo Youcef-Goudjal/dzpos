@@ -22,6 +22,7 @@ enum AppRoutes {
   accounts("accounts", "Accounts", AccountsPage()),
   newAccount("newAccount", "NewAccount", NewAccountPage()),
   accountsList("accountsList", "AccountsList", AccountsListPage()),
+  debtList("debtList", "DebtList", DebtListPage()),
   reports("reports", "Reports", ReportsPage());
 
   const AppRoutes(this.path, this.name, this.view);

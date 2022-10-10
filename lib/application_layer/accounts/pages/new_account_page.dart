@@ -14,20 +14,22 @@ class NewAccountPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NewAccountCubit(
+      create: (_) => NewAccountCubit(
         customer: customer,
         supplier: supplier,
       ),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("New Account"),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: context.read<NewAccountCubit>().save,
-          child: const Icon(Icons.save),
-        ),
-        body: const _NewAccountBody(),
-      ),
+      child: Builder(builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text("New Account"),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: context.read<NewAccountCubit>().save,
+            child: const Icon(Icons.save),
+          ),
+          body: const _NewAccountBody(),
+        );
+      }),
     );
   }
 }
@@ -57,11 +59,20 @@ class _NewAccountBody extends StatelessWidget {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: state.isCustomer
-                                ? context.theme.primaryColor
+                                ? context.theme.colorScheme.secondary
                                 : null,
                           ),
                           onPressed: newAccountCubit.onChangeIsCustomer,
-                          child: const Text("Customer"),
+                          child: Center(
+                            child: Text(
+                              "Customer",
+                              style: TextStyle(
+                                color: state.isCustomer
+                                    ? context.theme.colorScheme.onSecondary
+                                    : null,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       15.w.widthBox,
@@ -69,11 +80,20 @@ class _NewAccountBody extends StatelessWidget {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: !state.isCustomer
-                                ? context.theme.primaryColor
+                                ? context.theme.colorScheme.secondary
                                 : null,
                           ),
                           onPressed: newAccountCubit.onChangeIsSupplier,
-                          child: const Text("Supplier"),
+                          child: Center(
+                            child: Text(
+                              "Supplier",
+                              style: TextStyle(
+                                color: !state.isCustomer
+                                    ? context.theme.colorScheme.onSecondary
+                                    : null,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -82,29 +102,62 @@ class _NewAccountBody extends StatelessWidget {
               ),
             ),
             15.h.heightBox,
-            AppTextField(
-              hint: "Id",
-              enabled: false,
+            BlocBuilder<NewAccountCubit, NewAccountState>(
+              buildWhen: (previous, current) => previous.id != current.id,
+              builder: (context, state) {
+                return AppTextField(
+                  initialValue: newAccountCubit.state.id,
+                  hint: "Id",
+                  enabled: false,
+                );
+              },
             ),
             15.h.heightBox,
-            AppTextField(
-              onChanged: newAccountCubit.onChangeCode,
-              hint: "Barcode",
+            BlocBuilder<NewAccountCubit, NewAccountState>(
+              buildWhen: (previous, current) => previous.code != current.code,
+              builder: (context, state) {
+                return AppTextField(
+                  initialValue: newAccountCubit.state.code,
+                  onChanged: newAccountCubit.onChangeCode,
+                  hint: "Barcode",
+                );
+              },
             ),
             15.h.heightBox,
-            AppTextField(
-              onChanged: newAccountCubit.onChangeName,
-              hint: "Name",
+            BlocBuilder<NewAccountCubit, NewAccountState>(
+              buildWhen: (previous, current) => previous.name != current.name,
+              builder: (context, state) {
+                return AppTextField(
+                  initialValue: newAccountCubit.state.name,
+                  onChanged: newAccountCubit.onChangeName,
+                  hint: "Name",
+                );
+              },
             ),
             15.h.heightBox,
-            AppTextField(
-              onChanged: newAccountCubit.onChangeContact,
-              hint: "Contact",
+            BlocBuilder<NewAccountCubit, NewAccountState>(
+              buildWhen: (previous, current) =>
+                  previous.contact != current.contact,
+              builder: (context, state) {
+                return AppTextField(
+                  initialValue: newAccountCubit.state.contact,
+                  onChanged: newAccountCubit.onChangeContact,
+                  hint: "Contact",
+                );
+              },
             ),
             15.h.heightBox,
-            AppTextField(
-              onChanged: newAccountCubit.onChangeAddress,
-              hint: "@",
+            BlocBuilder<NewAccountCubit, NewAccountState>(
+              buildWhen: (previous, current) =>
+                  previous.address != current.address,
+              builder: (context, state) {
+                return AppTextField(
+                  initialValue: newAccountCubit.state.address,
+                  onChanged: newAccountCubit.onChangeAddress,
+                  maxLine: 3,
+                  hint: "@",
+                );
+              },
             )
           ],
         ),

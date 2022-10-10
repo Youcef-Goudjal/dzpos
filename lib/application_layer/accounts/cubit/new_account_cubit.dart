@@ -13,7 +13,19 @@ class NewAccountCubit extends Cubit<NewAccountState> {
   final Customer? customer;
   final Supplier? supplier;
   NewAccountCubit({this.customer, this.supplier})
-      : super(const NewAccountState());
+      : super(const NewAccountState()) {
+    emit(state.copyWith(
+      name: customer?.name ?? supplier?.name,
+      code: customer?.code ?? supplier?.code,
+      address: customer?.address ?? supplier?.address,
+      contact: customer?.contact ?? supplier?.contact,
+      isCustomer: customer == null
+          ? supplier == null
+              ? false
+              : true
+          : true,
+    ));
+  }
 
   onChangeIsCustomer() {
     emit(state.copyWith(
@@ -61,20 +73,20 @@ class NewAccountCubit extends Cubit<NewAccountState> {
       if (state.isCustomer) {
         repository.addCustomer(
           CustomersCompanion(
-            customerName: Value(state.name),
+            name: Value(state.name),
             address: Value(state.address),
             contact: Value(state.contact),
-            customerCode: Value(state.code),
+            code: Value(state.code),
           ),
         );
       } else {
         // else means its a supplier
         repository.addSupplier(
           SuppliersCompanion(
-            supplierName: Value(state.name),
-            supplierAddress: Value(state.address),
-            supplierContact: Value(state.contact),
-            supplierCode: Value(state.code),
+            name: Value(state.name),
+            address: Value(state.address),
+            contact: Value(state.contact),
+            code: Value(state.code),
           ),
         );
       }

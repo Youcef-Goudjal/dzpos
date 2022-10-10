@@ -85,22 +85,11 @@ class _AccountsListBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 40,
-          child: ElevatedButton(
-            onPressed: context.read<AccountsListCubit>().importFromContacts,
-            child: const Text("Import from Contacts"),
-          ),
-        ),
-        TabBarView(
-          controller: _tabController,
-          children: const [
-            _CustomersList(),
-            _SuppliersList(),
-          ],
-        ),
+    return TabBarView(
+      controller: _tabController,
+      children: const [
+        _CustomersList(),
+        _SuppliersList(),
       ],
     );
   }
@@ -113,65 +102,79 @@ class _SuppliersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: BlocBuilder<AccountsListCubit, AccountsListState>(
-              buildWhen: (previous, current) =>
-                  previous.suppliers != current.suppliers,
-              builder: (context, state) {
-                if (state.suppliers.isEmpty) {
-                  return const Center(
-                    child: Text("No Supplier found"),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: state.suppliers.length,
-                  itemBuilder: (context, index) {
-                    final element = state.suppliers[index];
-                    return ListTile(
-                      title: Text(element.supplierName),
-                      subtitle: Text("Phone : ${element.supplierContact}"),
-                    );
-                  },
-                );
-              }),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: context.theme.colorScheme.primaryContainer,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
+    return Padding(
+      padding: const EdgeInsets.all(8.0).copyWith(bottom: 0),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () {
+                context
+                    .read<AccountsListCubit>()
+                    .importFromContactsSuppliers(context);
+              },
+              child: const Center(child: Text("Import Suppliers")),
             ),
           ),
-          height: 30,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Number of results:  ",
-                style: TextStyle(
-                  color: context.theme.colorScheme.onPrimaryContainer,
-                ),
-              ),
-              BlocBuilder<AccountsListCubit, AccountsListState>(
+          Expanded(
+            child: BlocBuilder<AccountsListCubit, AccountsListState>(
                 buildWhen: (previous, current) =>
                     previous.suppliers != current.suppliers,
                 builder: (context, state) {
-                  return Text(
-                    "${state.suppliers.length}",
-                    style: TextStyle(
-                      color: context.theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  if (state.suppliers.isEmpty) {
+                    return const Center(
+                      child: Text("No Supplier found"),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: state.suppliers.length,
+                    itemBuilder: (context, index) {
+                      final element = state.suppliers[index];
+                      return ListTile(
+                        title: Text(element.name),
+                        subtitle: Text("Phone : ${element.contact}"),
+                      );
+                    },
                   );
-                },
-              )
-            ],
+                }),
           ),
-        )
-      ],
+          Container(
+            decoration: BoxDecoration(
+              color: context.theme.colorScheme.primaryContainer,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Number of results:  ",
+                  style: TextStyle(
+                    color: context.theme.colorScheme.onPrimaryContainer,
+                  ),
+                ),
+                BlocBuilder<AccountsListCubit, AccountsListState>(
+                  buildWhen: (previous, current) =>
+                      previous.suppliers != current.suppliers,
+                  builder: (context, state) {
+                    return Text(
+                      "${state.suppliers.length}",
+                      style: TextStyle(
+                        color: context.theme.colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -183,65 +186,79 @@ class _CustomersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: BlocBuilder<AccountsListCubit, AccountsListState>(
-              buildWhen: (previous, current) =>
-                  previous.customers != current.customers,
-              builder: (context, state) {
-                if (state.customers.isEmpty) {
-                  return const Center(
-                    child: Text("No customer found"),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: state.customers.length,
-                  itemBuilder: (context, index) {
-                    final element = state.customers[index];
-                    return ListTile(
-                      title: Text(element.customerName),
-                      subtitle: Text("Phone : ${element.contact}"),
-                    );
-                  },
-                );
-              }),
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: context.theme.colorScheme.primaryContainer,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(8),
-              topRight: Radius.circular(8),
+    return Padding(
+      padding: const EdgeInsets.all(8.0).copyWith(bottom: 0),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 50,
+            child: ElevatedButton(
+              onPressed: () {
+                context
+                    .read<AccountsListCubit>()
+                    .importFromContactsCustomers(context);
+              },
+              child: const Center(child: Text("Import Customers")),
             ),
           ),
-          height: 30,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "Number of results:  ",
-                style: TextStyle(
-                  color: context.theme.colorScheme.onPrimaryContainer,
-                ),
-              ),
-              BlocBuilder<AccountsListCubit, AccountsListState>(
+          Expanded(
+            child: BlocBuilder<AccountsListCubit, AccountsListState>(
                 buildWhen: (previous, current) =>
                     previous.customers != current.customers,
                 builder: (context, state) {
-                  return Text(
-                    "${state.customers.length}",
-                    style: TextStyle(
-                      color: context.theme.colorScheme.onPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  if (state.customers.isEmpty) {
+                    return const Center(
+                      child: Text("No customer found"),
+                    );
+                  }
+                  return ListView.builder(
+                    itemCount: state.customers.length,
+                    itemBuilder: (context, index) {
+                      final element = state.customers[index];
+                      return ListTile(
+                        title: Text(element.name),
+                        subtitle: Text("Phone : ${element.contact}"),
+                      );
+                    },
                   );
-                },
-              )
-            ],
+                }),
           ),
-        )
-      ],
+          Container(
+            decoration: BoxDecoration(
+              color: context.theme.colorScheme.primaryContainer,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(8),
+                topRight: Radius.circular(8),
+              ),
+            ),
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Number of results:  ",
+                  style: TextStyle(
+                    color: context.theme.colorScheme.onPrimaryContainer,
+                  ),
+                ),
+                BlocBuilder<AccountsListCubit, AccountsListState>(
+                  buildWhen: (previous, current) =>
+                      previous.customers != current.customers,
+                  builder: (context, state) {
+                    return Text(
+                      "${state.customers.length}",
+                      style: TextStyle(
+                        color: context.theme.colorScheme.onPrimary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
@@ -292,44 +309,24 @@ class AccountsSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestions = accounts.where((element) {
-      if (element is Customer) {
-        return (element.customerName.contains(query) ||
-            element.customerCode.contains(query) ||
-            element.contact.contains(query));
-      }
-      if (element is Supplier) {
-        return (element.supplierName.contains(query) ||
-            element.supplierCode.contains(query) ||
-            element.supplierContact.contains(query));
-      }
-      return false;
+      return (element.name.contains(query) ||
+          element.code.contains(query) ||
+          element.contact.contains(query));
     });
     return ListView.builder(
       itemCount: query.isEmpty ? accounts.length : suggestions.length,
       itemBuilder: (context, index) {
         final element =
             query.isEmpty ? accounts[index] : suggestions.elementAt(index);
-        if (element is Customer) {
-          return ListTile(
-            title: Text(element.customerName),
-            subtitle: Text("Phone : ${element.contact}"),
-            onTap: () {
-              selectedIndex = index;
-              showResults(context);
-            },
-          );
-        }
-        if (element is Supplier) {
-          return ListTile(
-            title: Text(element.supplierName),
-            subtitle: Text("Phone : ${element.supplierContact}"),
-            onTap: () {
-              selectedIndex = index;
-              showResults(context);
-            },
-          );
-        }
-        return const SizedBox.shrink();
+
+        return ListTile(
+          title: Text(element.name),
+          subtitle: Text("Phone : ${element.contact}"),
+          onTap: () {
+            selectedIndex = index;
+            showResults(context);
+          },
+        );
       },
     );
   }

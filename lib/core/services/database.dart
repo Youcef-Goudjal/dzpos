@@ -23,6 +23,8 @@ part 'tables.dart';
     ReceiveProducts,
     PurchaseOrders,
     Suppliers,
+    Debts,
+    
   ],
   daos: [InvoicesDao, AccountsDao],
 )

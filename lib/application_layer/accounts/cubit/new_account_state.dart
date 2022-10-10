@@ -8,8 +8,9 @@ class NewAccountState extends Equatable {
     this.contact = "",
     this.address = "",
     this.code = "",
+    this.id = "",
   });
-
+  final String id;
   final Status status;
   final bool isCustomer;
   final String code;
@@ -18,10 +19,19 @@ class NewAccountState extends Equatable {
   final String address;
 
   @override
-  List<Object> get props => [status, isCustomer, name, contact, address, code];
+  List<Object> get props => [
+        id,
+        status,
+        isCustomer,
+        name,
+        contact,
+        address,
+        code,
+      ];
 
   NewAccountState copyWith({
     Status? status,
+    String? id,
     bool? isCustomer,
     String? name,
     String? code,
@@ -29,6 +39,7 @@ class NewAccountState extends Equatable {
     String? address,
   }) =>
       NewAccountState(
+        id: id ?? this.id,
         status: status ?? this.status,
         address: address ?? this.address,
         contact: contact ?? this.contact,

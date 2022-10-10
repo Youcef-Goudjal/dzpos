@@ -3,6 +3,10 @@ import 'package:dzpos/product/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../core/manager/route/routes.dart';
+import '../../application_layer.dart';
 
 class AccountsPage extends StatelessWidget {
   const AccountsPage({Key? key}) : super(key: key);
@@ -59,7 +63,7 @@ class AccountsPage extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 alignment: Alignment.centerLeft,
               ),
-              onPressed: () {},
+              onPressed: () => Accounts.values[index + 3].onPressed(context),
               icon: SvgPicture.asset(
                 Accounts.values[index + 3].iconPath!,
               ),
@@ -87,8 +91,27 @@ enum Accounts {
   openingAccount("Opening Account", AppAssets.customer);
 
   final String name;
-  // final VoidCallback? onPressed;
   final String? iconPath;
 
   const Accounts(this.name, [this.iconPath]);
+
+  void onPressed(BuildContext context) {
+    switch (this) {
+      case Accounts.openingAccount:
+        context.pushNamed(AppRoutes.newAccount.name);
+        break;
+
+      case Accounts.accountsList:
+        context.pushNamed(AppRoutes.accountsList.name);
+        break;
+      case Accounts.oldDebts:
+        showOldDebtDialog(context);
+        break;
+      case Accounts.debtList:
+        context.pushNamed(AppRoutes.debtList.name);
+        break;
+      default:
+    }
+    return;
+  }
 }

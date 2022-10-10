@@ -25,7 +25,11 @@ abstract class AppRouter {
               AppRoutes.listOfMaterials.goRoute(),
               AppRoutes.product.goRoute(),
             ]),
-            AppRoutes.accounts.goRoute(),
+            AppRoutes.accounts.goRoute([
+              AppRoutes.newAccount.goRoute(),
+              AppRoutes.accountsList.goRoute(),
+              AppRoutes.debtList.goRoute(),
+            ]),
             AppRoutes.reports.goRoute(),
             AppRoutes.settings.goRoute(),
           ], (context, state) {
@@ -37,6 +41,7 @@ abstract class AppRouter {
                     // TODO: handel if the client profile is activate
                     return AppRoutes.home.view;
                   }
+                  print("Profile not loaded");
                   return AppRoutes.splash.view;
                 },
               ),

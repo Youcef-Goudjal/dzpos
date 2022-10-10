@@ -15,8 +15,9 @@ class AppTextField extends StatefulWidget {
     this.textInputAction,
     this.errorText,
     this.enabled,
+    this.initialValue,
   });
-
+  final String? initialValue;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
@@ -47,7 +48,8 @@ class _AppTextFieldState extends State<AppTextField> {
           const SizedBox(width: 10),
         ],
         Expanded(
-          child: TextField(
+          child: TextFormField(
+            initialValue: widget.initialValue,
             enabled: widget.enabled,
             maxLines: widget.maxLine,
             onChanged: widget.onChanged,

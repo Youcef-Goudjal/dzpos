@@ -226,5 +226,7 @@ class Debts extends Table {
   IntColumn get supplierId => integer().references(Suppliers, #id)();
   DateTimeColumn get dateRecorded =>
       dateTime().withDefault(currentDateAndTime)();
+  BoolColumn get isCredit => boolean()();
+  TextColumn get description => text()();
   IntColumn get userId => integer().references(Users, #id)();
 }
