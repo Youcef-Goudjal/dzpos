@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 enum DebtType {
-  none,
+  all,
   debtor,
   creditor;
 
@@ -29,7 +29,7 @@ class DebtListPage extends StatefulWidget {
 }
 
 class _DebtListPageState extends State<DebtListPage> {
-  DebtType debtTypeSelected = DebtType.none;
+  DebtType debtTypeSelected = DebtType.all;
   Map<String, bool> checkList = {
     "customers": false,
     "suppliers": true,
@@ -67,54 +67,172 @@ class _DebtListPageState extends State<DebtListPage> {
             const Text("Debt Show"),
             Row(
               children: [
-                CheckboxListTile(
-                  value: checkList["customers"],
-                  onChanged: (value) {
-                    setState(() {
-                      checkList["customers"] = value!;
-                    });
-                  },
-                  title: const Text("Customers"),
+                Expanded(
+                  child: CheckboxListTile(
+                    value: checkList["customers"],
+                    onChanged: (value) {
+                      setState(() {
+                        checkList["customers"] = value!;
+                      });
+                    },
+                    title: const Text(
+                      "Customers",
+                      style: TextStyle(
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
+                  ),
                 ),
-                CheckboxListTile(
-                  value: checkList["suppliers"],
-                  onChanged: (value) {
-                    setState(() {
-                      checkList["suppliers"] = value!;
-                    });
-                  },
-                  title: const Text("Suppliers"),
+                Expanded(
+                  child: CheckboxListTile(
+                    value: checkList["suppliers"],
+                    onChanged: (value) {
+                      setState(() {
+                        checkList["suppliers"] = value!;
+                      });
+                    },
+                    title: const Text(
+                      "Suppliers",
+                      style: TextStyle(
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
+                  ),
                 ),
-                CheckboxListTile(
-                  value: checkList["other"],
-                  onChanged: (value) {
-                    setState(() {
-                      checkList["other"] = value!;
-                    });
-                  },
-                  title: const Text("Other"),
+                Expanded(
+                  child: CheckboxListTile(
+                    value: checkList["other"],
+                    onChanged: (value) {
+                      setState(() {
+                        checkList["other"] = value!;
+                      });
+                    },
+                    title: const Text(
+                      "Other",
+                      style: TextStyle(
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  // color: context.primaryColor.withOpacity(0.5),
+                  border: Border.all(
+                    color: context.primaryColor,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                height: 50,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            debtTypeSelected = DebtType.creditor;
+                          });
+                        },
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            color: debtTypeSelected == DebtType.creditor
+                                ? context.primaryColor
+                                : null,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              bottomLeft: Radius.circular(20),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              DebtType.creditor.name,
+                              style: TextStyle(
+                                color: context.onSecondaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    VerticalDivider(
+                      color: context.primaryColor,
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            debtTypeSelected = DebtType.debtor;
+                          });
+                        },
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            color: debtTypeSelected == DebtType.debtor
+                                ? context.primaryColor
+                                : null,
+                          ),
+                          child: Center(
+                            child: Text(
+                              DebtType.debtor.name,
+                              style: TextStyle(
+                                color: context.onSecondaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    VerticalDivider(
+                      color: context.primaryColor,
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            debtTypeSelected = DebtType.all;
+                          });
+                        },
+                        child: Ink(
+                          decoration: BoxDecoration(
+                            color: debtTypeSelected == DebtType.all
+                                ? context.primaryColor
+                                : null,
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              DebtType.all.name,
+                              style: TextStyle(
+                                color: context.onSecondaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
             10.heightBox,
-            // ChipsChoice.single(
-            //   value: DebtType.none,
-            //   onChanged: (value) => setState(() {
-            //     debtTypeSelected = value as DebtType? ?? DebtType.none;
-            //   }),
-            //   choiceItems: C2Choice.listFrom<List<DebtType>, DebtType>(
-            //     source: DebtType.values,
-            //     value: (index, item) => DebtType.values,
-            //     label: (index, item) => item.name,
-            //   ),
-            // ),
-            // 10.heightBox,
             Expanded(
               child: ListView(),
             ),
             const SizedBox(
               height: 40,
-              child: _ActionsDebt(),
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: _ActionsDebt(),
+              ),
             )
           ],
         ),

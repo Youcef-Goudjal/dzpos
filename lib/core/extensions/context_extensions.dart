@@ -68,4 +68,11 @@ extension DurationExtension on BuildContext {
 extension ThemeExt on BuildContext {
   ThemeData get theme => Theme.of(this);
   TextTheme get textTheme => theme.textTheme;
+  Color get primaryColor => theme.primaryColor;
+  ColorScheme get colorScheme => theme.colorScheme;
+  Color get secondaryColor => colorScheme.secondary;
+  Color get onSecondaryColor => colorScheme.onSecondary;
+  Color get onPrimaryColor => colorScheme.onPrimary;
+  Color get error => colorScheme.error;
+  Color get onError => colorScheme.onError;
 }

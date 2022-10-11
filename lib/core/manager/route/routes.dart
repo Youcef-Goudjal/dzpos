@@ -22,6 +22,12 @@ enum AppRoutes {
   accounts("accounts", "Accounts", AccountsPage()),
   newAccount("newAccount", "NewAccount", NewAccountPage()),
   accountsList("accountsList", "AccountsList", AccountsListPage()),
+  accountStatement(
+      "accountStatement", "AccountStatement", AccountStatementPage()),
+  payment("payment", "Payment", PaymentPage()),
+  catchFromAccount(
+      "catchFromAccount", "catchFromAccount", CatchFromAccountPage()),
+  registerNewDebt("registerNewDebt", "registerNewDebt", RegisterNewDebtPage()),
   debtList("debtList", "DebtList", DebtListPage()),
   reports("reports", "Reports", ReportsPage());
 

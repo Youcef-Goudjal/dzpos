@@ -29,6 +29,7 @@ abstract class AppRouter {
               AppRoutes.newAccount.goRoute(),
               AppRoutes.accountsList.goRoute(),
               AppRoutes.debtList.goRoute(),
+              AppRoutes.accountStatement.goRoute(),
             ]),
             AppRoutes.reports.goRoute(),
             AppRoutes.settings.goRoute(),
@@ -38,6 +39,7 @@ abstract class AppRouter {
               child: BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoaded) {
+                    print("profile loaded");
                     // TODO: handel if the client profile is activate
                     return AppRoutes.home.view;
                   }
