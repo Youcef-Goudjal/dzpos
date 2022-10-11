@@ -7,21 +7,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/services/database.dart';
 
 class NewAccountPage extends StatelessWidget {
-  final Customer? customer;
-  final Supplier? supplier;
-  const NewAccountPage({super.key, this.customer, this.supplier});
+  final Account? account;
+
+  const NewAccountPage({super.key, this.account});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => NewAccountCubit(
-        customer: customer,
-        supplier: supplier,
+        account: account,
       ),
       child: Builder(builder: (context) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text("New Account"),
+            title: Text("${(account != null) ? "Updating" : "New"} Account"),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: context.read<NewAccountCubit>().save,
@@ -51,52 +50,31 @@ class _NewAccountBody extends StatelessWidget {
               height: 150.h,
               child: BlocBuilder<NewAccountCubit, NewAccountState>(
                 buildWhen: (previous, current) =>
-                    previous.isCustomer != current.isCustomer,
+                    previous.accountType != current.accountType,
                 builder: (context, state) {
                   return Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: state.isCustomer
-                                ? context.theme.colorScheme.secondary
-                                : null,
-                          ),
-                          onPressed: newAccountCubit.onChangeIsCustomer,
-                          child: Center(
-                            child: Text(
-                              "Customer",
-                              style: TextStyle(
-                                color: state.isCustomer
-                                    ? context.theme.colorScheme.onSecondary
-                                    : null,
+                    children: List.generate(
+                      AccountType.values.length,
+                      (index) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Expanded(
+                          child: ElevatedButton(
+                            onPressed: () =>
+                                newAccountCubit.onChangeIsAccountType(
+                              AccountType.values[index],
+                            ),
+                            child: Center(
+                              child: Text(
+                                AccountType.values[index]
+                                    .toString()
+                                    .split(".")
+                                    .last,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      15.w.widthBox,
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: !state.isCustomer
-                                ? context.theme.colorScheme.secondary
-                                : null,
-                          ),
-                          onPressed: newAccountCubit.onChangeIsSupplier,
-                          child: Center(
-                            child: Text(
-                              "Supplier",
-                              style: TextStyle(
-                                color: !state.isCustomer
-                                    ? context.theme.colorScheme.onSecondary
-                                    : null,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   );
                 },
               ),
@@ -136,11 +114,23 @@ class _NewAccountBody extends StatelessWidget {
             ),
             15.h.heightBox,
             BlocBuilder<NewAccountCubit, NewAccountState>(
+              buildWhen: (previous, current) => previous.email != current.email,
+              builder: (context, state) {
+                return AppTextField(
+                  initialValue: newAccountCubit.state.email,
+                  onChanged: newAccountCubit.onChangeEmail,
+                  hint: "Email",
+                );
+              },
+            ),
+            15.h.heightBox,
+            BlocBuilder<NewAccountCubit, NewAccountState>(
               buildWhen: (previous, current) =>
                   previous.contact != current.contact,
               builder: (context, state) {
                 return AppTextField(
                   initialValue: newAccountCubit.state.contact,
+                  keyboardType: TextInputType.number,
                   onChanged: newAccountCubit.onChangeContact,
                   hint: "Contact",
                 );

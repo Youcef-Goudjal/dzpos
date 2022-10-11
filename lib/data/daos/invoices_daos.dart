@@ -7,8 +7,7 @@ part 'invoices_daos.g.dart';
 @DriftAccessor(tables: [
   Products,
   Users,
-  Customers,
-  Suppliers,
+  Accounts,
   ProductUnits,
   ProductCategories,
   Invoices,
@@ -18,6 +17,4 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
     with _$InvoicesDaoMixin
     implements InvoicesDataSource {
   InvoicesDao(super.attachedDatabase);
-
-  
 }

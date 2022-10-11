@@ -19,12 +19,10 @@ part 'tables.dart';
     ProductCategories,
     Sales,
     Invoices,
-    Customers,
+    Accounts,
     ReceiveProducts,
     PurchaseOrders,
-    Suppliers,
     Debts,
-    
   ],
   daos: [InvoicesDao, AccountsDao],
 )

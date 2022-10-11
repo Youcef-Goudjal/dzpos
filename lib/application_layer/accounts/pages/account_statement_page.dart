@@ -1,6 +1,7 @@
 import 'package:dzpos/application_layer/accounts/cubit/account_statement_cubit.dart';
 import 'package:dzpos/application_layer/widgets/app_text_field.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:dzpos/core/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -119,14 +120,14 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
         ),
         child: Column(
           children: [
-            TypeAheadFormField(
+            TypeAheadFormField<Account>(
               initialValue: name,
               suggestionsCallback: (pattern) async {
-                final customers = await repository.allCustomers;
-                final suppliers = await repository.allSuppliers;
+                final customers = await repository.allAccounts;
+                
                 return [
                   ...customers,
-                  ...suppliers,
+               
                 ];
               },
               itemBuilder: (context, dynamic suggestion) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:contacts_service/contacts_service.dart';
 import 'package:drift/drift.dart';
 import 'package:dzpos/application_layer/application_layer.dart';
@@ -13,20 +15,17 @@ part 'accounts_list_state.dart';
 
 class AccountsListCubit extends Cubit<AccountsListState> {
   AccountsRepository repository = AccountsRepositoryImpl();
+  late StreamSubscription _subscriptionAccounts;
   AccountsListCubit() : super(const AccountsListState()) {
-    repository.allCustomers.then((value) {
+    _subscriptionAccounts = repository.watchAllAccounts.listen((value) {
       emit(state.copyWith(
-        customers: value,
-      ));
-    });
-    repository.allSuppliers.then((value) {
-      emit(state.copyWith(
-        suppliers: value,
+        accounts: value,
       ));
     });
   }
 
-  void importFromContactsCustomers(BuildContext context) async {
+  void importFromContactsAccounts(
+      BuildContext context, AccountType type) async {
     List<Contact>? customers = await showDialog(
       context: context,
       builder: (context) {
@@ -35,49 +34,51 @@ class AccountsListCubit extends Cubit<AccountsListState> {
         );
       },
     );
-    //TODO insert into customers
-    print("customers selected ${customers?.length}");
-  }
+    if (customers != null && customers.isNotEmpty) {
+      repository.addMultipleAccounts(customers.map(
+        (customerContact) {
+          final String name = customerContact.displayName ?? "Default";
+          final String? address =
+              getListFirstElement(customerContact.postalAddresses)?.street;
+          final String? contact =
+              getListFirstElement(customerContact.phones)?.value;
+          final String? email =
+              getListFirstElement(customerContact.emails)?.value;
 
-  void importFromContactsSuppliers(BuildContext context) async {
-    List<Contact>? suppliers = await showDialog(
-      context: context,
-      builder: (context) {
-        return const Dialog(
-          child: ContactSelector(),
-        );
-      },
-    );
-    //TODO insert into suppliers
-    print("suppliers selected ${suppliers?.length}");
+          ///
+          return AccountsCompanion(
+            name: Value(name),
+            address: Value(address),
+            contact: Value(contact),
+            email: Value(email),
+            accountType: Value(type),
+          );
+        },
+      ).toList());
+    }
   }
 
   void refresh() async {
-    final customers = await repository.allCustomers;
-    final suppliers = await repository.allSuppliers;
+    final customers = await repository.allAccounts;
+
     emit(state.copyWith(
-      customers: customers,
-      suppliers: suppliers,
+      accounts: customers,
     ));
+  }
+
+  @override
+  Future<void> close() {
+    _subscriptionAccounts.cancel();
+
+    return super.close();
   }
 }
 
-extension ContactExt on Contact {
-  CustomersCompanion get toCustomer {
-    return CustomersCompanion(
-      name: Value(displayName ?? "Default"),
-      contact: Value(phones!.first.value!),
-      email: Value(emails?.first.value ?? "Default"),
-      address: Value("${postalAddresses?.first.toString()}"),
-    );
+E? getListFirstElement<E>(List<E>? list) {
+  if (list != null) {
+    if (list.isNotEmpty) {
+      return list.first;
+    }
   }
-
-  SuppliersCompanion get toSupplier {
-    return SuppliersCompanion(
-      name: Value(displayName ?? "Default"),
-      contact: Value(phones!.first.value!),
-      email: Value(emails?.first.value ?? "Default"),
-      address: Value("${postalAddresses?.first.toString()}"),
-    );
-  }
+  return null;
 }

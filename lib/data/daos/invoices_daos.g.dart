@@ -9,8 +9,7 @@ part of 'invoices_daos.dart';
 mixin _$InvoicesDaoMixin on DatabaseAccessor<MyDatabase> {
   $ProductsTable get products => attachedDatabase.products;
   $UsersTable get users => attachedDatabase.users;
-  $CustomersTable get customers => attachedDatabase.customers;
-  $SuppliersTable get suppliers => attachedDatabase.suppliers;
+  $AccountsTable get accounts => attachedDatabase.accounts;
   $ProductUnitsTable get productUnits => attachedDatabase.productUnits;
   $ProductCategoriesTable get productCategories =>
       attachedDatabase.productCategories;

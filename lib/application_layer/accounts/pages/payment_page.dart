@@ -22,9 +22,15 @@ class PaymentPage extends StatelessWidget {
             onSelected: (account) {
               print(account);
             },
-            onChangeNote: (input) {},
-            onChangedAmount: (input) {},
-            onSave: () {},
+            onChangeNote: (note) {
+              print(note);
+            },
+            onChangedAmount: (amount) {
+              print("amount: $amount");
+            },
+            onSave: () {
+              print("saving");
+            },
           ),
           Expanded(child: ListView())
         ],

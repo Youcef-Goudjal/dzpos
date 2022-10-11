@@ -31,7 +31,7 @@ class AccountsPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 5),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () => Accounts.values[index].onPressed(context),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -77,18 +77,18 @@ class AccountsPage extends StatelessWidget {
 }
 
 enum Accounts {
-  payment("Payment to Account", AppAssets.cashInHand),//
-  catchFromAccount("Catch From Account", AppAssets.receiveCash),//
-  registerNewDebt("Register New debt", AppAssets.newSvg),//
-  debtList("Debt List", AppAssets.check),//
-  accountStatement("Account Statement", AppAssets.profiles),//
+  payment("Payment to Account", AppAssets.cashInHand), //
+  catchFromAccount("Catch From Account", AppAssets.receiveCash), //
+  registerNewDebt("Register New debt", AppAssets.newSvg), //
+  debtList("Debt List", AppAssets.check), //
+  accountStatement("Account Statement", AppAssets.profiles), //
   boxMovement("Box Movement", AppAssets.masterCard),
   fundAndRepair("Fund And Repair", AppAssets.maintenance),
   expenseRecording("Expense Recording", AppAssets.moneyBag),
   externalRevenueRecording("External Revenue Recording", AppAssets.wallet),
-  oldDebts("Old Debts", AppAssets.coins),//
-  accountsList("Accounts List", AppAssets.userGroups),//
-  openingAccount("Opening Account", AppAssets.customer);//
+  oldDebts("Old Debts", AppAssets.coins), //
+  accountsList("Accounts List", AppAssets.userGroups), //
+  openingAccount("Opening Account", AppAssets.customer); //
 
   final String name;
   final String? iconPath;

@@ -12,4 +12,4 @@ enum Status {
 
 enum PaymentType { cache, credit }
 
-enum AccountType { admin, cashier, inventory }
+enum UserType { admin, cashier, inventory }

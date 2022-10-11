@@ -14,11 +14,12 @@ part of "database.dart";
 @DataClassName("User")
 class Users extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get firebaseUid => text()();
-  TextColumn get username => text().withLength(max: 30)();
-  TextColumn get password => text().withLength(max: 30)();
-  TextColumn get contact => text().withLength(max: 10)();
-  IntColumn get accountType => intEnum<AccountType>()();
+  TextColumn get firebaseUid => text().nullable()();
+  TextColumn get username => text().nullable().withLength(max: 30)();
+  TextColumn get password => text().nullable().withLength(max: 30)();
+  TextColumn get contact => text().nullable().withLength(max: 10)();
+  IntColumn get accountType =>
+      intEnum<UserType>().withDefault(Constant(UserType.admin.index))();
 }
 
 /// product(product_id,product_code,product_name,unit_id,category_id,unit_in_stock,unit_price,discount_percentage,reorder_level,user_id)
@@ -37,14 +38,14 @@ class Users extends Table {
 @DataClassName("Product")
 class Products extends Table {
   IntColumn get id => integer().named("product_id").autoIncrement()();
-  TextColumn get code => text().named("product_code")();
+  TextColumn get code => text().nullable().named("product_code")();
   TextColumn get name => text().named("product_name")();
   IntColumn get categoryId => integer().references(ProductCategories, #id)();
   RealColumn get unitInStock => real().withDefault(const Constant(0))();
   RealColumn get discountPercentage =>
       real().check(discountPercentage.isNotNull())();
   RealColumn get reorderLevel => real()();
-  IntColumn get userId => integer().references(Users, #id)();
+  IntColumn get userId => integer().nullable().references(Users, #id)();
 }
 
 /// productUnit (unit_id, unit_name)
@@ -86,14 +87,17 @@ class ProductCategories extends Table {
 ///(3) customer_name is the full name of the customer,
 ///(4) contact is to the contact number or mobile number of the customer and,
 ///(5) address is to the complete address of the customer.
-@DataClassName("Customer")
-class Customers extends Table {
+enum AccountType { customer, supplier, none }
+
+@DataClassName("Account")
+class Accounts extends Table {
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get code => text().withLength(max: 25)();
+  TextColumn get code => text().nullable().withLength(max: 25)();
   TextColumn get name => text().withLength(max: 50)();
-  TextColumn get contact => text().withLength(max: 10)();
-  TextColumn get address => text().withLength(max: 100)();
-  TextColumn get email => text().withLength(max: 50)();
+  TextColumn get contact => text().nullable().withLength(max: 10)();
+  TextColumn get address => text().nullable().withLength(max: 100)();
+  TextColumn get email => text().nullable().withLength(max: 50)();
+  IntColumn get accountType => intEnum<AccountType>()();
 }
 
 /// sales (sales_id, invoice_id, product_id, quantity, unit_price, sub_total)
@@ -125,15 +129,15 @@ class Sales extends Table {
 ///(4) supplier_contact is the contact information or contact number of the supplier,
 ///(5) supplier_address states the complete address of the supplier or company,
 ///(6) supplier_email stores the email address of the supplier or company.
-@DataClassName("Supplier")
-class Suppliers extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get code => text().withLength(max: 25)();
-  TextColumn get name => text().withLength(max: 50)();
-  TextColumn get contact => text().withLength(max: 10)();
-  TextColumn get address => text().withLength(max: 100)();
-  TextColumn get email => text().withLength(max: 50)();
-}
+// @DataClassName("Supplier")
+// class Suppliers extends Table {
+//   IntColumn get id => integer().autoIncrement()();
+//   TextColumn get code => text().nullable().withLength(max: 25)();
+//   TextColumn get name => text().withLength(max: 50)();
+//   TextColumn get contact => text().nullable().withLength(max: 10)();
+//   TextColumn get address => text().nullable().withLength(max: 100)();
+//   TextColumn get email => text().nullable().withLength(max: 50)();
+// }
 
 /// invoice (invoice_id, customer_id, payment_type, total_amount, amount_tendered, date_recorded, user_id)
 /// desc:  An invoice is a commercial document that itemizes and records a transaction between a buyer and a seller.
@@ -149,7 +153,7 @@ class Suppliers extends Table {
 @DataClassName("Invoice")
 class Invoices extends Table {
   IntColumn get invoiceId => integer().autoIncrement()();
-  IntColumn get customerId => integer().references(Customers, #id)();
+  IntColumn get customerId => integer().references(Accounts, #id)();
   IntColumn get paymentType => intEnum<PaymentType>()();
   RealColumn get totalAmount => real().check(totalAmount.isNotNull())();
   RealColumn get amountTendered => real().check(amountTendered.isNotNull())();
@@ -176,7 +180,7 @@ class PurchaseOrders extends Table {
   RealColumn get quantity => real().check(quantity.isNotNull())();
   RealColumn get unitPrice => real().check(unitPrice.isNotNull())();
   RealColumn get subTotal => real().generatedAs(quantity * unitPrice)();
-  IntColumn get supplierId => integer().references(Suppliers, #id)();
+  IntColumn get supplierId => integer().references(Accounts, #id)();
   DateTimeColumn get orderDate => dateTime().withDefault(currentDateAndTime)();
   IntColumn get userId => integer().references(Users, #id)();
 }
@@ -199,7 +203,7 @@ class ReceiveProducts extends Table {
   RealColumn get quantity => real().check(quantity.isNotNull())();
   RealColumn get unitPrice => real().check(unitPrice.isNotNull())();
   RealColumn get subTotal => real().generatedAs(quantity * unitPrice)();
-  IntColumn get supplierId => integer().references(Suppliers, #id)();
+  IntColumn get supplierId => integer().references(Accounts, #id)();
   DateTimeColumn get receivedDate =>
       dateTime().withDefault(currentDateAndTime)();
   IntColumn get userId => integer().references(Users, #id)();
@@ -222,8 +226,7 @@ class ReceiveProducts extends Table {
 class Debts extends Table {
   IntColumn get id => integer().autoIncrement()();
   RealColumn get amount => real()();
-  IntColumn get customerId => integer().references(Customers, #id)();
-  IntColumn get supplierId => integer().references(Suppliers, #id)();
+  IntColumn get accountId => integer().references(Accounts, #id)();
   DateTimeColumn get dateRecorded =>
       dateTime().withDefault(currentDateAndTime)();
   BoolColumn get isCredit => boolean()();

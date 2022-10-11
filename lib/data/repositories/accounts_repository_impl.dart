@@ -5,31 +5,30 @@ import "package:dzpos/domain/repositories/accounts_repository.dart";
 
 class AccountsRepositoryImpl implements AccountsRepository {
   final AccountsDao accountsDao = CommonBloc.accountsDao;
+
   @override
-  Future<int> addCustomer(CustomersCompanion customer) {
-    return accountsDao.addCustomer(customer);
+  Future<int> addAccount(AccountsCompanion customer) {
+    // TODO: implement addAccount
+    throw UnimplementedError();
   }
 
   @override
-  Future<void> addMultipleCustomers(List<CustomersCompanion> customers) {
-    return accountsDao.addMultipleCustomers(customers);
+  Future<void> addMultipleAccounts(List<AccountsCompanion> customers) {
+    // TODO: implement addMultipleAccounts
+    throw UnimplementedError();
   }
 
   @override
   // TODO: implement allCustomers
-  Future<List<Customer>> get allCustomers => accountsDao.allCustomers;
+  Future<List<Account>> get allAccounts => throw UnimplementedError();
 
   @override
-  Future<void> addMultipleSuppliers(List<SuppliersCompanion> suppliers) {
-    return accountsDao.addMultipleSuppliers(suppliers);
+  Future<int> updateAccount(AccountsCompanion updatedCustomer) {
+    // TODO: implement updateAccount
+    throw UnimplementedError();
   }
 
   @override
-  Future<int> addSupplier(SuppliersCompanion supplier) {
-    return accountsDao.addSupplier(supplier);
-  }
-
-  @override
-  // TODO: implement allSuppliers
-  Future<List<Supplier>> get allSuppliers => accountsDao.allSuppliers;
+  // TODO: implement watchAllCustomers
+  Stream<List<Account>> get watchAllAccounts => throw UnimplementedError();
 }

@@ -3,48 +3,53 @@ part of 'new_account_cubit.dart';
 class NewAccountState extends Equatable {
   const NewAccountState({
     this.status = Status.initial,
-    this.isCustomer = true,
+    this.accountType = AccountType.none,
     this.name = "",
     this.contact = "",
     this.address = "",
     this.code = "",
     this.id = "",
+    this.email = "",
   });
   final String id;
   final Status status;
-  final bool isCustomer;
+  final AccountType accountType;
   final String code;
   final String name;
   final String contact;
   final String address;
+  final String email;
 
   @override
   List<Object> get props => [
         id,
         status,
-        isCustomer,
+        accountType,
         name,
         contact,
         address,
         code,
+        email,
       ];
 
   NewAccountState copyWith({
     Status? status,
     String? id,
-    bool? isCustomer,
+    AccountType? accountType,
     String? name,
     String? code,
     String? contact,
     String? address,
+    String? email,
   }) =>
       NewAccountState(
         id: id ?? this.id,
         status: status ?? this.status,
         address: address ?? this.address,
         contact: contact ?? this.contact,
-        isCustomer: isCustomer ?? this.isCustomer,
+        accountType: accountType ?? this.accountType,
         name: name ?? this.name,
         code: code ?? this.code,
+        email: email ?? this.email,
       );
 }

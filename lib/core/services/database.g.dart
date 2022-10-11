@@ -9,26 +9,34 @@ part of 'database.dart';
 // ignore_for_file: type=lint
 class User extends DataClass implements Insertable<User> {
   final int id;
-  final String firebaseUid;
-  final String username;
-  final String password;
-  final String contact;
-  final AccountType accountType;
+  final String? firebaseUid;
+  final String? username;
+  final String? password;
+  final String? contact;
+  final UserType accountType;
   const User(
       {required this.id,
-      required this.firebaseUid,
-      required this.username,
-      required this.password,
-      required this.contact,
+      this.firebaseUid,
+      this.username,
+      this.password,
+      this.contact,
       required this.accountType});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['firebase_uid'] = Variable<String>(firebaseUid);
-    map['username'] = Variable<String>(username);
-    map['password'] = Variable<String>(password);
-    map['contact'] = Variable<String>(contact);
+    if (!nullToAbsent || firebaseUid != null) {
+      map['firebase_uid'] = Variable<String>(firebaseUid);
+    }
+    if (!nullToAbsent || username != null) {
+      map['username'] = Variable<String>(username);
+    }
+    if (!nullToAbsent || password != null) {
+      map['password'] = Variable<String>(password);
+    }
+    if (!nullToAbsent || contact != null) {
+      map['contact'] = Variable<String>(contact);
+    }
     {
       final converter = $UsersTable.$converter0;
       map['account_type'] = Variable<int>(converter.toSql(accountType));
@@ -39,10 +47,18 @@ class User extends DataClass implements Insertable<User> {
   UsersCompanion toCompanion(bool nullToAbsent) {
     return UsersCompanion(
       id: Value(id),
-      firebaseUid: Value(firebaseUid),
-      username: Value(username),
-      password: Value(password),
-      contact: Value(contact),
+      firebaseUid: firebaseUid == null && nullToAbsent
+          ? const Value.absent()
+          : Value(firebaseUid),
+      username: username == null && nullToAbsent
+          ? const Value.absent()
+          : Value(username),
+      password: password == null && nullToAbsent
+          ? const Value.absent()
+          : Value(password),
+      contact: contact == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contact),
       accountType: Value(accountType),
     );
   }
@@ -52,11 +68,11 @@ class User extends DataClass implements Insertable<User> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return User(
       id: serializer.fromJson<int>(json['id']),
-      firebaseUid: serializer.fromJson<String>(json['firebaseUid']),
-      username: serializer.fromJson<String>(json['username']),
-      password: serializer.fromJson<String>(json['password']),
-      contact: serializer.fromJson<String>(json['contact']),
-      accountType: serializer.fromJson<AccountType>(json['accountType']),
+      firebaseUid: serializer.fromJson<String?>(json['firebaseUid']),
+      username: serializer.fromJson<String?>(json['username']),
+      password: serializer.fromJson<String?>(json['password']),
+      contact: serializer.fromJson<String?>(json['contact']),
+      accountType: serializer.fromJson<UserType>(json['accountType']),
     );
   }
   @override
@@ -64,27 +80,27 @@ class User extends DataClass implements Insertable<User> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'firebaseUid': serializer.toJson<String>(firebaseUid),
-      'username': serializer.toJson<String>(username),
-      'password': serializer.toJson<String>(password),
-      'contact': serializer.toJson<String>(contact),
-      'accountType': serializer.toJson<AccountType>(accountType),
+      'firebaseUid': serializer.toJson<String?>(firebaseUid),
+      'username': serializer.toJson<String?>(username),
+      'password': serializer.toJson<String?>(password),
+      'contact': serializer.toJson<String?>(contact),
+      'accountType': serializer.toJson<UserType>(accountType),
     };
   }
 
   User copyWith(
           {int? id,
-          String? firebaseUid,
-          String? username,
-          String? password,
-          String? contact,
-          AccountType? accountType}) =>
+          Value<String?> firebaseUid = const Value.absent(),
+          Value<String?> username = const Value.absent(),
+          Value<String?> password = const Value.absent(),
+          Value<String?> contact = const Value.absent(),
+          UserType? accountType}) =>
       User(
         id: id ?? this.id,
-        firebaseUid: firebaseUid ?? this.firebaseUid,
-        username: username ?? this.username,
-        password: password ?? this.password,
-        contact: contact ?? this.contact,
+        firebaseUid: firebaseUid.present ? firebaseUid.value : this.firebaseUid,
+        username: username.present ? username.value : this.username,
+        password: password.present ? password.value : this.password,
+        contact: contact.present ? contact.value : this.contact,
         accountType: accountType ?? this.accountType,
       );
   @override
@@ -117,11 +133,11 @@ class User extends DataClass implements Insertable<User> {
 
 class UsersCompanion extends UpdateCompanion<User> {
   final Value<int> id;
-  final Value<String> firebaseUid;
-  final Value<String> username;
-  final Value<String> password;
-  final Value<String> contact;
-  final Value<AccountType> accountType;
+  final Value<String?> firebaseUid;
+  final Value<String?> username;
+  final Value<String?> password;
+  final Value<String?> contact;
+  final Value<UserType> accountType;
   const UsersCompanion({
     this.id = const Value.absent(),
     this.firebaseUid = const Value.absent(),
@@ -132,16 +148,12 @@ class UsersCompanion extends UpdateCompanion<User> {
   });
   UsersCompanion.insert({
     this.id = const Value.absent(),
-    required String firebaseUid,
-    required String username,
-    required String password,
-    required String contact,
-    required AccountType accountType,
-  })  : firebaseUid = Value(firebaseUid),
-        username = Value(username),
-        password = Value(password),
-        contact = Value(contact),
-        accountType = Value(accountType);
+    this.firebaseUid = const Value.absent(),
+    this.username = const Value.absent(),
+    this.password = const Value.absent(),
+    this.contact = const Value.absent(),
+    this.accountType = const Value.absent(),
+  });
   static Insertable<User> custom({
     Expression<int>? id,
     Expression<String>? firebaseUid,
@@ -162,11 +174,11 @@ class UsersCompanion extends UpdateCompanion<User> {
 
   UsersCompanion copyWith(
       {Value<int>? id,
-      Value<String>? firebaseUid,
-      Value<String>? username,
-      Value<String>? password,
-      Value<String>? contact,
-      Value<AccountType>? accountType}) {
+      Value<String?>? firebaseUid,
+      Value<String?>? username,
+      Value<String?>? password,
+      Value<String?>? contact,
+      Value<UserType>? accountType}) {
     return UsersCompanion(
       id: id ?? this.id,
       firebaseUid: firebaseUid ?? this.firebaseUid,
@@ -232,36 +244,38 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
       const VerificationMeta('firebaseUid');
   @override
   late final GeneratedColumn<String> firebaseUid = GeneratedColumn<String>(
-      'firebase_uid', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'firebase_uid', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _usernameMeta = const VerificationMeta('username');
   @override
   late final GeneratedColumn<String> username = GeneratedColumn<String>(
-      'username', aliasedName, false,
+      'username', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 30),
       type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _passwordMeta = const VerificationMeta('password');
   @override
   late final GeneratedColumn<String> password = GeneratedColumn<String>(
-      'password', aliasedName, false,
+      'password', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 30),
       type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _contactMeta = const VerificationMeta('contact');
   @override
   late final GeneratedColumn<String> contact = GeneratedColumn<String>(
-      'contact', aliasedName, false,
+      'contact', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 10),
       type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _accountTypeMeta =
       const VerificationMeta('accountType');
   @override
-  late final GeneratedColumnWithTypeConverter<AccountType, int> accountType =
+  late final GeneratedColumnWithTypeConverter<UserType, int> accountType =
       GeneratedColumn<int>('account_type', aliasedName, false,
-              type: DriftSqlType.int, requiredDuringInsert: true)
-          .withConverter<AccountType>($UsersTable.$converter0);
+              type: DriftSqlType.int,
+              requiredDuringInsert: false,
+              defaultValue: Constant(UserType.admin.index))
+          .withConverter<UserType>($UsersTable.$converter0);
   @override
   List<GeneratedColumn> get $columns =>
       [id, firebaseUid, username, password, contact, accountType];
@@ -282,26 +296,18 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
           _firebaseUidMeta,
           firebaseUid.isAcceptableOrUnknown(
               data['firebase_uid']!, _firebaseUidMeta));
-    } else if (isInserting) {
-      context.missing(_firebaseUidMeta);
     }
     if (data.containsKey('username')) {
       context.handle(_usernameMeta,
           username.isAcceptableOrUnknown(data['username']!, _usernameMeta));
-    } else if (isInserting) {
-      context.missing(_usernameMeta);
     }
     if (data.containsKey('password')) {
       context.handle(_passwordMeta,
           password.isAcceptableOrUnknown(data['password']!, _passwordMeta));
-    } else if (isInserting) {
-      context.missing(_passwordMeta);
     }
     if (data.containsKey('contact')) {
       context.handle(_contactMeta,
           contact.isAcceptableOrUnknown(data['contact']!, _contactMeta));
-    } else if (isInserting) {
-      context.missing(_contactMeta);
     }
     context.handle(_accountTypeMeta, const VerificationResult.success());
     return context;
@@ -316,13 +322,13 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
       id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       firebaseUid: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}firebase_uid'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}firebase_uid']),
       username: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}username'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}username']),
       password: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}password'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}password']),
       contact: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}contact'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}contact']),
       accountType: $UsersTable.$converter0.fromSql(attachedDatabase
           .options.types
           .read(DriftSqlType.int, data['${effectivePrefix}account_type'])!),
@@ -334,8 +340,8 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
     return $UsersTable(attachedDatabase, alias);
   }
 
-  static TypeConverter<AccountType, int> $converter0 =
-      const EnumIndexConverter<AccountType>(AccountType.values);
+  static TypeConverter<UserType, int> $converter0 =
+      const EnumIndexConverter<UserType>(UserType.values);
 }
 
 class ProductCategory extends DataClass implements Insertable<ProductCategory> {
@@ -511,46 +517,51 @@ class $ProductCategoriesTable extends ProductCategories
 
 class Product extends DataClass implements Insertable<Product> {
   final int id;
-  final String code;
+  final String? code;
   final String name;
   final int categoryId;
   final double unitInStock;
   final double discountPercentage;
   final double reorderLevel;
-  final int userId;
+  final int? userId;
   const Product(
       {required this.id,
-      required this.code,
+      this.code,
       required this.name,
       required this.categoryId,
       required this.unitInStock,
       required this.discountPercentage,
       required this.reorderLevel,
-      required this.userId});
+      this.userId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['product_id'] = Variable<int>(id);
-    map['product_code'] = Variable<String>(code);
+    if (!nullToAbsent || code != null) {
+      map['product_code'] = Variable<String>(code);
+    }
     map['product_name'] = Variable<String>(name);
     map['category_id'] = Variable<int>(categoryId);
     map['unit_in_stock'] = Variable<double>(unitInStock);
     map['discount_percentage'] = Variable<double>(discountPercentage);
     map['reorder_level'] = Variable<double>(reorderLevel);
-    map['user_id'] = Variable<int>(userId);
+    if (!nullToAbsent || userId != null) {
+      map['user_id'] = Variable<int>(userId);
+    }
     return map;
   }
 
   ProductsCompanion toCompanion(bool nullToAbsent) {
     return ProductsCompanion(
       id: Value(id),
-      code: Value(code),
+      code: code == null && nullToAbsent ? const Value.absent() : Value(code),
       name: Value(name),
       categoryId: Value(categoryId),
       unitInStock: Value(unitInStock),
       discountPercentage: Value(discountPercentage),
       reorderLevel: Value(reorderLevel),
-      userId: Value(userId),
+      userId:
+          userId == null && nullToAbsent ? const Value.absent() : Value(userId),
     );
   }
 
@@ -559,14 +570,14 @@ class Product extends DataClass implements Insertable<Product> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Product(
       id: serializer.fromJson<int>(json['id']),
-      code: serializer.fromJson<String>(json['code']),
+      code: serializer.fromJson<String?>(json['code']),
       name: serializer.fromJson<String>(json['name']),
       categoryId: serializer.fromJson<int>(json['categoryId']),
       unitInStock: serializer.fromJson<double>(json['unitInStock']),
       discountPercentage:
           serializer.fromJson<double>(json['discountPercentage']),
       reorderLevel: serializer.fromJson<double>(json['reorderLevel']),
-      userId: serializer.fromJson<int>(json['userId']),
+      userId: serializer.fromJson<int?>(json['userId']),
     );
   }
   @override
@@ -574,34 +585,34 @@ class Product extends DataClass implements Insertable<Product> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'code': serializer.toJson<String>(code),
+      'code': serializer.toJson<String?>(code),
       'name': serializer.toJson<String>(name),
       'categoryId': serializer.toJson<int>(categoryId),
       'unitInStock': serializer.toJson<double>(unitInStock),
       'discountPercentage': serializer.toJson<double>(discountPercentage),
       'reorderLevel': serializer.toJson<double>(reorderLevel),
-      'userId': serializer.toJson<int>(userId),
+      'userId': serializer.toJson<int?>(userId),
     };
   }
 
   Product copyWith(
           {int? id,
-          String? code,
+          Value<String?> code = const Value.absent(),
           String? name,
           int? categoryId,
           double? unitInStock,
           double? discountPercentage,
           double? reorderLevel,
-          int? userId}) =>
+          Value<int?> userId = const Value.absent()}) =>
       Product(
         id: id ?? this.id,
-        code: code ?? this.code,
+        code: code.present ? code.value : this.code,
         name: name ?? this.name,
         categoryId: categoryId ?? this.categoryId,
         unitInStock: unitInStock ?? this.unitInStock,
         discountPercentage: discountPercentage ?? this.discountPercentage,
         reorderLevel: reorderLevel ?? this.reorderLevel,
-        userId: userId ?? this.userId,
+        userId: userId.present ? userId.value : this.userId,
       );
   @override
   String toString() {
@@ -637,13 +648,13 @@ class Product extends DataClass implements Insertable<Product> {
 
 class ProductsCompanion extends UpdateCompanion<Product> {
   final Value<int> id;
-  final Value<String> code;
+  final Value<String?> code;
   final Value<String> name;
   final Value<int> categoryId;
   final Value<double> unitInStock;
   final Value<double> discountPercentage;
   final Value<double> reorderLevel;
-  final Value<int> userId;
+  final Value<int?> userId;
   const ProductsCompanion({
     this.id = const Value.absent(),
     this.code = const Value.absent(),
@@ -656,19 +667,17 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   });
   ProductsCompanion.insert({
     this.id = const Value.absent(),
-    required String code,
+    this.code = const Value.absent(),
     required String name,
     required int categoryId,
     this.unitInStock = const Value.absent(),
     required double discountPercentage,
     required double reorderLevel,
-    required int userId,
-  })  : code = Value(code),
-        name = Value(name),
+    this.userId = const Value.absent(),
+  })  : name = Value(name),
         categoryId = Value(categoryId),
         discountPercentage = Value(discountPercentage),
-        reorderLevel = Value(reorderLevel),
-        userId = Value(userId);
+        reorderLevel = Value(reorderLevel);
   static Insertable<Product> custom({
     Expression<int>? id,
     Expression<String>? code,
@@ -693,13 +702,13 @@ class ProductsCompanion extends UpdateCompanion<Product> {
 
   ProductsCompanion copyWith(
       {Value<int>? id,
-      Value<String>? code,
+      Value<String?>? code,
       Value<String>? name,
       Value<int>? categoryId,
       Value<double>? unitInStock,
       Value<double>? discountPercentage,
       Value<double>? reorderLevel,
-      Value<int>? userId}) {
+      Value<int?>? userId}) {
     return ProductsCompanion(
       id: id ?? this.id,
       code: code ?? this.code,
@@ -773,8 +782,8 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   final VerificationMeta _codeMeta = const VerificationMeta('code');
   @override
   late final GeneratedColumn<String> code = GeneratedColumn<String>(
-      'product_code', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'product_code', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -812,9 +821,9 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
-      'user_id', aliasedName, false,
+      'user_id', aliasedName, true,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints: 'REFERENCES "users" ("id")');
   @override
   List<GeneratedColumn> get $columns => [
@@ -843,8 +852,6 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     if (data.containsKey('product_code')) {
       context.handle(_codeMeta,
           code.isAcceptableOrUnknown(data['product_code']!, _codeMeta));
-    } else if (isInserting) {
-      context.missing(_codeMeta);
     }
     if (data.containsKey('product_name')) {
       context.handle(_nameMeta,
@@ -885,8 +892,6 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     if (data.containsKey('user_id')) {
       context.handle(_userIdMeta,
           userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
-    } else if (isInserting) {
-      context.missing(_userIdMeta);
     }
     return context;
   }
@@ -900,7 +905,7 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
       id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
       code: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}product_code'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}product_code']),
       name: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}product_name'])!,
       categoryId: attachedDatabase.options.types
@@ -912,7 +917,7 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
       reorderLevel: attachedDatabase.options.types
           .read(DriftSqlType.double, data['${effectivePrefix}reorder_level'])!,
       userId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id']),
     );
   }
 
@@ -1538,53 +1543,74 @@ class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
   }
 }
 
-class Customer extends DataClass implements Insertable<Customer> {
+class Account extends DataClass implements Insertable<Account> {
   final int id;
-  final String code;
+  final String? code;
   final String name;
-  final String contact;
-  final String address;
-  final String email;
-  const Customer(
+  final String? contact;
+  final String? address;
+  final String? email;
+  final AccountType accountType;
+  const Account(
       {required this.id,
-      required this.code,
+      this.code,
       required this.name,
-      required this.contact,
-      required this.address,
-      required this.email});
+      this.contact,
+      this.address,
+      this.email,
+      required this.accountType});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['code'] = Variable<String>(code);
+    if (!nullToAbsent || code != null) {
+      map['code'] = Variable<String>(code);
+    }
     map['name'] = Variable<String>(name);
-    map['contact'] = Variable<String>(contact);
-    map['address'] = Variable<String>(address);
-    map['email'] = Variable<String>(email);
+    if (!nullToAbsent || contact != null) {
+      map['contact'] = Variable<String>(contact);
+    }
+    if (!nullToAbsent || address != null) {
+      map['address'] = Variable<String>(address);
+    }
+    if (!nullToAbsent || email != null) {
+      map['email'] = Variable<String>(email);
+    }
+    {
+      final converter = $AccountsTable.$converter0;
+      map['account_type'] = Variable<int>(converter.toSql(accountType));
+    }
     return map;
   }
 
-  CustomersCompanion toCompanion(bool nullToAbsent) {
-    return CustomersCompanion(
+  AccountsCompanion toCompanion(bool nullToAbsent) {
+    return AccountsCompanion(
       id: Value(id),
-      code: Value(code),
+      code: code == null && nullToAbsent ? const Value.absent() : Value(code),
       name: Value(name),
-      contact: Value(contact),
-      address: Value(address),
-      email: Value(email),
+      contact: contact == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contact),
+      address: address == null && nullToAbsent
+          ? const Value.absent()
+          : Value(address),
+      email:
+          email == null && nullToAbsent ? const Value.absent() : Value(email),
+      accountType: Value(accountType),
     );
   }
 
-  factory Customer.fromJson(Map<String, dynamic> json,
+  factory Account.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Customer(
+    return Account(
       id: serializer.fromJson<int>(json['id']),
-      code: serializer.fromJson<String>(json['code']),
+      code: serializer.fromJson<String?>(json['code']),
       name: serializer.fromJson<String>(json['name']),
-      contact: serializer.fromJson<String>(json['contact']),
-      address: serializer.fromJson<String>(json['address']),
-      email: serializer.fromJson<String>(json['email']),
+      contact: serializer.fromJson<String?>(json['contact']),
+      address: serializer.fromJson<String?>(json['address']),
+      email: serializer.fromJson<String?>(json['email']),
+      accountType: serializer.fromJson<AccountType>(json['accountType']),
     );
   }
   @override
@@ -1592,90 +1618,97 @@ class Customer extends DataClass implements Insertable<Customer> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'code': serializer.toJson<String>(code),
+      'code': serializer.toJson<String?>(code),
       'name': serializer.toJson<String>(name),
-      'contact': serializer.toJson<String>(contact),
-      'address': serializer.toJson<String>(address),
-      'email': serializer.toJson<String>(email),
+      'contact': serializer.toJson<String?>(contact),
+      'address': serializer.toJson<String?>(address),
+      'email': serializer.toJson<String?>(email),
+      'accountType': serializer.toJson<AccountType>(accountType),
     };
   }
 
-  Customer copyWith(
+  Account copyWith(
           {int? id,
-          String? code,
+          Value<String?> code = const Value.absent(),
           String? name,
-          String? contact,
-          String? address,
-          String? email}) =>
-      Customer(
+          Value<String?> contact = const Value.absent(),
+          Value<String?> address = const Value.absent(),
+          Value<String?> email = const Value.absent(),
+          AccountType? accountType}) =>
+      Account(
         id: id ?? this.id,
-        code: code ?? this.code,
+        code: code.present ? code.value : this.code,
         name: name ?? this.name,
-        contact: contact ?? this.contact,
-        address: address ?? this.address,
-        email: email ?? this.email,
+        contact: contact.present ? contact.value : this.contact,
+        address: address.present ? address.value : this.address,
+        email: email.present ? email.value : this.email,
+        accountType: accountType ?? this.accountType,
       );
   @override
   String toString() {
-    return (StringBuffer('Customer(')
+    return (StringBuffer('Account(')
           ..write('id: $id, ')
           ..write('code: $code, ')
           ..write('name: $name, ')
           ..write('contact: $contact, ')
           ..write('address: $address, ')
-          ..write('email: $email')
+          ..write('email: $email, ')
+          ..write('accountType: $accountType')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, code, name, contact, address, email);
+  int get hashCode =>
+      Object.hash(id, code, name, contact, address, email, accountType);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Customer &&
+      (other is Account &&
           other.id == this.id &&
           other.code == this.code &&
           other.name == this.name &&
           other.contact == this.contact &&
           other.address == this.address &&
-          other.email == this.email);
+          other.email == this.email &&
+          other.accountType == this.accountType);
 }
 
-class CustomersCompanion extends UpdateCompanion<Customer> {
+class AccountsCompanion extends UpdateCompanion<Account> {
   final Value<int> id;
-  final Value<String> code;
+  final Value<String?> code;
   final Value<String> name;
-  final Value<String> contact;
-  final Value<String> address;
-  final Value<String> email;
-  const CustomersCompanion({
+  final Value<String?> contact;
+  final Value<String?> address;
+  final Value<String?> email;
+  final Value<AccountType> accountType;
+  const AccountsCompanion({
     this.id = const Value.absent(),
     this.code = const Value.absent(),
     this.name = const Value.absent(),
     this.contact = const Value.absent(),
     this.address = const Value.absent(),
     this.email = const Value.absent(),
+    this.accountType = const Value.absent(),
   });
-  CustomersCompanion.insert({
+  AccountsCompanion.insert({
     this.id = const Value.absent(),
-    required String code,
+    this.code = const Value.absent(),
     required String name,
-    required String contact,
-    required String address,
-    required String email,
-  })  : code = Value(code),
-        name = Value(name),
-        contact = Value(contact),
-        address = Value(address),
-        email = Value(email);
-  static Insertable<Customer> custom({
+    this.contact = const Value.absent(),
+    this.address = const Value.absent(),
+    this.email = const Value.absent(),
+    required AccountType accountType,
+  })  : name = Value(name),
+        accountType = Value(accountType);
+  static Insertable<Account> custom({
     Expression<int>? id,
     Expression<String>? code,
     Expression<String>? name,
     Expression<String>? contact,
     Expression<String>? address,
     Expression<String>? email,
+    Expression<int>? accountType,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1684,23 +1717,26 @@ class CustomersCompanion extends UpdateCompanion<Customer> {
       if (contact != null) 'contact': contact,
       if (address != null) 'address': address,
       if (email != null) 'email': email,
+      if (accountType != null) 'account_type': accountType,
     });
   }
 
-  CustomersCompanion copyWith(
+  AccountsCompanion copyWith(
       {Value<int>? id,
-      Value<String>? code,
+      Value<String?>? code,
       Value<String>? name,
-      Value<String>? contact,
-      Value<String>? address,
-      Value<String>? email}) {
-    return CustomersCompanion(
+      Value<String?>? contact,
+      Value<String?>? address,
+      Value<String?>? email,
+      Value<AccountType>? accountType}) {
+    return AccountsCompanion(
       id: id ?? this.id,
       code: code ?? this.code,
       name: name ?? this.name,
       contact: contact ?? this.contact,
       address: address ?? this.address,
       email: email ?? this.email,
+      accountType: accountType ?? this.accountType,
     );
   }
 
@@ -1725,29 +1761,33 @@ class CustomersCompanion extends UpdateCompanion<Customer> {
     if (email.present) {
       map['email'] = Variable<String>(email.value);
     }
+    if (accountType.present) {
+      final converter = $AccountsTable.$converter0;
+      map['account_type'] = Variable<int>(converter.toSql(accountType.value));
+    }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('CustomersCompanion(')
+    return (StringBuffer('AccountsCompanion(')
           ..write('id: $id, ')
           ..write('code: $code, ')
           ..write('name: $name, ')
           ..write('contact: $contact, ')
           ..write('address: $address, ')
-          ..write('email: $email')
+          ..write('email: $email, ')
+          ..write('accountType: $accountType')
           ..write(')'))
         .toString();
   }
 }
 
-class $CustomersTable extends Customers
-    with TableInfo<$CustomersTable, Customer> {
+class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $CustomersTable(this.attachedDatabase, [this._alias]);
+  $AccountsTable(this.attachedDatabase, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -1758,10 +1798,10 @@ class $CustomersTable extends Customers
   final VerificationMeta _codeMeta = const VerificationMeta('code');
   @override
   late final GeneratedColumn<String> code = GeneratedColumn<String>(
-      'code', aliasedName, false,
+      'code', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 25),
       type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -1772,33 +1812,40 @@ class $CustomersTable extends Customers
   final VerificationMeta _contactMeta = const VerificationMeta('contact');
   @override
   late final GeneratedColumn<String> contact = GeneratedColumn<String>(
-      'contact', aliasedName, false,
+      'contact', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 10),
       type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _addressMeta = const VerificationMeta('address');
   @override
   late final GeneratedColumn<String> address = GeneratedColumn<String>(
-      'address', aliasedName, false,
+      'address', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 100),
       type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
   final VerificationMeta _emailMeta = const VerificationMeta('email');
   @override
   late final GeneratedColumn<String> email = GeneratedColumn<String>(
-      'email', aliasedName, false,
+      'email', aliasedName, true,
       additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 50),
       type: DriftSqlType.string,
-      requiredDuringInsert: true);
+      requiredDuringInsert: false);
+  final VerificationMeta _accountTypeMeta =
+      const VerificationMeta('accountType');
+  @override
+  late final GeneratedColumnWithTypeConverter<AccountType, int> accountType =
+      GeneratedColumn<int>('account_type', aliasedName, false,
+              type: DriftSqlType.int, requiredDuringInsert: true)
+          .withConverter<AccountType>($AccountsTable.$converter0);
   @override
   List<GeneratedColumn> get $columns =>
-      [id, code, name, contact, address, email];
+      [id, code, name, contact, address, email, accountType];
   @override
-  String get aliasedName => _alias ?? 'customers';
+  String get aliasedName => _alias ?? 'accounts';
   @override
-  String get actualTableName => 'customers';
+  String get actualTableName => 'accounts';
   @override
-  VerificationContext validateIntegrity(Insertable<Customer> instance,
+  VerificationContext validateIntegrity(Insertable<Account> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -1808,8 +1855,6 @@ class $CustomersTable extends Customers
     if (data.containsKey('code')) {
       context.handle(
           _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
-    } else if (isInserting) {
-      context.missing(_codeMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -1820,49 +1865,50 @@ class $CustomersTable extends Customers
     if (data.containsKey('contact')) {
       context.handle(_contactMeta,
           contact.isAcceptableOrUnknown(data['contact']!, _contactMeta));
-    } else if (isInserting) {
-      context.missing(_contactMeta);
     }
     if (data.containsKey('address')) {
       context.handle(_addressMeta,
           address.isAcceptableOrUnknown(data['address']!, _addressMeta));
-    } else if (isInserting) {
-      context.missing(_addressMeta);
     }
     if (data.containsKey('email')) {
       context.handle(
           _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
-    } else if (isInserting) {
-      context.missing(_emailMeta);
     }
+    context.handle(_accountTypeMeta, const VerificationResult.success());
     return context;
   }
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  Customer map(Map<String, dynamic> data, {String? tablePrefix}) {
+  Account map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Customer(
+    return Account(
       id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       code: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}code']),
       name: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       contact: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}contact'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}contact']),
       address: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}address'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}address']),
       email: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}email']),
+      accountType: $AccountsTable.$converter0.fromSql(attachedDatabase
+          .options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}account_type'])!),
     );
   }
 
   @override
-  $CustomersTable createAlias(String alias) {
-    return $CustomersTable(attachedDatabase, alias);
+  $AccountsTable createAlias(String alias) {
+    return $AccountsTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<AccountType, int> $converter0 =
+      const EnumIndexConverter<AccountType>(AccountType.values);
 }
 
 class Invoice extends DataClass implements Insertable<Invoice> {
@@ -2113,7 +2159,7 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
       'customer_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "customers" ("id")');
+      defaultConstraints: 'REFERENCES "accounts" ("id")');
   final VerificationMeta _paymentTypeMeta =
       const VerificationMeta('paymentType');
   @override
@@ -2246,333 +2292,6 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
 
   static TypeConverter<PaymentType, int> $converter0 =
       const EnumIndexConverter<PaymentType>(PaymentType.values);
-}
-
-class Supplier extends DataClass implements Insertable<Supplier> {
-  final int id;
-  final String code;
-  final String name;
-  final String contact;
-  final String address;
-  final String email;
-  const Supplier(
-      {required this.id,
-      required this.code,
-      required this.name,
-      required this.contact,
-      required this.address,
-      required this.email});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['code'] = Variable<String>(code);
-    map['name'] = Variable<String>(name);
-    map['contact'] = Variable<String>(contact);
-    map['address'] = Variable<String>(address);
-    map['email'] = Variable<String>(email);
-    return map;
-  }
-
-  SuppliersCompanion toCompanion(bool nullToAbsent) {
-    return SuppliersCompanion(
-      id: Value(id),
-      code: Value(code),
-      name: Value(name),
-      contact: Value(contact),
-      address: Value(address),
-      email: Value(email),
-    );
-  }
-
-  factory Supplier.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Supplier(
-      id: serializer.fromJson<int>(json['id']),
-      code: serializer.fromJson<String>(json['code']),
-      name: serializer.fromJson<String>(json['name']),
-      contact: serializer.fromJson<String>(json['contact']),
-      address: serializer.fromJson<String>(json['address']),
-      email: serializer.fromJson<String>(json['email']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'code': serializer.toJson<String>(code),
-      'name': serializer.toJson<String>(name),
-      'contact': serializer.toJson<String>(contact),
-      'address': serializer.toJson<String>(address),
-      'email': serializer.toJson<String>(email),
-    };
-  }
-
-  Supplier copyWith(
-          {int? id,
-          String? code,
-          String? name,
-          String? contact,
-          String? address,
-          String? email}) =>
-      Supplier(
-        id: id ?? this.id,
-        code: code ?? this.code,
-        name: name ?? this.name,
-        contact: contact ?? this.contact,
-        address: address ?? this.address,
-        email: email ?? this.email,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('Supplier(')
-          ..write('id: $id, ')
-          ..write('code: $code, ')
-          ..write('name: $name, ')
-          ..write('contact: $contact, ')
-          ..write('address: $address, ')
-          ..write('email: $email')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(id, code, name, contact, address, email);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Supplier &&
-          other.id == this.id &&
-          other.code == this.code &&
-          other.name == this.name &&
-          other.contact == this.contact &&
-          other.address == this.address &&
-          other.email == this.email);
-}
-
-class SuppliersCompanion extends UpdateCompanion<Supplier> {
-  final Value<int> id;
-  final Value<String> code;
-  final Value<String> name;
-  final Value<String> contact;
-  final Value<String> address;
-  final Value<String> email;
-  const SuppliersCompanion({
-    this.id = const Value.absent(),
-    this.code = const Value.absent(),
-    this.name = const Value.absent(),
-    this.contact = const Value.absent(),
-    this.address = const Value.absent(),
-    this.email = const Value.absent(),
-  });
-  SuppliersCompanion.insert({
-    this.id = const Value.absent(),
-    required String code,
-    required String name,
-    required String contact,
-    required String address,
-    required String email,
-  })  : code = Value(code),
-        name = Value(name),
-        contact = Value(contact),
-        address = Value(address),
-        email = Value(email);
-  static Insertable<Supplier> custom({
-    Expression<int>? id,
-    Expression<String>? code,
-    Expression<String>? name,
-    Expression<String>? contact,
-    Expression<String>? address,
-    Expression<String>? email,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (code != null) 'code': code,
-      if (name != null) 'name': name,
-      if (contact != null) 'contact': contact,
-      if (address != null) 'address': address,
-      if (email != null) 'email': email,
-    });
-  }
-
-  SuppliersCompanion copyWith(
-      {Value<int>? id,
-      Value<String>? code,
-      Value<String>? name,
-      Value<String>? contact,
-      Value<String>? address,
-      Value<String>? email}) {
-    return SuppliersCompanion(
-      id: id ?? this.id,
-      code: code ?? this.code,
-      name: name ?? this.name,
-      contact: contact ?? this.contact,
-      address: address ?? this.address,
-      email: email ?? this.email,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (code.present) {
-      map['code'] = Variable<String>(code.value);
-    }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (contact.present) {
-      map['contact'] = Variable<String>(contact.value);
-    }
-    if (address.present) {
-      map['address'] = Variable<String>(address.value);
-    }
-    if (email.present) {
-      map['email'] = Variable<String>(email.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('SuppliersCompanion(')
-          ..write('id: $id, ')
-          ..write('code: $code, ')
-          ..write('name: $name, ')
-          ..write('contact: $contact, ')
-          ..write('address: $address, ')
-          ..write('email: $email')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $SuppliersTable extends Suppliers
-    with TableInfo<$SuppliersTable, Supplier> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $SuppliersTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _codeMeta = const VerificationMeta('code');
-  @override
-  late final GeneratedColumn<String> code = GeneratedColumn<String>(
-      'code', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 25),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 50),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  final VerificationMeta _contactMeta = const VerificationMeta('contact');
-  @override
-  late final GeneratedColumn<String> contact = GeneratedColumn<String>(
-      'contact', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 10),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  final VerificationMeta _addressMeta = const VerificationMeta('address');
-  @override
-  late final GeneratedColumn<String> address = GeneratedColumn<String>(
-      'address', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 100),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  final VerificationMeta _emailMeta = const VerificationMeta('email');
-  @override
-  late final GeneratedColumn<String> email = GeneratedColumn<String>(
-      'email', aliasedName, false,
-      additionalChecks: GeneratedColumn.checkTextLength(maxTextLength: 50),
-      type: DriftSqlType.string,
-      requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, code, name, contact, address, email];
-  @override
-  String get aliasedName => _alias ?? 'suppliers';
-  @override
-  String get actualTableName => 'suppliers';
-  @override
-  VerificationContext validateIntegrity(Insertable<Supplier> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('code')) {
-      context.handle(
-          _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
-    } else if (isInserting) {
-      context.missing(_codeMeta);
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    if (data.containsKey('contact')) {
-      context.handle(_contactMeta,
-          contact.isAcceptableOrUnknown(data['contact']!, _contactMeta));
-    } else if (isInserting) {
-      context.missing(_contactMeta);
-    }
-    if (data.containsKey('address')) {
-      context.handle(_addressMeta,
-          address.isAcceptableOrUnknown(data['address']!, _addressMeta));
-    } else if (isInserting) {
-      context.missing(_addressMeta);
-    }
-    if (data.containsKey('email')) {
-      context.handle(
-          _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
-    } else if (isInserting) {
-      context.missing(_emailMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  Supplier map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Supplier(
-      id: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      code: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
-      name: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      contact: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}contact'])!,
-      address: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}address'])!,
-      email: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}email'])!,
-    );
-  }
-
-  @override
-  $SuppliersTable createAlias(String alias) {
-    return $SuppliersTable(attachedDatabase, alias);
-  }
 }
 
 class ReceiveProduct extends DataClass implements Insertable<ReceiveProduct> {
@@ -2857,7 +2576,7 @@ class $ReceiveProductsTable extends ReceiveProducts
       'supplier_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "suppliers" ("id")');
+      defaultConstraints: 'REFERENCES "accounts" ("id")');
   final VerificationMeta _receivedDateMeta =
       const VerificationMeta('receivedDate');
   @override
@@ -3257,7 +2976,7 @@ class $PurchaseOrdersTable extends PurchaseOrders
       'supplier_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "suppliers" ("id")');
+      defaultConstraints: 'REFERENCES "accounts" ("id")');
   final VerificationMeta _orderDateMeta = const VerificationMeta('orderDate');
   @override
   late final GeneratedColumn<DateTime> orderDate = GeneratedColumn<DateTime>(
@@ -3375,8 +3094,7 @@ class $PurchaseOrdersTable extends PurchaseOrders
 class Debt extends DataClass implements Insertable<Debt> {
   final int id;
   final double amount;
-  final int customerId;
-  final int supplierId;
+  final int accountId;
   final DateTime dateRecorded;
   final bool isCredit;
   final String description;
@@ -3384,8 +3102,7 @@ class Debt extends DataClass implements Insertable<Debt> {
   const Debt(
       {required this.id,
       required this.amount,
-      required this.customerId,
-      required this.supplierId,
+      required this.accountId,
       required this.dateRecorded,
       required this.isCredit,
       required this.description,
@@ -3395,8 +3112,7 @@ class Debt extends DataClass implements Insertable<Debt> {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['amount'] = Variable<double>(amount);
-    map['customer_id'] = Variable<int>(customerId);
-    map['supplier_id'] = Variable<int>(supplierId);
+    map['account_id'] = Variable<int>(accountId);
     map['date_recorded'] = Variable<DateTime>(dateRecorded);
     map['is_credit'] = Variable<bool>(isCredit);
     map['description'] = Variable<String>(description);
@@ -3408,8 +3124,7 @@ class Debt extends DataClass implements Insertable<Debt> {
     return DebtsCompanion(
       id: Value(id),
       amount: Value(amount),
-      customerId: Value(customerId),
-      supplierId: Value(supplierId),
+      accountId: Value(accountId),
       dateRecorded: Value(dateRecorded),
       isCredit: Value(isCredit),
       description: Value(description),
@@ -3423,8 +3138,7 @@ class Debt extends DataClass implements Insertable<Debt> {
     return Debt(
       id: serializer.fromJson<int>(json['id']),
       amount: serializer.fromJson<double>(json['amount']),
-      customerId: serializer.fromJson<int>(json['customerId']),
-      supplierId: serializer.fromJson<int>(json['supplierId']),
+      accountId: serializer.fromJson<int>(json['accountId']),
       dateRecorded: serializer.fromJson<DateTime>(json['dateRecorded']),
       isCredit: serializer.fromJson<bool>(json['isCredit']),
       description: serializer.fromJson<String>(json['description']),
@@ -3437,8 +3151,7 @@ class Debt extends DataClass implements Insertable<Debt> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'amount': serializer.toJson<double>(amount),
-      'customerId': serializer.toJson<int>(customerId),
-      'supplierId': serializer.toJson<int>(supplierId),
+      'accountId': serializer.toJson<int>(accountId),
       'dateRecorded': serializer.toJson<DateTime>(dateRecorded),
       'isCredit': serializer.toJson<bool>(isCredit),
       'description': serializer.toJson<String>(description),
@@ -3449,8 +3162,7 @@ class Debt extends DataClass implements Insertable<Debt> {
   Debt copyWith(
           {int? id,
           double? amount,
-          int? customerId,
-          int? supplierId,
+          int? accountId,
           DateTime? dateRecorded,
           bool? isCredit,
           String? description,
@@ -3458,8 +3170,7 @@ class Debt extends DataClass implements Insertable<Debt> {
       Debt(
         id: id ?? this.id,
         amount: amount ?? this.amount,
-        customerId: customerId ?? this.customerId,
-        supplierId: supplierId ?? this.supplierId,
+        accountId: accountId ?? this.accountId,
         dateRecorded: dateRecorded ?? this.dateRecorded,
         isCredit: isCredit ?? this.isCredit,
         description: description ?? this.description,
@@ -3470,8 +3181,7 @@ class Debt extends DataClass implements Insertable<Debt> {
     return (StringBuffer('Debt(')
           ..write('id: $id, ')
           ..write('amount: $amount, ')
-          ..write('customerId: $customerId, ')
-          ..write('supplierId: $supplierId, ')
+          ..write('accountId: $accountId, ')
           ..write('dateRecorded: $dateRecorded, ')
           ..write('isCredit: $isCredit, ')
           ..write('description: $description, ')
@@ -3481,16 +3191,15 @@ class Debt extends DataClass implements Insertable<Debt> {
   }
 
   @override
-  int get hashCode => Object.hash(id, amount, customerId, supplierId,
-      dateRecorded, isCredit, description, userId);
+  int get hashCode => Object.hash(
+      id, amount, accountId, dateRecorded, isCredit, description, userId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Debt &&
           other.id == this.id &&
           other.amount == this.amount &&
-          other.customerId == this.customerId &&
-          other.supplierId == this.supplierId &&
+          other.accountId == this.accountId &&
           other.dateRecorded == this.dateRecorded &&
           other.isCredit == this.isCredit &&
           other.description == this.description &&
@@ -3500,8 +3209,7 @@ class Debt extends DataClass implements Insertable<Debt> {
 class DebtsCompanion extends UpdateCompanion<Debt> {
   final Value<int> id;
   final Value<double> amount;
-  final Value<int> customerId;
-  final Value<int> supplierId;
+  final Value<int> accountId;
   final Value<DateTime> dateRecorded;
   final Value<bool> isCredit;
   final Value<String> description;
@@ -3509,8 +3217,7 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
   const DebtsCompanion({
     this.id = const Value.absent(),
     this.amount = const Value.absent(),
-    this.customerId = const Value.absent(),
-    this.supplierId = const Value.absent(),
+    this.accountId = const Value.absent(),
     this.dateRecorded = const Value.absent(),
     this.isCredit = const Value.absent(),
     this.description = const Value.absent(),
@@ -3519,23 +3226,20 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
   DebtsCompanion.insert({
     this.id = const Value.absent(),
     required double amount,
-    required int customerId,
-    required int supplierId,
+    required int accountId,
     this.dateRecorded = const Value.absent(),
     required bool isCredit,
     required String description,
     required int userId,
   })  : amount = Value(amount),
-        customerId = Value(customerId),
-        supplierId = Value(supplierId),
+        accountId = Value(accountId),
         isCredit = Value(isCredit),
         description = Value(description),
         userId = Value(userId);
   static Insertable<Debt> custom({
     Expression<int>? id,
     Expression<double>? amount,
-    Expression<int>? customerId,
-    Expression<int>? supplierId,
+    Expression<int>? accountId,
     Expression<DateTime>? dateRecorded,
     Expression<bool>? isCredit,
     Expression<String>? description,
@@ -3544,8 +3248,7 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (amount != null) 'amount': amount,
-      if (customerId != null) 'customer_id': customerId,
-      if (supplierId != null) 'supplier_id': supplierId,
+      if (accountId != null) 'account_id': accountId,
       if (dateRecorded != null) 'date_recorded': dateRecorded,
       if (isCredit != null) 'is_credit': isCredit,
       if (description != null) 'description': description,
@@ -3556,8 +3259,7 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
   DebtsCompanion copyWith(
       {Value<int>? id,
       Value<double>? amount,
-      Value<int>? customerId,
-      Value<int>? supplierId,
+      Value<int>? accountId,
       Value<DateTime>? dateRecorded,
       Value<bool>? isCredit,
       Value<String>? description,
@@ -3565,8 +3267,7 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
     return DebtsCompanion(
       id: id ?? this.id,
       amount: amount ?? this.amount,
-      customerId: customerId ?? this.customerId,
-      supplierId: supplierId ?? this.supplierId,
+      accountId: accountId ?? this.accountId,
       dateRecorded: dateRecorded ?? this.dateRecorded,
       isCredit: isCredit ?? this.isCredit,
       description: description ?? this.description,
@@ -3583,11 +3284,8 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
     if (amount.present) {
       map['amount'] = Variable<double>(amount.value);
     }
-    if (customerId.present) {
-      map['customer_id'] = Variable<int>(customerId.value);
-    }
-    if (supplierId.present) {
-      map['supplier_id'] = Variable<int>(supplierId.value);
+    if (accountId.present) {
+      map['account_id'] = Variable<int>(accountId.value);
     }
     if (dateRecorded.present) {
       map['date_recorded'] = Variable<DateTime>(dateRecorded.value);
@@ -3609,8 +3307,7 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
     return (StringBuffer('DebtsCompanion(')
           ..write('id: $id, ')
           ..write('amount: $amount, ')
-          ..write('customerId: $customerId, ')
-          ..write('supplierId: $supplierId, ')
+          ..write('accountId: $accountId, ')
           ..write('dateRecorded: $dateRecorded, ')
           ..write('isCredit: $isCredit, ')
           ..write('description: $description, ')
@@ -3637,20 +3334,13 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
   late final GeneratedColumn<double> amount = GeneratedColumn<double>(
       'amount', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
-  final VerificationMeta _customerIdMeta = const VerificationMeta('customerId');
+  final VerificationMeta _accountIdMeta = const VerificationMeta('accountId');
   @override
-  late final GeneratedColumn<int> customerId = GeneratedColumn<int>(
-      'customer_id', aliasedName, false,
+  late final GeneratedColumn<int> accountId = GeneratedColumn<int>(
+      'account_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "customers" ("id")');
-  final VerificationMeta _supplierIdMeta = const VerificationMeta('supplierId');
-  @override
-  late final GeneratedColumn<int> supplierId = GeneratedColumn<int>(
-      'supplier_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: 'REFERENCES "suppliers" ("id")');
+      defaultConstraints: 'REFERENCES "accounts" ("id")');
   final VerificationMeta _dateRecordedMeta =
       const VerificationMeta('dateRecorded');
   @override
@@ -3680,16 +3370,8 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
       requiredDuringInsert: true,
       defaultConstraints: 'REFERENCES "users" ("id")');
   @override
-  List<GeneratedColumn> get $columns => [
-        id,
-        amount,
-        customerId,
-        supplierId,
-        dateRecorded,
-        isCredit,
-        description,
-        userId
-      ];
+  List<GeneratedColumn> get $columns =>
+      [id, amount, accountId, dateRecorded, isCredit, description, userId];
   @override
   String get aliasedName => _alias ?? 'debts';
   @override
@@ -3708,21 +3390,11 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
     } else if (isInserting) {
       context.missing(_amountMeta);
     }
-    if (data.containsKey('customer_id')) {
-      context.handle(
-          _customerIdMeta,
-          customerId.isAcceptableOrUnknown(
-              data['customer_id']!, _customerIdMeta));
+    if (data.containsKey('account_id')) {
+      context.handle(_accountIdMeta,
+          accountId.isAcceptableOrUnknown(data['account_id']!, _accountIdMeta));
     } else if (isInserting) {
-      context.missing(_customerIdMeta);
-    }
-    if (data.containsKey('supplier_id')) {
-      context.handle(
-          _supplierIdMeta,
-          supplierId.isAcceptableOrUnknown(
-              data['supplier_id']!, _supplierIdMeta));
-    } else if (isInserting) {
-      context.missing(_supplierIdMeta);
+      context.missing(_accountIdMeta);
     }
     if (data.containsKey('date_recorded')) {
       context.handle(
@@ -3763,10 +3435,8 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       amount: attachedDatabase.options.types
           .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
-      customerId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}customer_id'])!,
-      supplierId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}supplier_id'])!,
+      accountId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}account_id'])!,
       dateRecorded: attachedDatabase.options.types.read(
           DriftSqlType.dateTime, data['${effectivePrefix}date_recorded'])!,
       isCredit: attachedDatabase.options.types
@@ -3792,9 +3462,8 @@ abstract class _$MyDatabase extends GeneratedDatabase {
   late final $ProductsTable products = $ProductsTable(this);
   late final $ProductUnitsTable productUnits = $ProductUnitsTable(this);
   late final $SalesTable sales = $SalesTable(this);
-  late final $CustomersTable customers = $CustomersTable(this);
+  late final $AccountsTable accounts = $AccountsTable(this);
   late final $InvoicesTable invoices = $InvoicesTable(this);
-  late final $SuppliersTable suppliers = $SuppliersTable(this);
   late final $ReceiveProductsTable receiveProducts =
       $ReceiveProductsTable(this);
   late final $PurchaseOrdersTable purchaseOrders = $PurchaseOrdersTable(this);
@@ -3811,9 +3480,8 @@ abstract class _$MyDatabase extends GeneratedDatabase {
         products,
         productUnits,
         sales,
-        customers,
+        accounts,
         invoices,
-        suppliers,
         receiveProducts,
         purchaseOrders,
         debts

@@ -1,8 +1,9 @@
 import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/services/database.dart';
 
 class AccountsListPage extends StatefulWidget {
   const AccountsListPage({super.key});
@@ -43,8 +44,7 @@ class _AccountsListPageState extends State<AccountsListPage>
                               showSearch(
                                 context: context,
                                 delegate: AccountsSearchDelegate([
-                                  ...state.customers,
-                                  ...state.suppliers,
+                                  ...state.accounts,
                                 ]),
                               );
                             },
@@ -112,32 +112,34 @@ class _SuppliersList extends StatelessWidget {
               onPressed: () {
                 context
                     .read<AccountsListCubit>()
-                    .importFromContactsSuppliers(context);
+                    .importFromContactsAccounts(context, AccountType.supplier);
               },
               child: const Center(child: Text("Import Suppliers")),
             ),
           ),
           Expanded(
             child: BlocBuilder<AccountsListCubit, AccountsListState>(
-                buildWhen: (previous, current) =>
-                    previous.suppliers != current.suppliers,
                 builder: (context, state) {
-                  if (state.suppliers.isEmpty) {
-                    return const Center(
-                      child: Text("No Supplier found"),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: state.suppliers.length,
-                    itemBuilder: (context, index) {
-                      final element = state.suppliers[index];
-                      return ListTile(
-                        title: Text(element.name),
-                        subtitle: Text("Phone : ${element.contact}"),
-                      );
-                    },
+              final suppliers = state.accounts
+                  .where(
+                      (element) => element.accountType == AccountType.supplier)
+                  .toList();
+              if (suppliers.isEmpty) {
+                return const Center(
+                  child: Text("No Supplier found"),
+                );
+              }
+              return ListView.builder(
+                itemCount: suppliers.length,
+                itemBuilder: (context, index) {
+                  final element = suppliers[index];
+                  return ListTile(
+                    title: Text(element.name),
+                    subtitle: Text("Phone : ${element.contact}"),
                   );
-                }),
+                },
+              );
+            }),
           ),
           Container(
             decoration: BoxDecoration(
@@ -158,11 +160,13 @@ class _SuppliersList extends StatelessWidget {
                   ),
                 ),
                 BlocBuilder<AccountsListCubit, AccountsListState>(
-                  buildWhen: (previous, current) =>
-                      previous.suppliers != current.suppliers,
                   builder: (context, state) {
+                    final suppliers = state.accounts
+                        .where((element) =>
+                            element.accountType == AccountType.supplier)
+                        .toList();
                     return Text(
-                      "${state.suppliers.length}",
+                      "${suppliers.length}",
                       style: TextStyle(
                         color: context.theme.colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
@@ -196,7 +200,7 @@ class _CustomersList extends StatelessWidget {
               onPressed: () {
                 context
                     .read<AccountsListCubit>()
-                    .importFromContactsCustomers(context);
+                    .importFromContactsAccounts(context, AccountType.customer);
               },
               child: const Center(child: Text("Import Customers")),
             ),
@@ -204,17 +208,21 @@ class _CustomersList extends StatelessWidget {
           Expanded(
             child: BlocBuilder<AccountsListCubit, AccountsListState>(
                 buildWhen: (previous, current) =>
-                    previous.customers != current.customers,
+                    previous.accounts != current.accounts,
                 builder: (context, state) {
-                  if (state.customers.isEmpty) {
+                  final customers = state.accounts
+                      .where((element) =>
+                          element.accountType == AccountType.customer)
+                      .toList();
+                  if (customers.isEmpty) {
                     return const Center(
                       child: Text("No customer found"),
                     );
                   }
                   return ListView.builder(
-                    itemCount: state.customers.length,
+                    itemCount: customers.length,
                     itemBuilder: (context, index) {
-                      final element = state.customers[index];
+                      final element = state.accounts[index];
                       return ListTile(
                         title: Text(element.name),
                         subtitle: Text("Phone : ${element.contact}"),
@@ -243,10 +251,14 @@ class _CustomersList extends StatelessWidget {
                 ),
                 BlocBuilder<AccountsListCubit, AccountsListState>(
                   buildWhen: (previous, current) =>
-                      previous.customers != current.customers,
+                      previous.accounts != current.accounts,
                   builder: (context, state) {
+                    final customers = state.accounts
+                        .where((element) =>
+                            element.accountType == AccountType.supplier)
+                        .toList();
                     return Text(
-                      "${state.customers.length}",
+                      "${customers.length}",
                       style: TextStyle(
                         color: context.theme.colorScheme.onPrimary,
                         fontWeight: FontWeight.bold,
@@ -264,7 +276,7 @@ class _CustomersList extends StatelessWidget {
 }
 
 class AccountsSearchDelegate extends SearchDelegate {
-  List<dynamic> accounts;
+  List<Account> accounts;
   AccountsSearchDelegate(this.accounts);
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -295,13 +307,9 @@ class AccountsSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     final selectedAccount = accounts[selectedIndex];
-    if (selectedIndex is Customer) {
-      return NewAccountPage(
-        customer: selectedAccount,
-      );
-    }
+
     return NewAccountPage(
-      supplier: selectedAccount,
+      account: selectedAccount,
     );
   }
 
@@ -309,9 +317,14 @@ class AccountsSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestions = accounts.where((element) {
-      return (element.name.contains(query) ||
-          element.code.contains(query) ||
-          element.contact.contains(query));
+      if (element.code?.contains(query) ?? false) {
+        return true;
+      } else if (element.name.contains(query)) {
+        return true;
+      } else if (element.contact?.contains(query) ?? false) {
+        return true;
+      }
+      return false;
     });
     return ListView.builder(
       itemCount: query.isEmpty ? accounts.length : suggestions.length,

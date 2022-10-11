@@ -10,32 +10,24 @@ part 'new_account_state.dart';
 
 class NewAccountCubit extends Cubit<NewAccountState> {
   final AccountsRepository repository = AccountsRepositoryImpl();
-  final Customer? customer;
-  final Supplier? supplier;
-  NewAccountCubit({this.customer, this.supplier})
-      : super(const NewAccountState()) {
+  final Account? account;
+
+  NewAccountCubit({
+    this.account,
+  }) : super(const NewAccountState()) {
     emit(state.copyWith(
-      name: customer?.name ?? supplier?.name,
-      code: customer?.code ?? supplier?.code,
-      address: customer?.address ?? supplier?.address,
-      contact: customer?.contact ?? supplier?.contact,
-      isCustomer: customer == null
-          ? supplier == null
-              ? false
-              : true
-          : true,
+      name: account?.name,
+      code: account?.code,
+      address: account?.address,
+      contact: account?.contact,
+      email: account?.email,
+      accountType: account?.accountType,
     ));
   }
 
-  onChangeIsCustomer() {
+  onChangeIsAccountType(AccountType type) {
     emit(state.copyWith(
-      isCustomer: true,
-    ));
-  }
-
-  onChangeIsSupplier() {
-    emit(state.copyWith(
-      isCustomer: false,
+      accountType: type,
     ));
   }
 
@@ -48,6 +40,12 @@ class NewAccountCubit extends Cubit<NewAccountState> {
   onChangeName(String name) {
     emit(state.copyWith(
       name: name,
+    ));
+  }
+
+  onChangeEmail(String email) {
+    emit(state.copyWith(
+      email: email,
     ));
   }
 
@@ -70,26 +68,15 @@ class NewAccountCubit extends Cubit<NewAccountState> {
         status: Status.failure,
       ));
     } else {
-      if (state.isCustomer) {
-        repository.addCustomer(
-          CustomersCompanion(
-            name: Value(state.name),
-            address: Value(state.address),
-            contact: Value(state.contact),
-            code: Value(state.code),
-          ),
-        );
-      } else {
-        // else means its a supplier
-        repository.addSupplier(
-          SuppliersCompanion(
-            name: Value(state.name),
-            address: Value(state.address),
-            contact: Value(state.contact),
-            code: Value(state.code),
-          ),
-        );
-      }
+      repository.addAccount(
+        AccountsCompanion(
+          name: Value(state.name),
+          address: Value(state.address),
+          contact: Value(state.contact),
+          code: Value(state.code),
+          accountType: Value(state.accountType),
+        ),
+      );
     }
   }
 }

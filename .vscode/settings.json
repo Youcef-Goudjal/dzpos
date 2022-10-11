@@ -4,6 +4,8 @@
         "bluetooth",
         "dzpos",
         "france",
-        "mastercard"
+        "mastercard",
+        "nullable",
+        "typeahead"
     ]
 }

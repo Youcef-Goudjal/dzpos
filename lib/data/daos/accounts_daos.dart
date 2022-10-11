@@ -4,43 +4,34 @@ import 'package:dzpos/data/data.dart';
 
 part "accounts_daos.g.dart";
 
-@DriftAccessor(tables: [Customers, Suppliers])
+@DriftAccessor(tables: [Accounts])
 class AccountsDao extends DatabaseAccessor<MyDatabase>
     with _$AccountsDaoMixin
     implements AccountsDataSource {
   AccountsDao(super.attachedDatabase);
 
   @override
-  Future<int> addCustomer(CustomersCompanion customer) {
-    return into(customers).insert(customer);
+  Future<int> addAccount(AccountsCompanion customer) {
+    return into(accounts).insert(customer);
   }
 
   @override
-  Future<List<Customer>> get allCustomers => select(customers).get();
-
-  @override
-  Future<void> addMultipleCustomers(
-      List<CustomersCompanion> customersEntry) async {
-    await batch((batch) {
-      batch.insertAll(customers, customersEntry);
+  Future<void> addMultipleAccounts(List<AccountsCompanion> accountsList) {
+    return batch((batch) {
+      batch.insertAll(accounts, accountsList);
     });
   }
 
   @override
-  // TODO: i
+  Future<List<Account>> get allCustomers => select(accounts).get();
+
   @override
-  Future<void> addMultipleSuppliers(
-      List<SuppliersCompanion> suppliersEntry) async {
-    await batch((batch) {
-      batch.insertAll(suppliers, suppliersEntry);
-    });
+  Future updateAccount(AccountsCompanion updatedAccount) {
+    return (update(accounts)
+          ..where((tbl) => tbl.id.equals(updatedAccount.id.value)))
+        .write(updatedAccount);
   }
 
   @override
-  Future<int> addSupplier(SuppliersCompanion supplier) {
-    return into(suppliers).insert(supplier);
-  }
-
-  @override
-  Future<List<Supplier>> get allSuppliers => select(suppliers).get();
+  Stream<List<Account>> get watchAllCustomers => select(accounts).watch();
 }
