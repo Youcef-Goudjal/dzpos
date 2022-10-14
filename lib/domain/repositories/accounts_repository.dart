@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../core/services/database.dart';
 
 abstract class AccountsRepository {
@@ -6,4 +8,12 @@ abstract class AccountsRepository {
   Future<void> addMultipleAccounts(List<AccountsCompanion> accounts);
   Future<List<Account>> get allAccounts;
   Stream<List<Account>> get watchAllAccounts;
+
+  // debts
+  Stream<List<DebtWithAccount>> get debts;
+  Stream<List<Debt>> debtOfAccount(int accountId);
+  Future<int> registerDebt(DebtsCompanion newDebt);
+  Future<void> deleteDebt(int id);
+  Future<List<Debt>> getDebtBetweenDatesOfAccount(
+      int accountId, DateTimeRange date);
 }

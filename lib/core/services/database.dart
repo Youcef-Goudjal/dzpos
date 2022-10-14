@@ -44,3 +44,25 @@ LazyDatabase _openConnection() {
     return NativeDatabase(file);
   });
 }
+
+class FullProduct {
+  final Product product;
+  final ProductCategory category;
+  final List<ProductUnit> units;
+
+  FullProduct({
+    required this.product,
+    required this.category,
+    required this.units,
+  });
+}
+
+class DebtWithAccount {
+  final Debt debt;
+  final Account? account;
+
+  DebtWithAccount({
+    required this.debt,
+    this.account,
+  });
+}

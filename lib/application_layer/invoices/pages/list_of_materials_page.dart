@@ -43,20 +43,24 @@ class _MaterialsBody extends StatelessWidget {
             SliverAppBar(
               title: const Text("Materials List"),
               actions: [
-                StreamBuilder<List<Product>>(
-                    // stream: context.read<ListOfProductsCubit>().wachMaterials(),
-                    builder: (context, snapshot) {
-                      return IconButton(
-                        onPressed: () {
-                          showSearch(
-                            context: context,
-                            delegate:
-                                MaterialSearchDelegate(snapshot.data ?? []),
-                          );
-                        },
-                        icon: const Icon(Icons.search),
+                BlocBuilder<ListOfProductsCubit, ListOfProductsState>(
+                  builder: (context, state) {
+                    if (state.status.isLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
                       );
-                    }),
+                    }
+                    return IconButton(
+                      onPressed: () {
+                        showSearch(
+                          context: context,
+                          delegate: MaterialSearchDelegate(state.products),
+                        );
+                      },
+                      icon: const Icon(Icons.search),
+                    );
+                  },
+                ),
               ],
             )
           ];
@@ -108,23 +112,26 @@ class _MaterialsBody extends StatelessWidget {
                 ],
               ),
             ),
-            StreamBuilder<List<Product>>(
-              // stream: context.read<ListOfProductsCubit>().wachMaterials(),
+            BlocBuilder<ListOfProductsCubit, ListOfProductsState>(
               builder: (context, state) {
-                if (state.hasData) {
-                  return Expanded(
-                    child: ListView.builder(
-                      itemCount: state.data!.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(state.data![index].name),
-                        );
-                      },
+                if (state.status.isLoading) {
+                  return const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
                   );
                 }
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: state.products.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(
+                          state.products[index].name,
+                        ),
+                      );
+                    },
+                  ),
                 );
               },
             ),
@@ -146,11 +153,10 @@ class _MaterialsBody extends StatelessWidget {
                       color: context.theme.colorScheme.onPrimaryContainer,
                     ),
                   ),
-                  StreamBuilder<List<Product>>(
-                    // stream: context.read<ListOfProductsCubit>().wachMaterials(),
+                  BlocBuilder<ListOfProductsCubit, ListOfProductsState>(
                     builder: (context, state) {
                       return Text(
-                        "${state.data?.length ?? 0}",
+                        "${state.products.length}",
                         style: TextStyle(
                           color: context.theme.colorScheme.onPrimary,
                           fontWeight: FontWeight.bold,

@@ -24,10 +24,8 @@ enum AppRoutes {
   accountsList("accountsList", "AccountsList", AccountsListPage()),
   accountStatement(
       "accountStatement", "AccountStatement", AccountStatementPage()),
-  payment("payment", "Payment", PaymentPage()),
-  catchFromAccount(
-      "catchFromAccount", "catchFromAccount", CatchFromAccountPage()),
-  registerNewDebt("registerNewDebt", "registerNewDebt", RegisterNewDebtPage()),
+  debt("debt", "Debt", DebtPage()),
+
   debtList("debtList", "DebtList", DebtListPage()),
   reports("reports", "Reports", ReportsPage());
 
@@ -49,6 +47,7 @@ enum AppRoutes {
       routes: routes ?? [],
       pageBuilder: pageBuilder ??
           (context, state) {
+            
             return MaterialPage(
               key: state.pageKey,
               child: view,

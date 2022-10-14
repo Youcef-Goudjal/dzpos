@@ -30,3 +30,5 @@ linter:
 analyzer:
   exclude:
     - "**/*.g.dart"
+  plugins:
+    - drift

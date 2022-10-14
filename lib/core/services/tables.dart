@@ -112,10 +112,10 @@ class Accounts extends Table {
 @DataClassName("Sale")
 class Sales extends Table {
   IntColumn get salesId => integer().autoIncrement()();
-  IntColumn get invoiceId => integer().check(invoiceId.isNotNull())();
-  IntColumn get productId => integer().check(productId.isNotNull())();
-  RealColumn get quantity => real().check(quantity.isNotNull())();
-  RealColumn get unitPrice => real().check(unitPrice.isNotNull())();
+  IntColumn get invoiceId => integer().references(Invoices, #id)();
+  IntColumn get productId => integer().references(Products, #id)();
+  RealColumn get quantity => real()();
+  RealColumn get unitPrice => real()();
   RealColumn get subTotal => real().generatedAs(quantity * unitPrice)();
 }
 
@@ -152,14 +152,14 @@ class Sales extends Table {
 
 @DataClassName("Invoice")
 class Invoices extends Table {
-  IntColumn get invoiceId => integer().autoIncrement()();
+  IntColumn get id => integer().autoIncrement()();
   IntColumn get customerId => integer().references(Accounts, #id)();
   IntColumn get paymentType => intEnum<PaymentType>()();
-  RealColumn get totalAmount => real().check(totalAmount.isNotNull())();
-  RealColumn get amountTendered => real().check(amountTendered.isNotNull())();
+  RealColumn get totalAmount => real().nullable()();
+  RealColumn get amountTendered => real()();
   DateTimeColumn get dateRecorded =>
       dateTime().withDefault(currentDateAndTime)();
-  IntColumn get userId => integer().references(Users, #id)();
+  IntColumn get userId => integer().nullable().references(Users, #id)();
 }
 
 ///purchaseOrder (purchase_order_id, product_id, quantity, unit_price, sub_total, supplier_id, order_date, user_id)
@@ -226,10 +226,10 @@ class ReceiveProducts extends Table {
 class Debts extends Table {
   IntColumn get id => integer().autoIncrement()();
   RealColumn get amount => real()();
-  IntColumn get accountId => integer().references(Accounts, #id)();
+  IntColumn get accountId => integer().nullable().references(Accounts, #id)();
   DateTimeColumn get dateRecorded =>
       dateTime().withDefault(currentDateAndTime)();
   BoolColumn get isCredit => boolean()();
-  TextColumn get description => text()();
-  IntColumn get userId => integer().references(Users, #id)();
+  TextColumn get description => text().nullable()();
+  IntColumn get userId => integer().nullable().references(Users, #id)();
 }

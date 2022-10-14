@@ -1,4 +1,5 @@
 import 'package:dzpos/application_layer/application_layer.dart';
+import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,18 +18,24 @@ class NewAccountPage extends StatelessWidget {
       create: (_) => NewAccountCubit(
         account: account,
       ),
-      child: Builder(builder: (context) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text("${(account != null) ? "Updating" : "New"} Account"),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: context.read<NewAccountCubit>().save,
-            child: const Icon(Icons.save),
-          ),
-          body: const _NewAccountBody(),
-        );
-      }),
+      child: BlocListener<NewAccountCubit, NewAccountState>(
+        listenWhen: (previous, current) => previous.status != current.status,
+        listener: (context, state) {
+          statusHandler(context, state.status, msg: state.msg);
+        },
+        child: Builder(builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("${(account != null) ? "Updating" : "New"} Account"),
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: context.read<NewAccountCubit>().save,
+              child: const Icon(Icons.save),
+            ),
+            body: const _NewAccountBody(),
+          );
+        }),
+      ),
     );
   }
 }
@@ -52,16 +59,22 @@ class _NewAccountBody extends StatelessWidget {
                 buildWhen: (previous, current) =>
                     previous.accountType != current.accountType,
                 builder: (context, state) {
-                  return Row(
-                    children: List.generate(
-                      AccountType.values.length,
-                      (index) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Expanded(
+                  return Center(
+                    child: Row(
+                      children: List.generate(
+                        AccountType.values.length,
+                        (index) => Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: ElevatedButton(
                             onPressed: () =>
                                 newAccountCubit.onChangeIsAccountType(
                               AccountType.values[index],
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  AccountType.values[index] == state.accountType
+                                      ? context.secondaryColor
+                                      : null,
                             ),
                             child: Center(
                               child: Text(

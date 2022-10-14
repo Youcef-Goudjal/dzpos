@@ -1,4 +1,6 @@
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:dzpos/data/repositories/repositories.dart';
+import 'package:dzpos/domain/domain.dart';
 import 'package:dzpos/product/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +8,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/manager/route/routes.dart';
+
+final InvoicesRepository invoicesRepository = InvoicesRepositoryImpl();
 
 class InvoicesPage extends StatelessWidget {
   const InvoicesPage({Key? key}) : super(key: key);
@@ -133,8 +137,55 @@ enum Invoices {
   const Invoices(this.name, [this.iconPath]);
 
   void onPressed(BuildContext context) {
-    if (routeName != null) {
-      context.pushNamed(routeName!);
+    switch (this) {
+      case Invoices.newSaleInvoice:
+        context.pushNamed(AppRoutes.newSaleInvoice.name);
+        break;
+
+      case Invoices.newPurchaseInvoice:
+        context.pushNamed(AppRoutes.newPurchaseInvoice.name);
+        break;
+
+      case Invoices.storeInventory:
+        // context.pushNamed(AppRoutes.newSaleInvoice.name);
+        break;
+
+      case Invoices.returnedDamaged:
+        // context.pushNamed(AppRoutes.newSaleInvoice.name);
+        break;
+
+      case Invoices.showInvoices:
+        // context.pushNamed(AppRoutes..name);
+        break;
+      case Invoices.totalDailyInvoicesReports:
+        // context.pushNamed(AppRoutes.newSaleInvoice.name);
+        break;
+
+      case Invoices.activityOfTheMaterial:
+        // context.pushNamed(AppRoutes.newSaleInvoice.name);
+        break;
+
+      case Invoices.editPrices:
+        // context.pushNamed(AppRoutes.newSaleInvoice.name);
+        break;
+
+      case Invoices.pricingPolicy:
+        // context.pushNamed(AppRoutes.newSaleInvoice.name);
+        break;
+
+      case Invoices.inventoryInvoice:
+        // context.pushNamed(AppRoutes..name);
+        break;
+      case Invoices.storeReconciliationAndRepair:
+        // context.pushNamed(AppRoutes.newSaleInvoice.name);
+        break;
+
+      case Invoices.listOfMaterials:
+        context.pushNamed(AppRoutes.listOfMaterials.name);
+        break;
+
+      case Invoices.barCodeDesigner:
+        break;
     }
   }
 

@@ -1,3 +1,5 @@
+import 'package:dzpos/application_layer/auth/utils.dart';
+import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/product/product.dart';
 import 'package:flutter/material.dart';
@@ -105,21 +107,23 @@ enum Accounts {
         context.pushNamed(AppRoutes.accountsList.name);
         break;
       case Accounts.oldDebts:
-        showOldDebtDialog(context);
+        showDebtDialog(context);
         break;
       case Accounts.debtList:
         context.pushNamed(AppRoutes.debtList.name);
         break;
       case Accounts.payment:
-        context.pushNamed(AppRoutes.payment.name);
+        context.pushNamed(AppRoutes.debt.name, extra: DebtType.debtor);
         break;
       case Accounts.catchFromAccount:
-        context.pushNamed(AppRoutes.catchFromAccount.name);
+        context.pushNamed(AppRoutes.debt.name, extra: DebtType.creditor);
         break;
       case Accounts.registerNewDebt:
-        context.pushNamed(AppRoutes.registerNewDebt.name);
+        context.pushNamed(AppRoutes.debt.name, extra: DebtType.all);
         break;
+
       default:
+        statusHandler(context, Status.failure, msg: "Coming soon!!");
     }
     return;
   }

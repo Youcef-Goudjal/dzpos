@@ -30,9 +30,17 @@ abstract class AppRouter {
               AppRoutes.accountsList.goRoute(),
               AppRoutes.debtList.goRoute(),
               AppRoutes.accountStatement.goRoute(),
-              AppRoutes.registerNewDebt.goRoute(),
-              AppRoutes.payment.goRoute(),
-              AppRoutes.catchFromAccount.goRoute(),
+              AppRoutes.debt.goRoute(
+                [],
+                (context, state) {
+                  return MaterialPage(
+                    key: state.pageKey,
+                    child: DebtPage(
+                      type: state.extra as DebtType?,
+                    ),
+                  );
+                },
+              )
             ]),
             AppRoutes.reports.goRoute(),
             AppRoutes.settings.goRoute(),

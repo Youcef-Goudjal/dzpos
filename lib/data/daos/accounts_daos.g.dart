@@ -8,4 +8,5 @@ part of 'accounts_daos.dart';
 
 mixin _$AccountsDaoMixin on DatabaseAccessor<MyDatabase> {
   $AccountsTable get accounts => attachedDatabase.accounts;
+  $DebtsTable get debts => attachedDatabase.debts;
 }

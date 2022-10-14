@@ -68,15 +68,26 @@ class NewAccountCubit extends Cubit<NewAccountState> {
         status: Status.failure,
       ));
     } else {
-      repository.addAccount(
-        AccountsCompanion(
-          name: Value(state.name),
-          address: Value(state.address),
-          contact: Value(state.contact),
-          code: Value(state.code),
-          accountType: Value(state.accountType),
-        ),
-      );
+      try {
+        repository.addAccount(
+          AccountsCompanion.insert(
+            name: state.name,
+            accountType: state.accountType,
+            address: Value(state.address),
+            contact: Value(state.contact),
+            code: Value(state.code),
+          ),
+        );
+        emit(state.copyWith(
+          status: Status.success,
+          msg: "account added successfully",
+        ));
+      } on Exception {
+        emit(state.copyWith(
+          status: Status.failure,
+          msg: "error occurs",
+        ));
+      }
     }
   }
 }

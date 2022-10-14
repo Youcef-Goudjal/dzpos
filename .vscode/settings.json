@@ -1,4 +1,7 @@
 {
+    "dart.additionalAnalyzerFileExtensions": [
+        "drift"
+    ],
     "cSpell.words": [
         "algeria",
         "bluetooth",

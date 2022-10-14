@@ -1,6 +1,5 @@
 import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/common_blocs/common_blocs.dart';
-import 'package:dzpos/core/services/database.dart';
 import 'package:dzpos/product/firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';

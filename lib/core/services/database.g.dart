@@ -1231,318 +1231,6 @@ class $ProductUnitsTable extends ProductUnits
   }
 }
 
-class Sale extends DataClass implements Insertable<Sale> {
-  final int salesId;
-  final int invoiceId;
-  final int productId;
-  final double quantity;
-  final double unitPrice;
-  final double subTotal;
-  const Sale(
-      {required this.salesId,
-      required this.invoiceId,
-      required this.productId,
-      required this.quantity,
-      required this.unitPrice,
-      required this.subTotal});
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['sales_id'] = Variable<int>(salesId);
-    map['invoice_id'] = Variable<int>(invoiceId);
-    map['product_id'] = Variable<int>(productId);
-    map['quantity'] = Variable<double>(quantity);
-    map['unit_price'] = Variable<double>(unitPrice);
-    return map;
-  }
-
-  SalesCompanion toCompanion(bool nullToAbsent) {
-    return SalesCompanion(
-      salesId: Value(salesId),
-      invoiceId: Value(invoiceId),
-      productId: Value(productId),
-      quantity: Value(quantity),
-      unitPrice: Value(unitPrice),
-    );
-  }
-
-  factory Sale.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Sale(
-      salesId: serializer.fromJson<int>(json['salesId']),
-      invoiceId: serializer.fromJson<int>(json['invoiceId']),
-      productId: serializer.fromJson<int>(json['productId']),
-      quantity: serializer.fromJson<double>(json['quantity']),
-      unitPrice: serializer.fromJson<double>(json['unitPrice']),
-      subTotal: serializer.fromJson<double>(json['subTotal']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'salesId': serializer.toJson<int>(salesId),
-      'invoiceId': serializer.toJson<int>(invoiceId),
-      'productId': serializer.toJson<int>(productId),
-      'quantity': serializer.toJson<double>(quantity),
-      'unitPrice': serializer.toJson<double>(unitPrice),
-      'subTotal': serializer.toJson<double>(subTotal),
-    };
-  }
-
-  Sale copyWith(
-          {int? salesId,
-          int? invoiceId,
-          int? productId,
-          double? quantity,
-          double? unitPrice,
-          double? subTotal}) =>
-      Sale(
-        salesId: salesId ?? this.salesId,
-        invoiceId: invoiceId ?? this.invoiceId,
-        productId: productId ?? this.productId,
-        quantity: quantity ?? this.quantity,
-        unitPrice: unitPrice ?? this.unitPrice,
-        subTotal: subTotal ?? this.subTotal,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('Sale(')
-          ..write('salesId: $salesId, ')
-          ..write('invoiceId: $invoiceId, ')
-          ..write('productId: $productId, ')
-          ..write('quantity: $quantity, ')
-          ..write('unitPrice: $unitPrice, ')
-          ..write('subTotal: $subTotal')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(salesId, invoiceId, productId, quantity, unitPrice, subTotal);
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Sale &&
-          other.salesId == this.salesId &&
-          other.invoiceId == this.invoiceId &&
-          other.productId == this.productId &&
-          other.quantity == this.quantity &&
-          other.unitPrice == this.unitPrice &&
-          other.subTotal == this.subTotal);
-}
-
-class SalesCompanion extends UpdateCompanion<Sale> {
-  final Value<int> salesId;
-  final Value<int> invoiceId;
-  final Value<int> productId;
-  final Value<double> quantity;
-  final Value<double> unitPrice;
-  const SalesCompanion({
-    this.salesId = const Value.absent(),
-    this.invoiceId = const Value.absent(),
-    this.productId = const Value.absent(),
-    this.quantity = const Value.absent(),
-    this.unitPrice = const Value.absent(),
-  });
-  SalesCompanion.insert({
-    this.salesId = const Value.absent(),
-    required int invoiceId,
-    required int productId,
-    required double quantity,
-    required double unitPrice,
-  })  : invoiceId = Value(invoiceId),
-        productId = Value(productId),
-        quantity = Value(quantity),
-        unitPrice = Value(unitPrice);
-  static Insertable<Sale> custom({
-    Expression<int>? salesId,
-    Expression<int>? invoiceId,
-    Expression<int>? productId,
-    Expression<double>? quantity,
-    Expression<double>? unitPrice,
-  }) {
-    return RawValuesInsertable({
-      if (salesId != null) 'sales_id': salesId,
-      if (invoiceId != null) 'invoice_id': invoiceId,
-      if (productId != null) 'product_id': productId,
-      if (quantity != null) 'quantity': quantity,
-      if (unitPrice != null) 'unit_price': unitPrice,
-    });
-  }
-
-  SalesCompanion copyWith(
-      {Value<int>? salesId,
-      Value<int>? invoiceId,
-      Value<int>? productId,
-      Value<double>? quantity,
-      Value<double>? unitPrice}) {
-    return SalesCompanion(
-      salesId: salesId ?? this.salesId,
-      invoiceId: invoiceId ?? this.invoiceId,
-      productId: productId ?? this.productId,
-      quantity: quantity ?? this.quantity,
-      unitPrice: unitPrice ?? this.unitPrice,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (salesId.present) {
-      map['sales_id'] = Variable<int>(salesId.value);
-    }
-    if (invoiceId.present) {
-      map['invoice_id'] = Variable<int>(invoiceId.value);
-    }
-    if (productId.present) {
-      map['product_id'] = Variable<int>(productId.value);
-    }
-    if (quantity.present) {
-      map['quantity'] = Variable<double>(quantity.value);
-    }
-    if (unitPrice.present) {
-      map['unit_price'] = Variable<double>(unitPrice.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('SalesCompanion(')
-          ..write('salesId: $salesId, ')
-          ..write('invoiceId: $invoiceId, ')
-          ..write('productId: $productId, ')
-          ..write('quantity: $quantity, ')
-          ..write('unitPrice: $unitPrice')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $SalesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _salesIdMeta = const VerificationMeta('salesId');
-  @override
-  late final GeneratedColumn<int> salesId = GeneratedColumn<int>(
-      'sales_id', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _invoiceIdMeta = const VerificationMeta('invoiceId');
-  @override
-  late final GeneratedColumn<int> invoiceId = GeneratedColumn<int>(
-      'invoice_id', aliasedName, false,
-      check: () => invoiceId.isNotNull(),
-      type: DriftSqlType.int,
-      requiredDuringInsert: true);
-  final VerificationMeta _productIdMeta = const VerificationMeta('productId');
-  @override
-  late final GeneratedColumn<int> productId = GeneratedColumn<int>(
-      'product_id', aliasedName, false,
-      check: () => productId.isNotNull(),
-      type: DriftSqlType.int,
-      requiredDuringInsert: true);
-  final VerificationMeta _quantityMeta = const VerificationMeta('quantity');
-  @override
-  late final GeneratedColumn<double> quantity = GeneratedColumn<double>(
-      'quantity', aliasedName, false,
-      check: () => quantity.isNotNull(),
-      type: DriftSqlType.double,
-      requiredDuringInsert: true);
-  final VerificationMeta _unitPriceMeta = const VerificationMeta('unitPrice');
-  @override
-  late final GeneratedColumn<double> unitPrice = GeneratedColumn<double>(
-      'unit_price', aliasedName, false,
-      check: () => unitPrice.isNotNull(),
-      type: DriftSqlType.double,
-      requiredDuringInsert: true);
-  final VerificationMeta _subTotalMeta = const VerificationMeta('subTotal');
-  @override
-  late final GeneratedColumn<double> subTotal = GeneratedColumn<double>(
-      'sub_total', aliasedName, false,
-      type: DriftSqlType.double,
-      requiredDuringInsert: false,
-      generatedAs: GeneratedAs(quantity * unitPrice, false));
-  @override
-  List<GeneratedColumn> get $columns =>
-      [salesId, invoiceId, productId, quantity, unitPrice, subTotal];
-  @override
-  String get aliasedName => _alias ?? 'sales';
-  @override
-  String get actualTableName => 'sales';
-  @override
-  VerificationContext validateIntegrity(Insertable<Sale> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('sales_id')) {
-      context.handle(_salesIdMeta,
-          salesId.isAcceptableOrUnknown(data['sales_id']!, _salesIdMeta));
-    }
-    if (data.containsKey('invoice_id')) {
-      context.handle(_invoiceIdMeta,
-          invoiceId.isAcceptableOrUnknown(data['invoice_id']!, _invoiceIdMeta));
-    } else if (isInserting) {
-      context.missing(_invoiceIdMeta);
-    }
-    if (data.containsKey('product_id')) {
-      context.handle(_productIdMeta,
-          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
-    } else if (isInserting) {
-      context.missing(_productIdMeta);
-    }
-    if (data.containsKey('quantity')) {
-      context.handle(_quantityMeta,
-          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
-    } else if (isInserting) {
-      context.missing(_quantityMeta);
-    }
-    if (data.containsKey('unit_price')) {
-      context.handle(_unitPriceMeta,
-          unitPrice.isAcceptableOrUnknown(data['unit_price']!, _unitPriceMeta));
-    } else if (isInserting) {
-      context.missing(_unitPriceMeta);
-    }
-    if (data.containsKey('sub_total')) {
-      context.handle(_subTotalMeta,
-          subTotal.isAcceptableOrUnknown(data['sub_total']!, _subTotalMeta));
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {salesId};
-  @override
-  Sale map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return Sale(
-      salesId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}sales_id'])!,
-      invoiceId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}invoice_id'])!,
-      productId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
-      quantity: attachedDatabase.options.types
-          .read(DriftSqlType.double, data['${effectivePrefix}quantity'])!,
-      unitPrice: attachedDatabase.options.types
-          .read(DriftSqlType.double, data['${effectivePrefix}unit_price'])!,
-      subTotal: attachedDatabase.options.types
-          .read(DriftSqlType.double, data['${effectivePrefix}sub_total'])!,
-    );
-  }
-
-  @override
-  $SalesTable createAlias(String alias) {
-    return $SalesTable(attachedDatabase, alias);
-  }
-}
-
 class Account extends DataClass implements Insertable<Account> {
   final int id;
   final String? code;
@@ -1912,46 +1600,53 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
 }
 
 class Invoice extends DataClass implements Insertable<Invoice> {
-  final int invoiceId;
+  final int id;
   final int customerId;
   final PaymentType paymentType;
-  final double totalAmount;
+  final double? totalAmount;
   final double amountTendered;
   final DateTime dateRecorded;
-  final int userId;
+  final int? userId;
   const Invoice(
-      {required this.invoiceId,
+      {required this.id,
       required this.customerId,
       required this.paymentType,
-      required this.totalAmount,
+      this.totalAmount,
       required this.amountTendered,
       required this.dateRecorded,
-      required this.userId});
+      this.userId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['invoice_id'] = Variable<int>(invoiceId);
+    map['id'] = Variable<int>(id);
     map['customer_id'] = Variable<int>(customerId);
     {
       final converter = $InvoicesTable.$converter0;
       map['payment_type'] = Variable<int>(converter.toSql(paymentType));
     }
-    map['total_amount'] = Variable<double>(totalAmount);
+    if (!nullToAbsent || totalAmount != null) {
+      map['total_amount'] = Variable<double>(totalAmount);
+    }
     map['amount_tendered'] = Variable<double>(amountTendered);
     map['date_recorded'] = Variable<DateTime>(dateRecorded);
-    map['user_id'] = Variable<int>(userId);
+    if (!nullToAbsent || userId != null) {
+      map['user_id'] = Variable<int>(userId);
+    }
     return map;
   }
 
   InvoicesCompanion toCompanion(bool nullToAbsent) {
     return InvoicesCompanion(
-      invoiceId: Value(invoiceId),
+      id: Value(id),
       customerId: Value(customerId),
       paymentType: Value(paymentType),
-      totalAmount: Value(totalAmount),
+      totalAmount: totalAmount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(totalAmount),
       amountTendered: Value(amountTendered),
       dateRecorded: Value(dateRecorded),
-      userId: Value(userId),
+      userId:
+          userId == null && nullToAbsent ? const Value.absent() : Value(userId),
     );
   }
 
@@ -1959,50 +1654,50 @@ class Invoice extends DataClass implements Insertable<Invoice> {
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Invoice(
-      invoiceId: serializer.fromJson<int>(json['invoiceId']),
+      id: serializer.fromJson<int>(json['id']),
       customerId: serializer.fromJson<int>(json['customerId']),
       paymentType: serializer.fromJson<PaymentType>(json['paymentType']),
-      totalAmount: serializer.fromJson<double>(json['totalAmount']),
+      totalAmount: serializer.fromJson<double?>(json['totalAmount']),
       amountTendered: serializer.fromJson<double>(json['amountTendered']),
       dateRecorded: serializer.fromJson<DateTime>(json['dateRecorded']),
-      userId: serializer.fromJson<int>(json['userId']),
+      userId: serializer.fromJson<int?>(json['userId']),
     );
   }
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'invoiceId': serializer.toJson<int>(invoiceId),
+      'id': serializer.toJson<int>(id),
       'customerId': serializer.toJson<int>(customerId),
       'paymentType': serializer.toJson<PaymentType>(paymentType),
-      'totalAmount': serializer.toJson<double>(totalAmount),
+      'totalAmount': serializer.toJson<double?>(totalAmount),
       'amountTendered': serializer.toJson<double>(amountTendered),
       'dateRecorded': serializer.toJson<DateTime>(dateRecorded),
-      'userId': serializer.toJson<int>(userId),
+      'userId': serializer.toJson<int?>(userId),
     };
   }
 
   Invoice copyWith(
-          {int? invoiceId,
+          {int? id,
           int? customerId,
           PaymentType? paymentType,
-          double? totalAmount,
+          Value<double?> totalAmount = const Value.absent(),
           double? amountTendered,
           DateTime? dateRecorded,
-          int? userId}) =>
+          Value<int?> userId = const Value.absent()}) =>
       Invoice(
-        invoiceId: invoiceId ?? this.invoiceId,
+        id: id ?? this.id,
         customerId: customerId ?? this.customerId,
         paymentType: paymentType ?? this.paymentType,
-        totalAmount: totalAmount ?? this.totalAmount,
+        totalAmount: totalAmount.present ? totalAmount.value : this.totalAmount,
         amountTendered: amountTendered ?? this.amountTendered,
         dateRecorded: dateRecorded ?? this.dateRecorded,
-        userId: userId ?? this.userId,
+        userId: userId.present ? userId.value : this.userId,
       );
   @override
   String toString() {
     return (StringBuffer('Invoice(')
-          ..write('invoiceId: $invoiceId, ')
+          ..write('id: $id, ')
           ..write('customerId: $customerId, ')
           ..write('paymentType: $paymentType, ')
           ..write('totalAmount: $totalAmount, ')
@@ -2014,13 +1709,13 @@ class Invoice extends DataClass implements Insertable<Invoice> {
   }
 
   @override
-  int get hashCode => Object.hash(invoiceId, customerId, paymentType,
-      totalAmount, amountTendered, dateRecorded, userId);
+  int get hashCode => Object.hash(id, customerId, paymentType, totalAmount,
+      amountTendered, dateRecorded, userId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Invoice &&
-          other.invoiceId == this.invoiceId &&
+          other.id == this.id &&
           other.customerId == this.customerId &&
           other.paymentType == this.paymentType &&
           other.totalAmount == this.totalAmount &&
@@ -2030,15 +1725,15 @@ class Invoice extends DataClass implements Insertable<Invoice> {
 }
 
 class InvoicesCompanion extends UpdateCompanion<Invoice> {
-  final Value<int> invoiceId;
+  final Value<int> id;
   final Value<int> customerId;
   final Value<PaymentType> paymentType;
-  final Value<double> totalAmount;
+  final Value<double?> totalAmount;
   final Value<double> amountTendered;
   final Value<DateTime> dateRecorded;
-  final Value<int> userId;
+  final Value<int?> userId;
   const InvoicesCompanion({
-    this.invoiceId = const Value.absent(),
+    this.id = const Value.absent(),
     this.customerId = const Value.absent(),
     this.paymentType = const Value.absent(),
     this.totalAmount = const Value.absent(),
@@ -2047,20 +1742,18 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
     this.userId = const Value.absent(),
   });
   InvoicesCompanion.insert({
-    this.invoiceId = const Value.absent(),
+    this.id = const Value.absent(),
     required int customerId,
     required PaymentType paymentType,
-    required double totalAmount,
+    this.totalAmount = const Value.absent(),
     required double amountTendered,
     this.dateRecorded = const Value.absent(),
-    required int userId,
+    this.userId = const Value.absent(),
   })  : customerId = Value(customerId),
         paymentType = Value(paymentType),
-        totalAmount = Value(totalAmount),
-        amountTendered = Value(amountTendered),
-        userId = Value(userId);
+        amountTendered = Value(amountTendered);
   static Insertable<Invoice> custom({
-    Expression<int>? invoiceId,
+    Expression<int>? id,
     Expression<int>? customerId,
     Expression<int>? paymentType,
     Expression<double>? totalAmount,
@@ -2069,7 +1762,7 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
     Expression<int>? userId,
   }) {
     return RawValuesInsertable({
-      if (invoiceId != null) 'invoice_id': invoiceId,
+      if (id != null) 'id': id,
       if (customerId != null) 'customer_id': customerId,
       if (paymentType != null) 'payment_type': paymentType,
       if (totalAmount != null) 'total_amount': totalAmount,
@@ -2080,15 +1773,15 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
   }
 
   InvoicesCompanion copyWith(
-      {Value<int>? invoiceId,
+      {Value<int>? id,
       Value<int>? customerId,
       Value<PaymentType>? paymentType,
-      Value<double>? totalAmount,
+      Value<double?>? totalAmount,
       Value<double>? amountTendered,
       Value<DateTime>? dateRecorded,
-      Value<int>? userId}) {
+      Value<int?>? userId}) {
     return InvoicesCompanion(
-      invoiceId: invoiceId ?? this.invoiceId,
+      id: id ?? this.id,
       customerId: customerId ?? this.customerId,
       paymentType: paymentType ?? this.paymentType,
       totalAmount: totalAmount ?? this.totalAmount,
@@ -2101,8 +1794,8 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (invoiceId.present) {
-      map['invoice_id'] = Variable<int>(invoiceId.value);
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
     }
     if (customerId.present) {
       map['customer_id'] = Variable<int>(customerId.value);
@@ -2129,7 +1822,7 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
   @override
   String toString() {
     return (StringBuffer('InvoicesCompanion(')
-          ..write('invoiceId: $invoiceId, ')
+          ..write('id: $id, ')
           ..write('customerId: $customerId, ')
           ..write('paymentType: $paymentType, ')
           ..write('totalAmount: $totalAmount, ')
@@ -2146,10 +1839,10 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $InvoicesTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _invoiceIdMeta = const VerificationMeta('invoiceId');
+  final VerificationMeta _idMeta = const VerificationMeta('id');
   @override
-  late final GeneratedColumn<int> invoiceId = GeneratedColumn<int>(
-      'invoice_id', aliasedName, false,
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
@@ -2171,18 +1864,14 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
       const VerificationMeta('totalAmount');
   @override
   late final GeneratedColumn<double> totalAmount = GeneratedColumn<double>(
-      'total_amount', aliasedName, false,
-      check: () => totalAmount.isNotNull(),
-      type: DriftSqlType.double,
-      requiredDuringInsert: true);
+      'total_amount', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
   final VerificationMeta _amountTenderedMeta =
       const VerificationMeta('amountTendered');
   @override
   late final GeneratedColumn<double> amountTendered = GeneratedColumn<double>(
       'amount_tendered', aliasedName, false,
-      check: () => amountTendered.isNotNull(),
-      type: DriftSqlType.double,
-      requiredDuringInsert: true);
+      type: DriftSqlType.double, requiredDuringInsert: true);
   final VerificationMeta _dateRecordedMeta =
       const VerificationMeta('dateRecorded');
   @override
@@ -2194,13 +1883,13 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
-      'user_id', aliasedName, false,
+      'user_id', aliasedName, true,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints: 'REFERENCES "users" ("id")');
   @override
   List<GeneratedColumn> get $columns => [
-        invoiceId,
+        id,
         customerId,
         paymentType,
         totalAmount,
@@ -2217,9 +1906,8 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('invoice_id')) {
-      context.handle(_invoiceIdMeta,
-          invoiceId.isAcceptableOrUnknown(data['invoice_id']!, _invoiceIdMeta));
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     if (data.containsKey('customer_id')) {
       context.handle(
@@ -2235,8 +1923,6 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
           _totalAmountMeta,
           totalAmount.isAcceptableOrUnknown(
               data['total_amount']!, _totalAmountMeta));
-    } else if (isInserting) {
-      context.missing(_totalAmountMeta);
     }
     if (data.containsKey('amount_tendered')) {
       context.handle(
@@ -2255,33 +1941,31 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
     if (data.containsKey('user_id')) {
       context.handle(_userIdMeta,
           userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
-    } else if (isInserting) {
-      context.missing(_userIdMeta);
     }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {invoiceId};
+  Set<GeneratedColumn> get $primaryKey => {id};
   @override
   Invoice map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Invoice(
-      invoiceId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}invoice_id'])!,
+      id: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       customerId: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}customer_id'])!,
       paymentType: $InvoicesTable.$converter0.fromSql(attachedDatabase
           .options.types
           .read(DriftSqlType.int, data['${effectivePrefix}payment_type'])!),
       totalAmount: attachedDatabase.options.types
-          .read(DriftSqlType.double, data['${effectivePrefix}total_amount'])!,
+          .read(DriftSqlType.double, data['${effectivePrefix}total_amount']),
       amountTendered: attachedDatabase.options.types.read(
           DriftSqlType.double, data['${effectivePrefix}amount_tendered'])!,
       dateRecorded: attachedDatabase.options.types.read(
           DriftSqlType.dateTime, data['${effectivePrefix}date_recorded'])!,
       userId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id']),
     );
   }
 
@@ -2292,6 +1976,314 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
 
   static TypeConverter<PaymentType, int> $converter0 =
       const EnumIndexConverter<PaymentType>(PaymentType.values);
+}
+
+class Sale extends DataClass implements Insertable<Sale> {
+  final int salesId;
+  final int invoiceId;
+  final int productId;
+  final double quantity;
+  final double unitPrice;
+  final double subTotal;
+  const Sale(
+      {required this.salesId,
+      required this.invoiceId,
+      required this.productId,
+      required this.quantity,
+      required this.unitPrice,
+      required this.subTotal});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['sales_id'] = Variable<int>(salesId);
+    map['invoice_id'] = Variable<int>(invoiceId);
+    map['product_id'] = Variable<int>(productId);
+    map['quantity'] = Variable<double>(quantity);
+    map['unit_price'] = Variable<double>(unitPrice);
+    return map;
+  }
+
+  SalesCompanion toCompanion(bool nullToAbsent) {
+    return SalesCompanion(
+      salesId: Value(salesId),
+      invoiceId: Value(invoiceId),
+      productId: Value(productId),
+      quantity: Value(quantity),
+      unitPrice: Value(unitPrice),
+    );
+  }
+
+  factory Sale.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Sale(
+      salesId: serializer.fromJson<int>(json['salesId']),
+      invoiceId: serializer.fromJson<int>(json['invoiceId']),
+      productId: serializer.fromJson<int>(json['productId']),
+      quantity: serializer.fromJson<double>(json['quantity']),
+      unitPrice: serializer.fromJson<double>(json['unitPrice']),
+      subTotal: serializer.fromJson<double>(json['subTotal']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'salesId': serializer.toJson<int>(salesId),
+      'invoiceId': serializer.toJson<int>(invoiceId),
+      'productId': serializer.toJson<int>(productId),
+      'quantity': serializer.toJson<double>(quantity),
+      'unitPrice': serializer.toJson<double>(unitPrice),
+      'subTotal': serializer.toJson<double>(subTotal),
+    };
+  }
+
+  Sale copyWith(
+          {int? salesId,
+          int? invoiceId,
+          int? productId,
+          double? quantity,
+          double? unitPrice,
+          double? subTotal}) =>
+      Sale(
+        salesId: salesId ?? this.salesId,
+        invoiceId: invoiceId ?? this.invoiceId,
+        productId: productId ?? this.productId,
+        quantity: quantity ?? this.quantity,
+        unitPrice: unitPrice ?? this.unitPrice,
+        subTotal: subTotal ?? this.subTotal,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('Sale(')
+          ..write('salesId: $salesId, ')
+          ..write('invoiceId: $invoiceId, ')
+          ..write('productId: $productId, ')
+          ..write('quantity: $quantity, ')
+          ..write('unitPrice: $unitPrice, ')
+          ..write('subTotal: $subTotal')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(salesId, invoiceId, productId, quantity, unitPrice, subTotal);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Sale &&
+          other.salesId == this.salesId &&
+          other.invoiceId == this.invoiceId &&
+          other.productId == this.productId &&
+          other.quantity == this.quantity &&
+          other.unitPrice == this.unitPrice &&
+          other.subTotal == this.subTotal);
+}
+
+class SalesCompanion extends UpdateCompanion<Sale> {
+  final Value<int> salesId;
+  final Value<int> invoiceId;
+  final Value<int> productId;
+  final Value<double> quantity;
+  final Value<double> unitPrice;
+  const SalesCompanion({
+    this.salesId = const Value.absent(),
+    this.invoiceId = const Value.absent(),
+    this.productId = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.unitPrice = const Value.absent(),
+  });
+  SalesCompanion.insert({
+    this.salesId = const Value.absent(),
+    required int invoiceId,
+    required int productId,
+    required double quantity,
+    required double unitPrice,
+  })  : invoiceId = Value(invoiceId),
+        productId = Value(productId),
+        quantity = Value(quantity),
+        unitPrice = Value(unitPrice);
+  static Insertable<Sale> custom({
+    Expression<int>? salesId,
+    Expression<int>? invoiceId,
+    Expression<int>? productId,
+    Expression<double>? quantity,
+    Expression<double>? unitPrice,
+  }) {
+    return RawValuesInsertable({
+      if (salesId != null) 'sales_id': salesId,
+      if (invoiceId != null) 'invoice_id': invoiceId,
+      if (productId != null) 'product_id': productId,
+      if (quantity != null) 'quantity': quantity,
+      if (unitPrice != null) 'unit_price': unitPrice,
+    });
+  }
+
+  SalesCompanion copyWith(
+      {Value<int>? salesId,
+      Value<int>? invoiceId,
+      Value<int>? productId,
+      Value<double>? quantity,
+      Value<double>? unitPrice}) {
+    return SalesCompanion(
+      salesId: salesId ?? this.salesId,
+      invoiceId: invoiceId ?? this.invoiceId,
+      productId: productId ?? this.productId,
+      quantity: quantity ?? this.quantity,
+      unitPrice: unitPrice ?? this.unitPrice,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (salesId.present) {
+      map['sales_id'] = Variable<int>(salesId.value);
+    }
+    if (invoiceId.present) {
+      map['invoice_id'] = Variable<int>(invoiceId.value);
+    }
+    if (productId.present) {
+      map['product_id'] = Variable<int>(productId.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<double>(quantity.value);
+    }
+    if (unitPrice.present) {
+      map['unit_price'] = Variable<double>(unitPrice.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SalesCompanion(')
+          ..write('salesId: $salesId, ')
+          ..write('invoiceId: $invoiceId, ')
+          ..write('productId: $productId, ')
+          ..write('quantity: $quantity, ')
+          ..write('unitPrice: $unitPrice')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $SalesTable extends Sales with TableInfo<$SalesTable, Sale> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SalesTable(this.attachedDatabase, [this._alias]);
+  final VerificationMeta _salesIdMeta = const VerificationMeta('salesId');
+  @override
+  late final GeneratedColumn<int> salesId = GeneratedColumn<int>(
+      'sales_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _invoiceIdMeta = const VerificationMeta('invoiceId');
+  @override
+  late final GeneratedColumn<int> invoiceId = GeneratedColumn<int>(
+      'invoice_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES "invoices" ("id")');
+  final VerificationMeta _productIdMeta = const VerificationMeta('productId');
+  @override
+  late final GeneratedColumn<int> productId = GeneratedColumn<int>(
+      'product_id', aliasedName, false,
+      type: DriftSqlType.int,
+      requiredDuringInsert: true,
+      defaultConstraints: 'REFERENCES "products" ("product_id")');
+  final VerificationMeta _quantityMeta = const VerificationMeta('quantity');
+  @override
+  late final GeneratedColumn<double> quantity = GeneratedColumn<double>(
+      'quantity', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  final VerificationMeta _unitPriceMeta = const VerificationMeta('unitPrice');
+  @override
+  late final GeneratedColumn<double> unitPrice = GeneratedColumn<double>(
+      'unit_price', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  final VerificationMeta _subTotalMeta = const VerificationMeta('subTotal');
+  @override
+  late final GeneratedColumn<double> subTotal = GeneratedColumn<double>(
+      'sub_total', aliasedName, false,
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      generatedAs: GeneratedAs(quantity * unitPrice, false));
+  @override
+  List<GeneratedColumn> get $columns =>
+      [salesId, invoiceId, productId, quantity, unitPrice, subTotal];
+  @override
+  String get aliasedName => _alias ?? 'sales';
+  @override
+  String get actualTableName => 'sales';
+  @override
+  VerificationContext validateIntegrity(Insertable<Sale> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('sales_id')) {
+      context.handle(_salesIdMeta,
+          salesId.isAcceptableOrUnknown(data['sales_id']!, _salesIdMeta));
+    }
+    if (data.containsKey('invoice_id')) {
+      context.handle(_invoiceIdMeta,
+          invoiceId.isAcceptableOrUnknown(data['invoice_id']!, _invoiceIdMeta));
+    } else if (isInserting) {
+      context.missing(_invoiceIdMeta);
+    }
+    if (data.containsKey('product_id')) {
+      context.handle(_productIdMeta,
+          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
+    } else if (isInserting) {
+      context.missing(_productIdMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    if (data.containsKey('unit_price')) {
+      context.handle(_unitPriceMeta,
+          unitPrice.isAcceptableOrUnknown(data['unit_price']!, _unitPriceMeta));
+    } else if (isInserting) {
+      context.missing(_unitPriceMeta);
+    }
+    if (data.containsKey('sub_total')) {
+      context.handle(_subTotalMeta,
+          subTotal.isAcceptableOrUnknown(data['sub_total']!, _subTotalMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {salesId};
+  @override
+  Sale map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Sale(
+      salesId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}sales_id'])!,
+      invoiceId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}invoice_id'])!,
+      productId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
+      quantity: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}quantity'])!,
+      unitPrice: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}unit_price'])!,
+      subTotal: attachedDatabase.options.types
+          .read(DriftSqlType.double, data['${effectivePrefix}sub_total'])!,
+    );
+  }
+
+  @override
+  $SalesTable createAlias(String alias) {
+    return $SalesTable(attachedDatabase, alias);
+  }
 }
 
 class ReceiveProduct extends DataClass implements Insertable<ReceiveProduct> {
@@ -3094,29 +3086,35 @@ class $PurchaseOrdersTable extends PurchaseOrders
 class Debt extends DataClass implements Insertable<Debt> {
   final int id;
   final double amount;
-  final int accountId;
+  final int? accountId;
   final DateTime dateRecorded;
   final bool isCredit;
-  final String description;
-  final int userId;
+  final String? description;
+  final int? userId;
   const Debt(
       {required this.id,
       required this.amount,
-      required this.accountId,
+      this.accountId,
       required this.dateRecorded,
       required this.isCredit,
-      required this.description,
-      required this.userId});
+      this.description,
+      this.userId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['amount'] = Variable<double>(amount);
-    map['account_id'] = Variable<int>(accountId);
+    if (!nullToAbsent || accountId != null) {
+      map['account_id'] = Variable<int>(accountId);
+    }
     map['date_recorded'] = Variable<DateTime>(dateRecorded);
     map['is_credit'] = Variable<bool>(isCredit);
-    map['description'] = Variable<String>(description);
-    map['user_id'] = Variable<int>(userId);
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    if (!nullToAbsent || userId != null) {
+      map['user_id'] = Variable<int>(userId);
+    }
     return map;
   }
 
@@ -3124,11 +3122,16 @@ class Debt extends DataClass implements Insertable<Debt> {
     return DebtsCompanion(
       id: Value(id),
       amount: Value(amount),
-      accountId: Value(accountId),
+      accountId: accountId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(accountId),
       dateRecorded: Value(dateRecorded),
       isCredit: Value(isCredit),
-      description: Value(description),
-      userId: Value(userId),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      userId:
+          userId == null && nullToAbsent ? const Value.absent() : Value(userId),
     );
   }
 
@@ -3138,11 +3141,11 @@ class Debt extends DataClass implements Insertable<Debt> {
     return Debt(
       id: serializer.fromJson<int>(json['id']),
       amount: serializer.fromJson<double>(json['amount']),
-      accountId: serializer.fromJson<int>(json['accountId']),
+      accountId: serializer.fromJson<int?>(json['accountId']),
       dateRecorded: serializer.fromJson<DateTime>(json['dateRecorded']),
       isCredit: serializer.fromJson<bool>(json['isCredit']),
-      description: serializer.fromJson<String>(json['description']),
-      userId: serializer.fromJson<int>(json['userId']),
+      description: serializer.fromJson<String?>(json['description']),
+      userId: serializer.fromJson<int?>(json['userId']),
     );
   }
   @override
@@ -3151,30 +3154,30 @@ class Debt extends DataClass implements Insertable<Debt> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'amount': serializer.toJson<double>(amount),
-      'accountId': serializer.toJson<int>(accountId),
+      'accountId': serializer.toJson<int?>(accountId),
       'dateRecorded': serializer.toJson<DateTime>(dateRecorded),
       'isCredit': serializer.toJson<bool>(isCredit),
-      'description': serializer.toJson<String>(description),
-      'userId': serializer.toJson<int>(userId),
+      'description': serializer.toJson<String?>(description),
+      'userId': serializer.toJson<int?>(userId),
     };
   }
 
   Debt copyWith(
           {int? id,
           double? amount,
-          int? accountId,
+          Value<int?> accountId = const Value.absent(),
           DateTime? dateRecorded,
           bool? isCredit,
-          String? description,
-          int? userId}) =>
+          Value<String?> description = const Value.absent(),
+          Value<int?> userId = const Value.absent()}) =>
       Debt(
         id: id ?? this.id,
         amount: amount ?? this.amount,
-        accountId: accountId ?? this.accountId,
+        accountId: accountId.present ? accountId.value : this.accountId,
         dateRecorded: dateRecorded ?? this.dateRecorded,
         isCredit: isCredit ?? this.isCredit,
-        description: description ?? this.description,
-        userId: userId ?? this.userId,
+        description: description.present ? description.value : this.description,
+        userId: userId.present ? userId.value : this.userId,
       );
   @override
   String toString() {
@@ -3209,11 +3212,11 @@ class Debt extends DataClass implements Insertable<Debt> {
 class DebtsCompanion extends UpdateCompanion<Debt> {
   final Value<int> id;
   final Value<double> amount;
-  final Value<int> accountId;
+  final Value<int?> accountId;
   final Value<DateTime> dateRecorded;
   final Value<bool> isCredit;
-  final Value<String> description;
-  final Value<int> userId;
+  final Value<String?> description;
+  final Value<int?> userId;
   const DebtsCompanion({
     this.id = const Value.absent(),
     this.amount = const Value.absent(),
@@ -3226,16 +3229,13 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
   DebtsCompanion.insert({
     this.id = const Value.absent(),
     required double amount,
-    required int accountId,
+    this.accountId = const Value.absent(),
     this.dateRecorded = const Value.absent(),
     required bool isCredit,
-    required String description,
-    required int userId,
+    this.description = const Value.absent(),
+    this.userId = const Value.absent(),
   })  : amount = Value(amount),
-        accountId = Value(accountId),
-        isCredit = Value(isCredit),
-        description = Value(description),
-        userId = Value(userId);
+        isCredit = Value(isCredit);
   static Insertable<Debt> custom({
     Expression<int>? id,
     Expression<double>? amount,
@@ -3259,11 +3259,11 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
   DebtsCompanion copyWith(
       {Value<int>? id,
       Value<double>? amount,
-      Value<int>? accountId,
+      Value<int?>? accountId,
       Value<DateTime>? dateRecorded,
       Value<bool>? isCredit,
-      Value<String>? description,
-      Value<int>? userId}) {
+      Value<String?>? description,
+      Value<int?>? userId}) {
     return DebtsCompanion(
       id: id ?? this.id,
       amount: amount ?? this.amount,
@@ -3337,9 +3337,9 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
   final VerificationMeta _accountIdMeta = const VerificationMeta('accountId');
   @override
   late final GeneratedColumn<int> accountId = GeneratedColumn<int>(
-      'account_id', aliasedName, false,
+      'account_id', aliasedName, true,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints: 'REFERENCES "accounts" ("id")');
   final VerificationMeta _dateRecordedMeta =
       const VerificationMeta('dateRecorded');
@@ -3360,14 +3360,14 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
       const VerificationMeta('description');
   @override
   late final GeneratedColumn<String> description = GeneratedColumn<String>(
-      'description', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+      'description', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
-      'user_id', aliasedName, false,
+      'user_id', aliasedName, true,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints: 'REFERENCES "users" ("id")');
   @override
   List<GeneratedColumn> get $columns =>
@@ -3393,8 +3393,6 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
     if (data.containsKey('account_id')) {
       context.handle(_accountIdMeta,
           accountId.isAcceptableOrUnknown(data['account_id']!, _accountIdMeta));
-    } else if (isInserting) {
-      context.missing(_accountIdMeta);
     }
     if (data.containsKey('date_recorded')) {
       context.handle(
@@ -3413,14 +3411,10 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
           _descriptionMeta,
           description.isAcceptableOrUnknown(
               data['description']!, _descriptionMeta));
-    } else if (isInserting) {
-      context.missing(_descriptionMeta);
     }
     if (data.containsKey('user_id')) {
       context.handle(_userIdMeta,
           userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
-    } else if (isInserting) {
-      context.missing(_userIdMeta);
     }
     return context;
   }
@@ -3436,15 +3430,15 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
       amount: attachedDatabase.options.types
           .read(DriftSqlType.double, data['${effectivePrefix}amount'])!,
       accountId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}account_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}account_id']),
       dateRecorded: attachedDatabase.options.types.read(
           DriftSqlType.dateTime, data['${effectivePrefix}date_recorded'])!,
       isCredit: attachedDatabase.options.types
           .read(DriftSqlType.bool, data['${effectivePrefix}is_credit'])!,
       description: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}description'])!,
+          .read(DriftSqlType.string, data['${effectivePrefix}description']),
       userId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}user_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}user_id']),
     );
   }
 
@@ -3461,9 +3455,9 @@ abstract class _$MyDatabase extends GeneratedDatabase {
       $ProductCategoriesTable(this);
   late final $ProductsTable products = $ProductsTable(this);
   late final $ProductUnitsTable productUnits = $ProductUnitsTable(this);
-  late final $SalesTable sales = $SalesTable(this);
   late final $AccountsTable accounts = $AccountsTable(this);
   late final $InvoicesTable invoices = $InvoicesTable(this);
+  late final $SalesTable sales = $SalesTable(this);
   late final $ReceiveProductsTable receiveProducts =
       $ReceiveProductsTable(this);
   late final $PurchaseOrdersTable purchaseOrders = $PurchaseOrdersTable(this);
@@ -3479,9 +3473,9 @@ abstract class _$MyDatabase extends GeneratedDatabase {
         productCategories,
         products,
         productUnits,
-        sales,
         accounts,
         invoices,
+        sales,
         receiveProducts,
         purchaseOrders,
         debts

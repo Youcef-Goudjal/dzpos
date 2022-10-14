@@ -1,25 +1,25 @@
 import 'package:dzpos/application_layer/accounts/cubit/account_statement_cubit.dart';
+import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/application_layer/widgets/app_text_field.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+import '../../../core/utils/date_utils.dart';
 import '../../../data/data.dart';
 import '../../../domain/domain.dart';
 
-final AccountsRepository repository = AccountsRepositoryImpl();
+final AccountsRepository accountsRepository = AccountsRepositoryImpl();
 
 class AccountStatementPage extends StatelessWidget {
   const AccountStatementPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AccountStatementCubit(),
-      child: const _AccountStatementBody(),
-    );
+    return const _AccountStatementBody();
   }
 }
 
@@ -33,68 +33,118 @@ class _AccountStatementBody extends StatefulWidget {
 }
 
 class _AccountStatementBodyState extends State<_AccountStatementBody> {
+  Account? account;
+  DateTimeRange? dateRange;
+
   @override
   void initState() async {
     super.initState();
-    await showDialog(
+    final result = await showDialog(
       context: context,
       builder: (context) {
         return const _AccountStatementDialog();
       },
     );
+    account = result[0];
+    dateRange = result[1];
   }
 
   @override
   Widget build(BuildContext context) {
-    final accountStatementCubit = context.read<AccountStatementCubit>();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(accountStatementCubit.state.account.name),
-        bottom: const _BottomAppBar(),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            // Todo: List of this account debt
-            child: ListView(),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: context.secondaryColor,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
+    if (account == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+      
+    }
+    return BlocProvider(
+      create: (context) => AccountStatementCubit(accountsRepository, account!),
+      child: BlocListener<AccountStatementCubit, AccountStatementState>(
+        listener: (context, state) {
+          statusHandler(context, state.status, msg: state.msg);
+
+        },
+        child: Builder(builder: (context) {
+          final accountStatementCubit = context.read<AccountStatementCubit>();
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(accountStatementCubit.state.account.name),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(50),
+                child: InkWell(
+                  onTap: () async {
+                    final date = await showDateRangePicker(
+                      context: context,
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(3000),
+                    );
+                    accountStatementCubit.onDateChanged(date);
+                  },
+                  child: Text(
+                      "From :${accountStatementCubit.state.from}  To:${accountStatementCubit.state.to}"),
+                ),
               ),
             ),
-            height: 30,
-            child: Row(
-              children: const [
-                Icon(Icons.print),
-                Text("Print detailed Report")
+            body: Column(
+              children: [
+                Expanded(
+              child: BlocBuilder<AccountStatementCubit, AccountStatementState>(
+                builder: (context, state) {
+                  if (state.status.isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  return ListView.separated(
+                    itemCount: state.debts.length,
+                    separatorBuilder: (context, index) => 15.h.heightBox,
+                    itemBuilder: (context, index) {
+                      final debt = state.debts[index];
+                      return ListTile(
+                        title: Text(
+                          "${debt.amount}",
+                          style: context.textTheme.titleLarge,
+                        ),
+                        subtitle: Text(
+                            "${DateToYMD(debt.dateRecorded)}  ${state.account.name}"),
+                        leading: debt.isCredit
+                            ? const Icon(
+                                Icons.arrow_circle_up_outlined,
+                                color: Colors.green,
+                              )
+                            : const Icon(
+                                Icons.arrow_circle_down_outlined,
+                                color: Colors.red,
+                              ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: context.secondaryColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  height: 30,
+                  child: Row(
+                    children: const [
+                      Icon(Icons.print),
+                      Text("Print detailed Report")
+                    ],
+                  ),
+                )
               ],
             ),
-          )
-        ],
+          );
+        }),
       ),
     );
   }
-}
-
-class _BottomAppBar extends StatelessWidget with PreferredSizeWidget {
-  const _BottomAppBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final accountStatementCubit = context.read<AccountStatementCubit>();
-
-    return Text(
-        "From :${accountStatementCubit.state.from}  To:${accountStatementCubit.state.to}");
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(50);
 }
 
 /// this dialog shown when the page started
@@ -109,7 +159,7 @@ class _AccountStatementDialog extends StatefulWidget {
 class __AccountStatementDialogState extends State<_AccountStatementDialog> {
   String? name = "";
   DateTimeRange? dateRange;
-  dynamic result;
+  Account? account;
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -123,11 +173,10 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
             TypeAheadFormField<Account>(
               initialValue: name,
               suggestionsCallback: (pattern) async {
-                final customers = await repository.allAccounts;
-                
+                final accounts = await accountsRepository.allAccounts;
+
                 return [
-                  ...customers,
-               
+                  ...accounts,
                 ];
               },
               itemBuilder: (context, dynamic suggestion) {
@@ -136,11 +185,11 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
                   subtitle: Text(suggestion.contact),
                 );
               },
-              onSuggestionSelected: (dynamic suggestion) {
+              onSuggestionSelected: (Account suggestion) {
                 setState(() {
                   name = suggestion.name;
                 });
-                result = suggestion;
+                account = suggestion;
               },
             ),
             10.heightBox,
@@ -151,7 +200,7 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
                   onTap: () async {
                     await showDateRangePicker(
                       context: context,
-                      firstDate: DateTime.now(),
+                      firstDate: DateTime(2000),
                       lastDate: DateTime.now(),
                     );
                   },
@@ -166,7 +215,7 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
                   onTap: () async {
                     dateRange = await showDateRangePicker(
                       context: context,
-                      firstDate: DateTime.now(),
+                      firstDate: DateTime(2000),
                       lastDate: DateTime.now(),
                     );
                     setState(() {});
@@ -184,11 +233,8 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  if (result != null && dateRange != null) {
-                    context
-                        .read<AccountStatementCubit>()
-                        .saveDialogData(result, dateRange!);
-                    Navigator.pop(context);
+                  if (account != null && dateRange != null) {
+                    Navigator.pop(context, [account, dateRange]);
                   }
                 },
                 child: const Center(

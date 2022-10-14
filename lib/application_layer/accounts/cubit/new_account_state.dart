@@ -10,6 +10,7 @@ class NewAccountState extends Equatable {
     this.code = "",
     this.id = "",
     this.email = "",
+    this.msg,
   });
   final String id;
   final Status status;
@@ -19,6 +20,7 @@ class NewAccountState extends Equatable {
   final String contact;
   final String address;
   final String email;
+  final String? msg;
 
   @override
   List<Object> get props => [
@@ -41,6 +43,7 @@ class NewAccountState extends Equatable {
     String? contact,
     String? address,
     String? email,
+    String? msg,
   }) =>
       NewAccountState(
         id: id ?? this.id,
@@ -51,5 +54,6 @@ class NewAccountState extends Equatable {
         name: name ?? this.name,
         code: code ?? this.code,
         email: email ?? this.email,
+        msg: msg,
       );
 }

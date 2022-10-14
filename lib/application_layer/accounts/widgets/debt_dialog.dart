@@ -1,33 +1,44 @@
+import 'package:drift/drift.dart' show Value;
 import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-showOldDebtDialog(BuildContext context) {
+showDebtDialog(BuildContext context, {bool? isCreditor}) {
   showDialog(
     context: context,
     builder: (context) {
-      return const _OldDebtBody();
+      return _DebtBody(
+        isCreditor: isCreditor,
+      );
     },
   );
 }
 
-class _OldDebtBody extends StatefulWidget {
-  const _OldDebtBody({
+class _DebtBody extends StatefulWidget {
+  final bool? isCreditor;
+  const _DebtBody({
+    this.isCreditor,
     Key? key,
   }) : super(key: key);
 
   @override
-  State<_OldDebtBody> createState() => _OldDebtBodyState();
+  State<_DebtBody> createState() => _DebtBodyState();
 }
 
-class _OldDebtBodyState extends State<_OldDebtBody> {
-  late int accountId;
-  String? desc;
-  String? amount;
+class _DebtBodyState extends State<_DebtBody> {
+  int? accountId;
+  String desc = "";
+  String amount = "";
   Account? account;
-  bool isCreditor = true;
+  late bool isCreditor;
+  @override
+  void initState() {
+    super.initState();
+    isCreditor = widget.isCreditor ?? true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -42,7 +53,7 @@ class _OldDebtBodyState extends State<_OldDebtBody> {
               TypeAheadFormField<Account>(
                 suggestionsCallback: (pattern) async {
                   return [
-                    ...await repository.allAccounts,
+                    ...await accountsRepository.allAccounts,
                   ];
                 },
                 autoFlipDirection: true,
@@ -58,9 +69,7 @@ class _OldDebtBodyState extends State<_OldDebtBody> {
                     subtitle: Text(suggestion.contact),
                   );
                 },
-                hideKeyboardOnDrag: true,
                 direction: AxisDirection.up,
-                hideOnEmpty: true,
                 onSuggestionSelected: (suggestion) {
                   setState(() {
                     account = suggestion;
@@ -113,7 +122,20 @@ class _OldDebtBodyState extends State<_OldDebtBody> {
                     Expanded(
                       child: ElevatedButton(
                         child: const Text("Save"),
-                        onPressed: () {},
+                        onPressed: () {
+                          final amountD = double.tryParse(amount);
+                          if (amountD != null && accountId != null) {
+                            accountsRepository.registerDebt(
+                              DebtsCompanion(
+                                accountId: Value(accountId!),
+                                amount: Value(amountD),
+                                description: Value(desc),
+                                isCredit: Value(isCreditor),
+                                userId: const Value(0),
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ),
                     10.widthBox,
