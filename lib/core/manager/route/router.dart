@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dzpos/core/common_blocs/profile/profile_bloc.dart';
+import 'package:dzpos/core/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -20,10 +21,29 @@ abstract class AppRouter {
         routes: [
           AppRoutes.home.goRoute([
             AppRoutes.invoices.goRoute([
-              AppRoutes.newSaleInvoice.goRoute(),
-              AppRoutes.newPurchaseInvoice.goRoute(),
+              AppRoutes.newInvoice.goRoute(
+                [],
+                (context, state) {
+                  return MaterialPage(
+                    key: state.pageKey,
+                    child: NewInvoicePage(
+                      type: state.extra as InvoiceType,
+                    ),
+                  );
+                },
+              ),
               AppRoutes.listOfMaterials.goRoute(),
-              AppRoutes.product.goRoute(),
+              AppRoutes.product.goRoute(
+                [],
+                (context, state) {
+                  return MaterialPage(
+                    key: state.pageKey,
+                    child: ProductPage(
+                      product: state.extra as FullProduct?,
+                    ),
+                  );
+                },
+              ),
             ]),
             AppRoutes.accounts.goRoute([
               AppRoutes.newAccount.goRoute(),

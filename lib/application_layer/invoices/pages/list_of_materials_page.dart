@@ -1,7 +1,4 @@
-import 'package:dzpos/application_layer/invoices/cubit/list_of_products_cubit.dart';
-import 'package:dzpos/application_layer/invoices/invoices.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/data/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +6,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/manager/route/routes.dart';
 import '../../../core/services/database.dart';
+import '../../application_layer.dart';
 
 class ListOfMaterialsPage extends StatelessWidget {
   const ListOfMaterialsPage({super.key});
@@ -16,7 +14,7 @@ class ListOfMaterialsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ListOfProductsCubit(),
+      create: (context) => ListOfProductsCubit(invoicesRepository),
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () {
@@ -37,6 +35,7 @@ class _MaterialsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final listOfProductsCubit = context.read<ListOfProductsCubit>();
     return NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
@@ -125,9 +124,76 @@ class _MaterialsBody extends StatelessWidget {
                   child: ListView.builder(
                     itemCount: state.products.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          state.products[index].name,
+                      final product = state.products[index];
+
+                      return Dismissible(
+                        key: ValueKey(product.productId),
+                        background: Container(color: context.error),
+                        onDismissed: (direction) async {
+                          final result = await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text("Delete Product"),
+                                content: Text(
+                                    "Deleting product ${product.productId}"),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, "No");
+                                    },
+                                    child: const Text("Cancel"),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: context.error,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context, "Yes");
+                                    },
+                                    child: Text(
+                                      "Yes",
+                                      style: context.textTheme.titleLarge!
+                                          .copyWith(
+                                        color: context.onError,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+
+                          if (result == "Yes") {
+                            listOfProductsCubit.deleteProduct(product);
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            onTap: () {
+                              context.pushNamed(
+                                AppRoutes.product.name,
+                                extra: product,
+                              );
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide(
+                                  color: context.primaryColor,
+                                  width: 2,
+                                )),
+                            title: Text(product.productName),
+                            subtitle: Row(
+                              children: [
+                                Text(
+                                    "Units In stock ${product.unitInStock}\n category:${product.category.name}"),
+                                const Spacer(),
+                                Text(
+                                    "price :${product.getUnit?.price ?? "0.0"}")
+                              ],
+                            ),
+                          ),
                         ),
                       );
                     },
@@ -173,7 +239,7 @@ class _MaterialsBody extends StatelessWidget {
 }
 
 class MaterialSearchDelegate extends SearchDelegate {
-  final List<Product> materials;
+  final List<FullProduct> materials;
 
   MaterialSearchDelegate(this.materials);
   @override
@@ -204,20 +270,20 @@ class MaterialSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return ProductPage(product: ProductModel(product: materials[i]));
+    return ProductPage(product: materials[i]);
   }
 
   int i = 0;
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestions =
-        materials.where((element) => element.name.contains(query));
+        materials.where((element) => element.productName.contains(query));
     return ListView.builder(
       itemCount: query.isEmpty ? materials.length : suggestions.length,
       itemBuilder: (context, index) {
         final name = query.isEmpty
-            ? materials[index].name
-            : suggestions.elementAt(index).name;
+            ? materials[index].productName
+            : suggestions.elementAt(index).productName;
         return ListTile(
           title: Text(name),
           onTap: () {

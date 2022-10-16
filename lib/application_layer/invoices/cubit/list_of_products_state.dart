@@ -6,13 +6,13 @@ class ListOfProductsState extends Equatable {
     this.products = const [],
   });
   final Status status;
-  final List<Product> products;
+  final List<FullProduct> products;
   @override
   List<Object> get props => [status, products];
 
   ListOfProductsState copyWith({
     Status? status,
-    List<Product>? products,
+    List<FullProduct>? products,
   }) =>
       ListOfProductsState(
         status: status ?? this.status,

@@ -1,18 +1,16 @@
-import 'package:dzpos/application_layer/application_layer.dart';
-import 'package:dzpos/application_layer/invoices/cubit/product_cubit.dart';
+import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/data/models/product_model.dart';
-import 'package:dzpos/product/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../core/enums.dart';
+import '../../../core/services/database.dart';
+import '../../../product/product.dart';
+import '../../application_layer.dart';
 
 class ProductPage extends StatefulWidget {
-  final ProductModel? product;
+  final FullProduct? product;
   const ProductPage({super.key, this.product});
 
   @override
@@ -34,17 +32,9 @@ class _ProductPageState extends State<ProductPage>
       create: (context) => ProductCubit(),
       child: Builder(builder: (context) {
         return BlocListener<ProductCubit, ProductState>(
+          listenWhen: (previous, current) => previous.status != current.status,
           listener: (context, state) {
-            if (state.status == Status.failure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  backgroundColor: context.error,
-                  content: const Text(
-                    "Something went wrong !! \n product name or category not set",
-                  ),
-                ),
-              );
-            }
+            statusHandler(context, state.status, msg: state.msg);
           },
           child: Scaffold(
             floatingActionButton: FloatingActionButton(
@@ -98,23 +88,27 @@ class _UnitsBarcode extends StatelessWidget {
   Widget build(BuildContext context) {
     final productCubit = context.read<ProductCubit>();
 
-    return ListView.separated(
-      itemCount: productCubit.state.units.length + 1,
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-      itemBuilder: (context, index) {
-        if (index >= productCubit.state.units.length) {
-          return ElevatedButton(
-            onPressed: () {
-              // todo: add multiple units
-            },
-            child: const Text("Add new Unit"),
-          );
-        }
-        return _ProductCard(
-          index: index,
+    return BlocBuilder<ProductCubit, ProductState>(
+      buildWhen: (previous, current) =>
+          previous.product.unitsList != current.product.unitsList,
+      builder: (context, state) {
+        return ListView.separated(
+          itemCount: productCubit.state.product.unitsList.length + 1,
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+          itemBuilder: (context, index) {
+            if (index >= productCubit.state.product.unitsList.length) {
+              return ElevatedButton(
+                onPressed: productCubit.addEmptyUnit,
+                child: const Text("Add new Unit"),
+              );
+            }
+            return _ProductCard(
+              index: index,
+            );
+          },
+          separatorBuilder: (context, index) => 10.h.heightBox,
         );
       },
-      separatorBuilder: (context, index) => 10.h.heightBox,
     );
   }
 }
@@ -128,6 +122,7 @@ class _ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productCubit = context.read<ProductCubit>();
     return Card(
       margin: EdgeInsets.symmetric(vertical: 10.h),
       child: Padding(
@@ -141,7 +136,9 @@ class _ProductCard extends StatelessWidget {
                 Expanded(
                   child: AppTextField(
                     hint: "Barcode",
-                    // onChanged: productCubit.onCodeChanged,
+                    onChanged: (input) {
+                      productCubit.onCodeUnitUpdated(index, input);
+                    },
                   ),
                 ),
               ],
@@ -153,8 +150,13 @@ class _ProductCard extends StatelessWidget {
                 10.w.widthBox,
                 Expanded(
                   child: AppTextField(
-                      // onChanged: productCubit.onPriceChanged,
-                      ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onChanged: (input) {
+                      productCubit.onPriceUnitUpdated(index, input);
+                    },
+                  ),
                 ),
               ],
             ),
@@ -165,8 +167,13 @@ class _ProductCard extends StatelessWidget {
                 10.w.widthBox,
                 Expanded(
                   child: AppTextField(
-                      // onChanged: productCubit.onBoxChanged,
-                      ),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    onChanged: (input) {
+                      productCubit.onBoxUnitUpdated(index, input);
+                    },
+                  ),
                 ),
               ],
             ),
@@ -202,7 +209,7 @@ class _ProductInfo extends StatelessWidget {
         20.h.heightBox,
         BlocBuilder<ProductCubit, ProductState>(
           buildWhen: (previous, current) =>
-              previous.productName != current.productName,
+              previous.product.productName != current.product.productName,
           builder: (context, state) {
             return AppTextField(
               hint: "Product name",
@@ -215,59 +222,73 @@ class _ProductInfo extends StatelessWidget {
           children: [
             const Text("Category :"),
             20.widthBox,
-            FutureBuilder<List<ProductCategory>>(
-              builder: (context, snapshot) {
-                if (snapshot.connectionState.isLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+            Expanded(
+              child: StreamBuilder<List<ProductCategory>>(
+                stream: invoicesRepository.watchCategories,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState.isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  final categories = snapshot.data!;
+                  print(categories);
+                  if (categories.isEmpty) {
+                    return const Text("No category found !!");
+                  }
+                  productCubit.onCategorySelected(categories.first);
+                  return BlocBuilder<ProductCubit, ProductState>(
+                    buildWhen: (previous, current) =>
+                        previous.product.category != current.product.category,
+                    builder: (context, state) {
+                      return DropdownButton<ProductCategory>(
+                        isExpanded: true,
+                        // value: state.product.category,
+                        items: categories
+                            .map((e) => DropdownMenuItem<ProductCategory>(
+                                child: Text(e.name)))
+                            .toList(),
+                        onChanged: productCubit.onCategorySelected,
+                      );
+                    },
                   );
-                }
-                final categories = snapshot.data!;
-                return DropdownButton<ProductCategory>(
-                  items: categories
-                      .map((e) => DropdownMenuItem<ProductCategory>(
-                          child: Text(e.name)))
-                      .toList(),
-                  onChanged: (value) {
-                    productCubit.onCategorySelected(value!);
-                  },
-                );
-              },
+                },
+              ),
             ),
             10.w.widthBox,
             IconButton(
               onPressed: () async {
-                final categoryName = await showDialog(
+                await showDialog(
                   context: context,
                   builder: (context) {
                     return Dialog(
                       child: StatefulBuilder(
                         builder: (context, setState) {
-                          String categoryName = "";
-                          return Column(
-                            children: [
-                              AppTextField(
-                                onChanged: (input) {
-                                  categoryName = input;
-                                },
-                              ),
-                              10.heightBox,
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.pop(context, categoryName);
-                                },
-                                child: const Center(
-                                  child: Text("Save"),
+                          return Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                AppTextField(
+                                  onChanged: productCubit.onCategoryChanged,
                                 ),
-                              )
-                            ],
+                                10.heightBox,
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Center(
+                                    child: Text("Save"),
+                                  ),
+                                )
+                              ],
+                            ),
                           );
                         },
                       ),
                     );
                   },
                 );
-                productCubit.onCategoryChanged(categoryName);
                 productCubit.saveCategory();
               },
               icon: const Icon(Icons.add),
@@ -282,7 +303,9 @@ class _ProductInfo extends StatelessWidget {
             Expanded(
               child: AppTextField(
                 onChanged: productCubit.onUnitInStockChanged,
-                keyboardType: TextInputType.number,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
               ),
             ),
           ],

@@ -10,84 +10,222 @@ part 'product_state.dart';
 
 class ProductCubit extends Cubit<ProductState> {
   final InvoicesRepository repository = InvoicesRepositoryImpl();
-  final Product? product;
-  ProductCubit({this.product}) : super(const ProductState()) {
-    if (product != null) {
-      emit(state.copyWith(
-        id: product!.id,
-        productName: product!.name,
-        productCode: product!.code,
-        unitInStock: product!.unitInStock,
-      ));
+
+  ProductCubit({FullProduct? product}) : super(const ProductState()) {
+    if (product == null) {
+      // if the product is null we create empty product
+      repository.createEmptyProduct().then(
+        (value) {
+          emit(state.copyWith(
+            product: value,
+          ));
+        },
+      );
+    } else {
+      emit(state.copyWith(product: product));
     }
   }
 
   void onNameChanged(String value) {
-    emit(state.copyWith(
-      productName: value,
-    ));
+    final fullProduct = state.product;
+    emit(
+      state.copyWith(
+        product: fullProduct.copyWith(
+            product: fullProduct.product.copyWith(
+          name: value,
+        )),
+      ),
+    );
   }
 
   void onCodeChanged(String value) {
-    emit(state.copyWith(
-      productCode: value,
-    ));
+    final fullProduct = state.product;
+    emit(
+      state.copyWith(
+        product: fullProduct.copyWith(
+            product: fullProduct.product.copyWith(
+          code: Value(value),
+        )),
+      ),
+    );
   }
 
   void onUnitInStockChanged(String value) {
-    emit(state.copyWith(
-      unitInStock: double.tryParse(value),
-    ));
-  }
-
-  void onPriceChanged(String value) {
-    emit(state.copyWith(
-      price: double.tryParse(value),
-    ));
-  }
-
-  void onBoxChanged(String value) {
-    emit(state.copyWith(
-      box: double.tryParse(value),
-    ));
+    final fullProduct = state.product;
+    final unitInStock = double.tryParse(value);
+    if (unitInStock != null) {
+      emit(
+        state.copyWith(
+          product: fullProduct.copyWith(
+              product: fullProduct.product.copyWith(
+            unitInStock: unitInStock,
+          )),
+        ),
+      );
+    }
   }
 
   void onCategoryChanged(String category) {
+    print(category);
     emit(state.copyWith(
       categoryName: category,
     ));
   }
 
-  void onCategorySelected(ProductCategory category) {
-    emit(state.copyWith(category: category));
+  void onCategorySelected(ProductCategory? category) {
+    final fullProduct = state.product;
+    emit(
+      state.copyWith(
+        product: fullProduct.copyWith(
+          category: category,
+        ),
+      ),
+    );
   }
 
   void saveCategory() async {
-    final id = await repository.insertCategory(ProductCategoriesCompanion(
-      name: Value(state.categoryName),
-    ));
-
-    emit(state.copyWith(
-      category: ProductCategory(id: id, name: state.categoryName),
-    ));
-  }
-
-  void saveProduct() {
-    if (state.category != null && state.productName.isNotEmpty) {
-      repository.insertProduct(
-        ProductsCompanion(
-          categoryId: Value(state.category!.id),
-          code: Value(state.productCode),
-          name: Value(state.productName),
-          discountPercentage: const Value(1),
-          reorderLevel: const Value(0),
-          unitInStock: Value(state.unitInStock),
+    if (state.categoryName.isNotEmpty) {
+      final id = await repository.insertCategory(ProductCategoriesCompanion(
+        name: Value(state.categoryName),
+      ));
+      final category = ProductCategory(id: id, name: state.categoryName);
+      final fullProduct = state.product;
+      emit(
+        state.copyWith(
+          product: fullProduct.copyWith(
+            category: category,
+          ),
         ),
       );
-    } else {
+    }
+  }
+
+  void addEmptyUnit() {
+    final fullProduct = state.product;
+    List<ProductUnit> unitsList = [];
+    unitsList.addAll([
+      ...fullProduct.unitsList,
+      ProductUnit(
+        id: -1,
+        code: "",
+        price: 0,
+        box: 0,
+        subTotal: 0,
+        productId: fullProduct.productId,
+      ),
+    ]);
+
+    emit(
+      state.copyWith(
+        product: fullProduct.copyWith(
+          unitsList: unitsList,
+        ),
+      ),
+    );
+  }
+
+  void onCodeUnitUpdated(int index, String input) {
+    final fullProduct = state.product;
+    List<ProductUnit> unitsList = [];
+    unitsList.addAll(fullProduct.unitsList);
+    unitsList.removeAt(index);
+    unitsList.insert(
+        index,
+        fullProduct.unitsList[index].copyWith(
+          code: input,
+        ));
+
+    emit(
+      state.copyWith(
+        product: fullProduct.copyWith(
+          unitsList: unitsList,
+        ),
+      ),
+    );
+  }
+
+  void onPriceUnitUpdated(int index, String input) {
+    final fullProduct = state.product;
+    final price = double.tryParse(input);
+
+    if (price != null) {
+      List<ProductUnit> unitsList = [];
+      unitsList.addAll(fullProduct.unitsList);
+      unitsList.removeAt(index);
+      unitsList.insert(
+          index,
+          fullProduct.unitsList[index].copyWith(
+            price: price,
+          ));
+
+      emit(
+        state.copyWith(
+          product: fullProduct.copyWith(
+            unitsList: unitsList,
+          ),
+        ),
+      );
+    }
+  }
+
+  void onBoxUnitUpdated(int index, String input) {
+    final fullProduct = state.product;
+    final box = double.tryParse(input);
+    if (box != null) {
+      List<ProductUnit> unitsList = [];
+      unitsList.addAll(fullProduct.unitsList);
+      unitsList.removeAt(index);
+      unitsList.insert(
+          index,
+          fullProduct.unitsList[index].copyWith(
+            box: box,
+          ));
+
+      emit(
+        state.copyWith(
+          product: fullProduct.copyWith(
+            unitsList: unitsList,
+          ),
+        ),
+      );
+    }
+  }
+
+  void saveProduct() async {
+    try {
+      final product = state.product;
+      if (product.isNotEmpty) {
+        if (product.unitsList.isNotEmpty) {
+          await repository.writeProduct(product);
+          emit(state.copyWith(
+            save: true,
+            status: Status.success,
+            msg: "product added successfully",
+          ));
+        } else {
+          emit(state.copyWith(
+            status: Status.failure,
+            msg: "please add at least on unit",
+          ));
+        }
+      } else {
+        emit(state.copyWith(
+          status: Status.failure,
+          msg: "The product is empty",
+        ));
+      }
+    } on Exception {
       emit(state.copyWith(
         status: Status.failure,
       ));
     }
+  }
+
+  @override
+  Future<void> close() {
+    if (!state.save) {
+      repository.deleteProduct(state.product.productId);
+    }
+    return super.close();
   }
 }

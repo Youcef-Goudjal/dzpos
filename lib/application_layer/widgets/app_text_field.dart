@@ -49,6 +49,7 @@ class _AppTextFieldState extends State<AppTextField> {
         ],
         Expanded(
           child: TextFormField(
+            
             initialValue: widget.initialValue,
             enabled: widget.enabled,
             maxLines: widget.maxLine,

@@ -37,9 +37,9 @@ class Users extends Table {
 /// user_id:  refers to the user who encoded the item information.
 @DataClassName("Product")
 class Products extends Table {
-  IntColumn get id => integer().named("product_id").autoIncrement()();
-  TextColumn get code => text().nullable().named("product_code")();
-  TextColumn get name => text().named("product_name")();
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get code => text().nullable()();
+  TextColumn get name => text()();
   IntColumn get categoryId => integer().references(ProductCategories, #id)();
   RealColumn get unitInStock => real().withDefault(const Constant(0))();
   RealColumn get discountPercentage =>
@@ -114,6 +114,7 @@ class Sales extends Table {
   IntColumn get salesId => integer().autoIncrement()();
   IntColumn get invoiceId => integer().references(Invoices, #id)();
   IntColumn get productId => integer().references(Products, #id)();
+  IntColumn get unitId => integer().references(ProductUnits, #id)();
   RealColumn get quantity => real()();
   RealColumn get unitPrice => real()();
   RealColumn get subTotal => real().generatedAs(quantity * unitPrice)();

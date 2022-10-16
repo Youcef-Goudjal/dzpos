@@ -27,7 +27,37 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   }
 
   @override
-  Future<int> startInvoice(InvoicesCompanion invoice) {
-    return invoicesDao.startInvoice(invoice);
+  Stream<List<FullProduct>> get watchProducts => invoicesDao.watchProducts;
+
+  @override
+  Future<FullInvoice> createEmptyInvoice() {
+    return invoicesDao.createEmptyInvoice();
+  }
+
+  @override
+  Future<FullProduct> createEmptyProduct() {
+    return invoicesDao.createEmptyProduct();
+  }
+
+  @override
+  Future<void> writeProduct(FullProduct fullProduct) {
+    return invoicesDao.writeProduct(fullProduct);
+  }
+
+  @override
+  Future<FullInvoice> get allInvoices => invoicesDao.allInvoices;
+
+  @override
+  Future<void> writeInvoice(FullInvoice fullInvoice) {
+    return invoicesDao.writeInvoice(fullInvoice);
+  }
+
+  @override
+  Stream<List<ProductCategory>> get watchCategories =>
+      invoicesDao.watchCategories;
+
+  @override
+  Future<void> deleteProduct(int productId) {
+    return invoicesDao.deleteProduct(productId);
   }
 }

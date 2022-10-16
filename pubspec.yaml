@@ -78,7 +78,10 @@ dependencies:
   uuid: ^3.0.6
   chips_choice: ^2.1.1
   intl: ^0.17.0
- 
+  syncfusion_flutter_xlsio: ^20.3.49-beta
+  draggable_scrollbar: ^0.1.0
+  flutter_barcode_scanner: ^2.0.0
+  rxdart: ^0.27.5
 
 
 dev_dependencies:

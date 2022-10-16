@@ -14,8 +14,7 @@ enum AppRoutes {
   splash("/splash", "SPLASH", SplashPage()),
   home('/home', 'HOME', HomePage()),
   invoices("invoices", "Invoices", InvoicesPage()),
-  newSaleInvoice("newSale", "NewSale", NewSalePage()),
-  newPurchaseInvoice("newPurchase", "NewPurchase", NewPurchasePage()),
+  newInvoice("newInvoice", "NewInvoice", NewInvoicePage()),
   listOfMaterials("listOfMaterials", "ListOfMaterials", ListOfMaterialsPage()),
   product("product", "Product", ProductPage()),
   settings("settings", "Settings", SettingsPage()),
@@ -47,7 +46,6 @@ enum AppRoutes {
       routes: routes ?? [],
       pageBuilder: pageBuilder ??
           (context, state) {
-            
             return MaterialPage(
               key: state.pageKey,
               child: view,

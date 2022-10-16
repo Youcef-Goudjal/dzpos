@@ -1,3 +1,4 @@
+import 'package:dzpos/application_layer/invoices/invoices.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/data/repositories/repositories.dart';
 import 'package:dzpos/domain/domain.dart';
@@ -7,7 +8,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/enums.dart';
 import '../../../core/manager/route/routes.dart';
+import '../../auth/utils.dart';
 
 final InvoicesRepository invoicesRepository = InvoicesRepositoryImpl();
 
@@ -139,43 +142,43 @@ enum Invoices {
   void onPressed(BuildContext context) {
     switch (this) {
       case Invoices.newSaleInvoice:
-        context.pushNamed(AppRoutes.newSaleInvoice.name);
+        context.pushNamed(AppRoutes.newInvoice.name, extra: InvoiceType.sell);
         break;
 
       case Invoices.newPurchaseInvoice:
-        context.pushNamed(AppRoutes.newPurchaseInvoice.name);
+        context.pushNamed(AppRoutes.newInvoice.name, extra: InvoiceType.buy);
         break;
 
       case Invoices.storeInventory:
-        // context.pushNamed(AppRoutes.newSaleInvoice.name);
-        break;
+      // context.pushNamed(AppRoutes.newSaleInvoice.name);
+      // break;
 
       case Invoices.returnedDamaged:
-        // context.pushNamed(AppRoutes.newSaleInvoice.name);
-        break;
+      // context.pushNamed(AppRoutes.newSaleInvoice.name);
+      // break;
 
       case Invoices.showInvoices:
-        // context.pushNamed(AppRoutes..name);
-        break;
+      // context.pushNamed(AppRoutes..name);
+      // break;
       case Invoices.totalDailyInvoicesReports:
-        // context.pushNamed(AppRoutes.newSaleInvoice.name);
-        break;
+      // context.pushNamed(AppRoutes.newSaleInvoice.name);
+      // break;
 
       case Invoices.activityOfTheMaterial:
-        // context.pushNamed(AppRoutes.newSaleInvoice.name);
-        break;
+      // context.pushNamed(AppRoutes.newSaleInvoice.name);
+      // break;
 
       case Invoices.editPrices:
-        // context.pushNamed(AppRoutes.newSaleInvoice.name);
-        break;
+      // context.pushNamed(AppRoutes.newSaleInvoice.name);
+      // break;
 
       case Invoices.pricingPolicy:
-        // context.pushNamed(AppRoutes.newSaleInvoice.name);
-        break;
+      // context.pushNamed(AppRoutes.newSaleInvoice.name);
+      // break;
 
       case Invoices.inventoryInvoice:
-        // context.pushNamed(AppRoutes..name);
-        break;
+      // context.pushNamed(AppRoutes..name);
+      // break;
       case Invoices.storeReconciliationAndRepair:
         // context.pushNamed(AppRoutes.newSaleInvoice.name);
         break;
@@ -185,14 +188,9 @@ enum Invoices {
         break;
 
       case Invoices.barCodeDesigner:
-        break;
+      // break;
+      default:
+        statusHandler(context, Status.failure, msg: "Coming soon!!");
     }
-  }
-
-  String? get routeName {
-    try {
-      return AppRoutes.values.byName(toString().split(".").last).name;
-    } catch (e) {}
-    return null;
   }
 }
