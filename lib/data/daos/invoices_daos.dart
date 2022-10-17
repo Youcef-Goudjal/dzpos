@@ -79,7 +79,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       /// mapping id to product
       final idToProduct = {for (var p in value) p.id: p};
       final ids = idToProduct.keys;
-      print("ids :$ids");
+      // print("ids :$ids");
       // select all units and categories that are included in any product
       final entryQuery = select(products).join(
         [
@@ -97,7 +97,6 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
           final idToCategories = <int, ProductCategory>{};
 
           for (final row in rows) {
-            print("row:$row");
             final unit = row.readTable(productUnits);
             final category = row.readTable(productCategories);
             final id = row.readTable(products).id;
@@ -125,7 +124,6 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       final product = entry.product.copyWith(
         categoryId: entry.category.id,
       );
-
       // first we write the product
       await into(products).insert(product, mode: InsertMode.replace);
 
@@ -182,8 +180,8 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
             unitId: s.unitId,
             quantity: s.quantity,
             unitPrice: s.unitPrice,
-            
           ),
+          mode: InsertMode.insertOrReplace,
         );
       }
     });
@@ -219,5 +217,100 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
     return transaction(() async {
       await (delete(productUnits)..where((tbl) => tbl.id.equals(unitId))).go();
     });
+  }
+
+  @override
+  Stream<List<FullInvoice>> get watchAllInvoices async* {
+    final invoiceStream = select(invoices).watch();
+
+    final idToProduct = {for (var p in await allProducts) p.productId: p};
+
+    yield* invoiceStream.switchMap((value) {
+      // mapping id to invoice
+      final idToInvoice = {for (var i in value) i.id: i};
+      final ids = idToInvoice.keys;
+      print("invoice ids : $ids");
+
+      final query = select(invoices).join([
+        innerJoin(accounts, accounts.id.equalsExp(invoices.customerId)),
+        innerJoin(sales, sales.invoiceId.equalsExp(invoices.id)),
+      ]);
+
+      return query.watch().map((rows) {
+        final idToSales = <int, List<FullSale>>{};
+        final idToAccount = <int, Account>{};
+
+        for (var row in rows) {
+          final sale = row.readTable(sales);
+          final account = row.readTable(accounts);
+          final id = row.readTable(invoices).id;
+          idToAccount.putIfAbsent(id, () => account);
+          idToSales.putIfAbsent(id, () => []).add(
+                FullSale(
+                  sale,
+                  idToProduct[sale.productId]!,
+                ),
+              );
+        }
+        return [
+          for (var id in ids)
+            FullInvoice(
+              idToInvoice[id]!,
+              idToSales[id] ?? [],
+              idToAccount[id] ??
+                  const Account(
+                    id: -1,
+                    name: "",
+                    accountType: AccountType.none,
+                  ),
+            )
+        ];
+      });
+    });
+  }
+
+  Future<List<FullProduct>> get allProducts async {
+    final productList = await select(products).get();
+
+    /// mapping id to product
+    final idToProduct = {for (var p in productList) p.id: p};
+    final ids = idToProduct.keys;
+
+    final query = select(products).join([
+      innerJoin(productCategories,
+          productCategories.id.equalsExp(products.categoryId)),
+      innerJoin(productUnits, productUnits.productId.equalsExp(products.id)),
+    ]);
+
+    final result = await query.get();
+    final idToUnits = <int, List<ProductUnit>>{};
+    final idToCategories = <int, ProductCategory>{};
+    for (final row in result) {
+      final unit = row.readTable(productUnits);
+      final category = row.readTable(productCategories);
+      final id = row.readTable(products).id;
+      idToUnits.putIfAbsent(id, () => []).add(unit);
+      idToCategories.putIfAbsent(id, () => category);
+    }
+    return [
+      for (var id in ids)
+        FullProduct(
+          product: idToProduct[id]!,
+          category:
+              idToCategories[id] ?? const ProductCategory(id: -1, name: ""),
+          unitsList: idToUnits[id] ?? [],
+        )
+    ];
+  }
+
+  @override
+  Future<int> deleteMultipleInvoices(List<int> ids) async {
+    await (delete(sales)..where((tbl) => tbl.invoiceId.isIn(ids))).go();
+    return await (delete(invoices)..where((tbl) => tbl.id.isIn(ids))).go();
+  }
+
+  @override
+  Future<void> removeSale(int saleId) async {
+    await (delete(sales)..where((tbl) => tbl.salesId.equals(saleId))).go();
   }
 }

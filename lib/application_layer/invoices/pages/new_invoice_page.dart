@@ -55,20 +55,23 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
   }
 
   Future _showDialog() async {
-    await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return BlocProvider.value(
-          value: context.read<NewInvoiceCubit>(),
-          child: const StartDialog(),
-        );
-      },
-    ).then((value) {
-      if (value != "Start") {
-        Navigator.pop(context);
-      }
-    });
+    final cubit = context.read<NewInvoiceCubit>();
+    if (cubit.state.state.isNew) {
+      await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) {
+          return BlocProvider.value(
+            value: cubit,
+            child: const StartDialog(),
+          );
+        },
+      ).then((value) {
+        if (value != "Start") {
+          Navigator.pop(context);
+        }
+      });
+    }
   }
 
   @override

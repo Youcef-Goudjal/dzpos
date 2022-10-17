@@ -14,7 +14,10 @@ abstract class InvoicesRepository {
   Stream<List<FullProduct>> get watchProducts;
   Future<FullInvoice> createEmptyInvoice();
   Future<FullInvoice> get allInvoices;
+  Stream<List<FullInvoice>> get watchAllInvoices;
   Future<void> writeInvoice(FullInvoice fullInvoice);
   Future<void> deleteProduct(int productId);
   Future<void> deleteInvoice(int invoiceId);
+  Future<void> removeSale(int saleId);
+  Future<int> deleteMultipleInvoices(List<int> ids);
 }

@@ -15,6 +15,7 @@ enum AppRoutes {
   home('/home', 'HOME', HomePage()),
   invoices("invoices", "Invoices", InvoicesPage()),
   newInvoice("newInvoice/:type", "NewInvoice", NewInvoicePage()),
+  showInvoices("showInvoices", "ShowInvoices", ShowInvoicesPage()),
   listOfMaterials("listOfMaterials", "ListOfMaterials", ListOfMaterialsPage()),
   product("product", "Product", ProductPage()),
   settings("settings", "Settings", SettingsPage()),

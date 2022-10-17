@@ -41,6 +41,7 @@ abstract class AppRouter {
                 },
               ),
               AppRoutes.listOfMaterials.goRoute(),
+              AppRoutes.showInvoices.goRoute(),
               AppRoutes.product.goRoute(
                 [],
                 (context, state) {

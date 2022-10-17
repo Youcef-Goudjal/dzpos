@@ -36,12 +36,15 @@ class NewInvoiceState extends Equatable {
     Status? status,
     InvoiceState? state,
     String? msg,
-  }) =>
-      NewInvoiceState(
-        invoice: invoice ?? this.invoice,
-        save: save ?? this.save,
-        // status: status ?? this.status,
-        msg: msg ?? this.msg,
-        state: state ?? this.state,
-      );
+  }) {
+    final s = this.status.isFailure ? Status.initial : this.status;
+
+    return NewInvoiceState(
+      invoice: invoice ?? this.invoice,
+      save: save ?? this.save,
+      status: status ?? s,
+      msg: msg ?? this.msg,
+      state: state ?? this.state,
+    );
+  }
 }

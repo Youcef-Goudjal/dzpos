@@ -70,4 +70,18 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   Future<void> removeUnit(int unitId) {
     return invoicesDao.removeUnit(unitId);
   }
+
+  @override
+  Stream<List<FullInvoice>> get watchAllInvoices =>
+      invoicesDao.watchAllInvoices;
+
+  @override
+  Future<int> deleteMultipleInvoices(List<int> ids) {
+    return invoicesDao.deleteMultipleInvoices(ids);
+  }
+
+  @override
+  Future<void> removeSale(int saleId) {
+    return invoicesDao.removeSale(saleId);
+  }
 }

@@ -94,7 +94,7 @@ class SettingsPage extends StatelessWidget {
           title: const Text("Print Settings"),
           tiles: [
             SettingsTile.navigation(
-              title: const Text("Reporting Componrnts + Logo"),
+              title: const Text("Reporting Components + Logo"),
               onPressed: (context) {},
             ),
             SettingsTile.navigation(

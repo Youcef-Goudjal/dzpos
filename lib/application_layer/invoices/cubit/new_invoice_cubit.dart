@@ -1,3 +1,5 @@
+import 'package:dzpos/application_layer/widgets/widgets.dart';
+import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:dzpos/domain/domain.dart';
 import 'package:equatable/equatable.dart';
@@ -222,17 +224,17 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
     }
   }
 
-  void removeSale(int index) {
+  void removeSale(int index) async {
     final fullInvoice = state.invoice;
     List<FullSale> sales = [];
     sales.addAll(fullInvoice.sales);
     sales.removeAt(index);
-    emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
     if (state.state.isUpdating) {
       // remove also from the local database
+      await invoicesRepository.removeSale(fullInvoice.sales[index].saleId);
     }
+    emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
   }
-
 
   saveInvoice(BuildContext context) async {
     // save invoice
@@ -249,12 +251,78 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
           msg: "please add at least on product",
         ));
       } else {
-        await invoicesRepository.writeInvoice(invoice);
-        emit(state.copyWith(
-          save: true,
-          status: Status.success,
-          msg: "product added successfully",
-        ));
+        final result = await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("${state.state.name} invoice"),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      children: [
+                        const Expanded(child: Text("Total :")),
+                        Expanded(
+                          child: AppTextField(
+                            enabled: false,
+                            initialValue: "${state.invoice.total}",
+                          ),
+                        ),
+                      ],
+                    ),
+                    10.heightBox,
+                    state.invoice.paymentType == PaymentType.credit
+                        ? Row(
+                            children: [
+                              const Expanded(child: Text("Amount Treated :")),
+                              Expanded(
+                                child: AppTextField(
+                                  enabled: true,
+                                  initialValue:
+                                      "${state.invoice.amountTendered}",
+                                  onChanged: onAmountTreatedChanged,
+                                ),
+                              ),
+                            ],
+                          )
+                        : const SizedBox.shrink(),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, "No");
+                  },
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: context.error,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context, "Yes");
+                  },
+                  child: Text(
+                    "Save",
+                    style: context.textTheme.titleLarge!.copyWith(
+                      color: context.onError,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+        if (result == "Yes") {
+          await invoicesRepository.writeInvoice(state.invoice);
+          emit(state.copyWith(
+            save: true,
+            status: Status.success,
+            msg: "product added successfully",
+          ));
+        }
       }
     } catch (e) {
       emit(state.copyWith(
@@ -263,6 +331,23 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
       ));
     }
   }
+
+  void onAmountTreatedChanged(String value) {
+    final fullInvoice = state.invoice;
+    final amount = double.tryParse(value);
+    if (amount != null) {
+      emit(
+        state.copyWith(
+          invoice: fullInvoice.copyWith(
+            invoice: fullInvoice.invoice.copyWith(
+              amountTendered: amount,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Future<void> close() {
     if (!state.save && state.state.isNew) {

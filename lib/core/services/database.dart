@@ -158,6 +158,10 @@ class FullInvoice extends Equatable {
     return "${dateRecorded.day}-${dateRecorded.month}";
   }
 
+  String get date2 {
+    return "${dateRecorded.day}-${dateRecorded.month}-${dateRecorded.year}";
+  }
+
   static final empty = FullInvoice(
     Invoice(
       id: -1,

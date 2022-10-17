@@ -13,9 +13,13 @@ abstract class InvoicesDataSource {
   Stream<List<FullProduct>> get watchProducts;
   Future<FullInvoice> createEmptyInvoice();
   Future<FullInvoice> get allInvoices;
+  Stream<List<FullInvoice>> get watchAllInvoices;
   Future<void> writeInvoice(FullInvoice fullInvoice);
   Future<void> deleteProduct(int productId);
+  Future<void> removeSale(int saleId);
+
   Future<void> deleteInvoice(int invoiceId);
+  Future<int> deleteMultipleInvoices(List<int> ids);
 }
 
 // class InvoicesDataSourceImpl implements InvoicesDataSource {}

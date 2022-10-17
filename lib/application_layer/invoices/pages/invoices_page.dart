@@ -158,6 +158,9 @@ enum Invoices {
         context.pushNamed(AppRoutes.listOfMaterials.name);
         break;
 
+      case Invoices.showInvoices:
+        context.pushNamed(AppRoutes.showInvoices.name);
+        break;
       case Invoices.storeInventory:
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
@@ -166,9 +169,6 @@ enum Invoices {
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 
-      case Invoices.showInvoices:
-      // context.pushNamed(AppRoutes..name);
-      // break;
       case Invoices.totalDailyInvoicesReports:
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
