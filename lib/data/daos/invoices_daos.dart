@@ -47,23 +47,27 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
 
   @override
   Future<FullInvoice> createEmptyInvoice() async {
-    final id = await into(invoices).insert(const InvoicesCompanion());
+    final id = await into(invoices).insert(InvoicesCompanion.insert(
+      customerId: -1,
+      paymentType: PaymentType.cache,
+      amountTendered: 0,
+    ));
     final invoice = Invoice(
       id: id,
-      customerId: 0,
+      customerId: -1,
       paymentType: PaymentType.cache,
       amountTendered: 0,
       dateRecorded: DateTime.now(),
     );
     const account = Account(
-      id: 0,
+      id: -1,
       name: "",
       accountType: AccountType.none,
     );
 
     return FullInvoice(
       invoice,
-      [],
+      const [],
       account,
     );
   }
@@ -127,11 +131,16 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
 
       // now we add the units
       for (final unit in entry.unitsList) {
-        await into(productUnits).insert(ProductUnitsCompanion.insert(
+        await into(productUnits).insert(
+          ProductUnitsCompanion.insert(
+            id: (unit.id == -1) ? const Value.absent() : Value(unit.id),
             code: unit.code,
             price: unit.price,
             productId: product.id,
-            box: Value(unit.box)));
+            box: Value(unit.box),
+          ),
+          mode: InsertMode.insertOrReplace,
+        );
       }
     });
   }
@@ -155,8 +164,29 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   Future<FullInvoice> get allInvoices => throw UnimplementedError();
 
   @override
-  Future<void> writeInvoice(FullInvoice fullInvoice) {
-    throw UnimplementedError();
+  Future<void> writeInvoice(FullInvoice entry) {
+    return transaction(() async {
+      final invoice = entry.invoice.copyWith(
+        customerId: entry.account.id,
+      );
+      // first we replace the invoice
+      await into(invoices).insert(invoice, mode: InsertMode.replace);
+
+      // now we add the sales
+      for (var s in entry.sales) {
+        await into(sales).insert(
+          SalesCompanion.insert(
+            salesId: (s.saleId == -1) ? const Value.absent() : Value(s.saleId),
+            invoiceId: invoice.id,
+            productId: s.productId,
+            unitId: s.unitId,
+            quantity: s.quantity,
+            unitPrice: s.unitPrice,
+            
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -172,6 +202,22 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
           .go();
 
       await (delete(products)..where((row) => row.id.equals(productId))).go();
+    });
+  }
+
+  @override
+  Future<void> deleteInvoice(int invoiceId) {
+    return transaction(() async {
+      await (delete(sales)..where((tbl) => tbl.invoiceId.equals(invoiceId)))
+          .go();
+      await (delete(invoices)..where((tbl) => tbl.id.equals(invoiceId))).go();
+    });
+  }
+
+  @override
+  Future<void> removeUnit(int unitId) {
+    return transaction(() async {
+      await (delete(productUnits)..where((tbl) => tbl.id.equals(unitId))).go();
     });
   }
 }

@@ -58,11 +58,24 @@ class FullProduct extends Equatable {
     return null;
   }
 
+  ProductUnit? unitById(int unitId) {
+    try {
+      return unitsList.where((element) => element.id == unitId).first;
+    } on Exception {
+      return null;
+    }
+  }
+
   int get productId => product.id;
   String get productName => product.name;
   String? get productCode => product.code;
   double get unitInStock => product.unitInStock;
   String get categoryName => category.name;
+
+  int? get unitId => getUnit?.id;
+  double? get priceUnit => getUnit?.price;
+  double? get boxUnit => getUnit?.box;
+  String? get codeUnit => getUnit?.code;
 
   const FullProduct({
     required this.product,
@@ -112,17 +125,108 @@ class DebtWithAccount {
   });
 }
 
-class FullInvoice {
+class FullInvoice extends Equatable {
   final Invoice invoice;
   final List<FullSale> sales;
   final Account account;
 
-  FullInvoice(this.invoice, this.sales, this.account);
+  const FullInvoice(this.invoice, this.sales, this.account);
+
+  int get invoiceId => invoice.id;
+  int get accountId => account.id;
+  PaymentType get paymentType => invoice.paymentType;
+  double? get totalAmount => invoice.totalAmount;
+  double get amountTendered => invoice.amountTendered;
+  DateTime get dateRecorded => invoice.dateRecorded;
+  String get name => account.name;
+
+  int get salesLength => sales.length;
+
+  double get total {
+    double t = 0;
+    for (var element in sales) {
+      t += element.subTotal * element.quantity;
+    }
+    return t;
+  }
+
+  String get time {
+    return "${dateRecorded.hour}-${dateRecorded.minute}";
+  }
+
+  String get date {
+    return "${dateRecorded.day}-${dateRecorded.month}";
+  }
+
+  static final empty = FullInvoice(
+    Invoice(
+      id: -1,
+      customerId: -1,
+      paymentType: PaymentType.cache,
+      amountTendered: 0,
+      dateRecorded: DateTime(2022),
+    ),
+    const [],
+    const Account(
+      id: -1,
+      name: "",
+      accountType: AccountType.none,
+    ),
+  );
+  bool get isEmpty => this == FullInvoice.empty;
+  bool get isNotEmpty => !isEmpty;
+
+  bool get isAccountEmpty => account == FullInvoice.empty.account;
+  bool get isInvoiceEmpty => invoice == FullInvoice.empty.invoice;
+
+  @override
+  List<Object?> get props => [invoice, sales, account];
+  FullInvoice copyWith({
+    Invoice? invoice,
+    List<FullSale>? sales,
+    Account? account,
+  }) =>
+      FullInvoice(
+        invoice ?? this.invoice,
+        sales ?? this.sales,
+        account ?? this.account,
+      );
 }
 
-class FullSale {
+bool useBox = true;
+
+class FullSale extends Equatable {
   final Sale sale;
   final FullProduct product;
 
-  FullSale(this.sale, this.product);
+  int get saleId => sale.salesId;
+  int get productId => sale.productId;
+  int get invoiceId => sale.invoiceId;
+  double get quantity => sale.quantity;
+  int get unitId => sale.unitId;
+  double get unitPrice => sale.unitPrice;
+  // double get subTotal => sale.subTotal;
+  String get productName => product.productName;
+
+  const FullSale(this.sale, this.product);
+
+  double get subTotal {
+    double t = 0;
+
+    double box = useBox ? (product.unitById(unitId)?.box) ?? 1 : 1;
+    t = quantity * unitPrice * box;
+    return t;
+  }
+
+  @override
+  List<Object?> get props => [sale, product];
+
+  FullSale copyWith({
+    Sale? sale,
+    FullProduct? product,
+  }) =>
+      FullSale(
+        sale ?? this.sale,
+        product ?? this.product,
+      );
 }

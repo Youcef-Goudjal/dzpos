@@ -18,11 +18,15 @@ class ProductCubit extends Cubit<ProductState> {
         (value) {
           emit(state.copyWith(
             product: value,
+            state: ProductStatus.New,
           ));
         },
       );
     } else {
-      emit(state.copyWith(product: product));
+      emit(state.copyWith(
+        product: product,
+        state: ProductStatus.Update,
+      ));
     }
   }
 
@@ -100,6 +104,21 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
+  void removeUnit(int index) async {
+    final FullProduct = state.product;
+    List<ProductUnit> unitsList = [];
+    unitsList.addAll(FullProduct.unitsList);
+    unitsList.removeAt(index);
+    await repository.removeUnit(FullProduct.unitsList[index].id);
+    emit(
+      state.copyWith(
+        product: FullProduct.copyWith(
+          unitsList: unitsList,
+        ),
+      ),
+    );
+  }
+
   void addEmptyUnit() {
     final fullProduct = state.product;
     List<ProductUnit> unitsList = [];
@@ -109,7 +128,7 @@ class ProductCubit extends Cubit<ProductState> {
         id: -1,
         code: "",
         price: 0,
-        box: 0,
+        box: 1,
         subTotal: 0,
         productId: fullProduct.productId,
       ),
@@ -217,6 +236,7 @@ class ProductCubit extends Cubit<ProductState> {
     } on Exception {
       emit(state.copyWith(
         status: Status.failure,
+        msg: "exception",
       ));
     }
   }
@@ -224,7 +244,9 @@ class ProductCubit extends Cubit<ProductState> {
   @override
   Future<void> close() {
     if (!state.save) {
-      repository.deleteProduct(state.product.productId);
+      if (state.productStatus.isNew) {
+        repository.deleteProduct(state.product.productId);
+      }
     }
     return super.close();
   }

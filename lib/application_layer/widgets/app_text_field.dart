@@ -16,6 +16,7 @@ class AppTextField extends StatefulWidget {
     this.errorText,
     this.enabled,
     this.initialValue,
+    this.isDense,
   });
   final String? initialValue;
   final TextEditingController? controller;
@@ -27,6 +28,7 @@ class AppTextField extends StatefulWidget {
   final int? maxLine;
   final String? hint;
   final bool? enabled;
+  final bool? isDense;
   String? errorText;
   final void Function(String input)? onChanged;
 
@@ -49,7 +51,6 @@ class _AppTextFieldState extends State<AppTextField> {
         ],
         Expanded(
           child: TextFormField(
-            
             initialValue: widget.initialValue,
             enabled: widget.enabled,
             maxLines: widget.maxLine,
@@ -58,7 +59,9 @@ class _AppTextFieldState extends State<AppTextField> {
             keyboardType: widget.keyboardType,
             textInputAction: widget.textInputAction,
             obscureText: widget.obscureText && _isObscure,
+            textAlign: TextAlign.center,
             decoration: InputDecoration(
+              isDense: widget.isDense,
               errorText: widget.errorText,
               suffixIcon: widget.obscureText
                   ? IconButton(

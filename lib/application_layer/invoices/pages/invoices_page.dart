@@ -1,4 +1,4 @@
-import 'package:dzpos/application_layer/invoices/invoices.dart';
+import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/data/repositories/repositories.dart';
 import 'package:dzpos/domain/domain.dart';
@@ -142,11 +142,20 @@ enum Invoices {
   void onPressed(BuildContext context) {
     switch (this) {
       case Invoices.newSaleInvoice:
-        context.pushNamed(AppRoutes.newInvoice.name, extra: InvoiceType.sell);
+        context.pushNamed(
+          AppRoutes.newInvoice.name,
+          params: <String, String>{'type': InvoiceType.sell.name},
+        );
         break;
 
       case Invoices.newPurchaseInvoice:
-        context.pushNamed(AppRoutes.newInvoice.name, extra: InvoiceType.buy);
+        context.pushNamed(
+          AppRoutes.newInvoice.name,
+          params: <String, String>{'type': InvoiceType.buy.name},
+        );
+        break;
+      case Invoices.listOfMaterials:
+        context.pushNamed(AppRoutes.listOfMaterials.name);
         break;
 
       case Invoices.storeInventory:
@@ -180,12 +189,8 @@ enum Invoices {
       // context.pushNamed(AppRoutes..name);
       // break;
       case Invoices.storeReconciliationAndRepair:
-        // context.pushNamed(AppRoutes.newSaleInvoice.name);
-        break;
-
-      case Invoices.listOfMaterials:
-        context.pushNamed(AppRoutes.listOfMaterials.name);
-        break;
+      // context.pushNamed(AppRoutes.newSaleInvoice.name);
+      // break;
 
       case Invoices.barCodeDesigner:
       // break;

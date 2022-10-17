@@ -29,7 +29,7 @@ class _ProductPageState extends State<ProductPage>
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProductCubit(),
+      create: (context) => ProductCubit(product: widget.product),
       child: Builder(builder: (context) {
         return BlocListener<ProductCubit, ProductState>(
           listenWhen: (previous, current) => previous.status != current.status,
@@ -123,63 +123,90 @@ class _ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productCubit = context.read<ProductCubit>();
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 10.h),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Row(
+    final unit = productCubit.state.product.unitsList[index];
+    return Stack(
+      children: [
+        Card(
+          elevation: 8,
+          margin: EdgeInsets.symmetric(vertical: 10.h),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
               children: [
-                SvgPicture.asset(AppAssets.barcode),
-                10.w.widthBox,
-                Expanded(
-                  child: AppTextField(
-                    hint: "Barcode",
-                    onChanged: (input) {
-                      productCubit.onCodeUnitUpdated(index, input);
-                    },
-                  ),
-                ),
-              ],
-            ),
-            10.h.heightBox,
-            Row(
-              children: [
-                const Text("Price :"),
-                10.w.widthBox,
-                Expanded(
-                  child: AppTextField(
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
+                Row(
+                  children: [
+                    SvgPicture.asset(AppAssets.barcode),
+                    10.w.widthBox,
+                    Expanded(
+                      child: AppTextField(
+                        initialValue: unit.code,
+                        hint: "Barcode",
+                        onChanged: (input) {
+                          productCubit.onCodeUnitUpdated(index, input);
+                        },
+                      ),
                     ),
-                    onChanged: (input) {
-                      productCubit.onPriceUnitUpdated(index, input);
-                    },
-                  ),
+                  ],
                 ),
-              ],
-            ),
-            10.h.heightBox,
-            Row(
-              children: [
-                const Text("box:"),
-                10.w.widthBox,
-                Expanded(
-                  child: AppTextField(
-                    keyboardType: const TextInputType.numberWithOptions(
-                      decimal: true,
+                10.h.heightBox,
+                Row(
+                  children: [
+                    const Text("Price :"),
+                    10.w.widthBox,
+                    Expanded(
+                      child: AppTextField(
+                        initialValue: "${unit.price}",
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        onChanged: (input) {
+                          productCubit.onPriceUnitUpdated(index, input);
+                        },
+                      ),
                     ),
-                    onChanged: (input) {
-                      productCubit.onBoxUnitUpdated(index, input);
-                    },
-                  ),
+                  ],
+                ),
+                10.h.heightBox,
+                Row(
+                  children: [
+                    const Text("box:"),
+                    10.w.widthBox,
+                    Expanded(
+                      child: AppTextField(
+                        initialValue: unit.box.toString(),
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        onChanged: (input) {
+                          productCubit.onBoxUnitUpdated(index, input);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+        Positioned(
+          top: 0,
+          right: 0,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              backgroundColor: context.error,
+              alignment: Alignment.center,
+            ),
+            onPressed: () {
+              productCubit.removeUnit(index);
+            },
+            child: Icon(
+              Icons.delete_forever,
+              color: context.onError,
+            ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -212,6 +239,7 @@ class _ProductInfo extends StatelessWidget {
               previous.product.productName != current.product.productName,
           builder: (context, state) {
             return AppTextField(
+              initialValue: state.product.productName,
               hint: "Product name",
               onChanged: productCubit.onNameChanged,
             );
@@ -232,7 +260,7 @@ class _ProductInfo extends StatelessWidget {
                     );
                   }
                   final categories = snapshot.data!;
-                  print(categories);
+
                   if (categories.isEmpty) {
                     return const Text("No category found !!");
                   }
@@ -243,10 +271,14 @@ class _ProductInfo extends StatelessWidget {
                     builder: (context, state) {
                       return DropdownButton<ProductCategory>(
                         isExpanded: true,
-                        // value: state.product.category,
+                        value: state.product.category,
                         items: categories
-                            .map((e) => DropdownMenuItem<ProductCategory>(
-                                child: Text(e.name)))
+                            .map(
+                              (e) => DropdownMenuItem<ProductCategory>(
+                                value: e,
+                                child: Text(e.name),
+                              ),
+                            )
                             .toList(),
                         onChanged: productCubit.onCategorySelected,
                       );
@@ -302,6 +334,7 @@ class _ProductInfo extends StatelessWidget {
             20.widthBox,
             Expanded(
               child: AppTextField(
+                initialValue: "${productCubit.state.product.unitInStock}",
                 onChanged: productCubit.onUnitInStockChanged,
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,

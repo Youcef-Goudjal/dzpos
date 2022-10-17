@@ -1,53 +1,47 @@
+// ignore_for_file: constant_identifier_names
+
 part of 'new_invoice_cubit.dart';
 
-class NewInvoiceState extends Equatable {
-  const NewInvoiceState({
-    required this.id,
-    required this.account,
-    this.amountTrended = 0,
-    this.total = 0,
-    this.date,
-    this.sales = const [],
-    this.status = Status.initial,
-    this.msg,
-  });
+enum InvoiceState {
+  New,
+  Update;
 
-  final DateTime? date;
-  final int id;
-  final double total, amountTrended;
-  final Account account;
-  final List<SalesCompanion> sales;
+  bool get isUpdating => this == InvoiceState.Update;
+  bool get isNew => this == InvoiceState.New;
+}
+
+class NewInvoiceState extends Equatable {
+  NewInvoiceState({
+    FullInvoice? invoice,
+    this.status = Status.initial,
+    this.state = InvoiceState.New,
+    this.save = false,
+    this.msg,
+  }) : invoice = invoice ?? FullInvoice.empty;
+  final FullInvoice invoice;
+  final bool save;
   final Status status;
+  final InvoiceState state;
   final String? msg;
 
   @override
   List<Object?> get props => [
-        id,
-        amountTrended,
-        total,
-        date,
-        sales,
+        invoice,
         status,
       ];
 
   NewInvoiceState copyWith({
-    DateTime? date,
-    Account? account,
-    int? id,
-    double? total,
-    double? amountTrended,
-    List<SalesCompanion>? sales,
+    FullInvoice? invoice,
+    bool? save,
     Status? status,
+    InvoiceState? state,
     String? msg,
   }) =>
       NewInvoiceState(
-        id: id ?? this.id,
-        account: account ?? this.account,
-        amountTrended: amountTrended ?? this.amountTrended,
-        total: total ?? this.total,
-        date: date ?? this.date,
-        sales: sales ?? this.sales,
-        status: status ?? this.status,
+        invoice: invoice ?? this.invoice,
+        save: save ?? this.save,
+        // status: status ?? this.status,
         msg: msg ?? this.msg,
+        state: state ?? this.state,
       );
 }

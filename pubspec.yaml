@@ -81,7 +81,13 @@ dependencies:
   syncfusion_flutter_xlsio: ^20.3.49-beta
   draggable_scrollbar: ^0.1.0
   flutter_barcode_scanner: ^2.0.0
-  rxdart: ^0.27.5
+  rxdart: ^0.26.0
+
+  # printing
+  printing: ^5.9.3
+  esc_pos_utils: ^1.1.0
+  esc_pos_printer: ^4.1.0
+  esc_pos_bluetooth: ^0.4.1
 
 
 dev_dependencies:

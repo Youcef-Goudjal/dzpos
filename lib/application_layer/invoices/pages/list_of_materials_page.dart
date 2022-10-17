@@ -1,3 +1,4 @@
+import 'package:dzpos/application_layer/widgets/confirm_delete_dialog.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -130,40 +131,8 @@ class _MaterialsBody extends StatelessWidget {
                         key: ValueKey(product.productId),
                         background: Container(color: context.error),
                         onDismissed: (direction) async {
-                          final result = await showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text("Delete Product"),
-                                content: Text(
-                                    "Deleting product ${product.productId}"),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context, "No");
-                                    },
-                                    child: const Text("Cancel"),
-                                  ),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: context.error,
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context, "Yes");
-                                    },
-                                    child: Text(
-                                      "Yes",
-                                      style: context.textTheme.titleLarge!
-                                          .copyWith(
-                                        color: context.onError,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-
+                          final result = await confirmDeleteDialog(context,
+                              msg: "deleting ${product.productName}");
                           if (result == "Yes") {
                             listOfProductsCubit.deleteProduct(product);
                           }

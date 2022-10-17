@@ -24,10 +24,18 @@ abstract class AppRouter {
               AppRoutes.newInvoice.goRoute(
                 [],
                 (context, state) {
+                  final type =
+                      InvoiceType.stringToType(state.params["type"] ?? "");
                   return MaterialPage(
                     key: state.pageKey,
-                    child: NewInvoicePage(
-                      type: state.extra as InvoiceType,
+                    child: BlocProvider(
+                      create: (context) => NewInvoiceCubit(
+                        invoicesRepository,
+                        invoice: state.extra as FullInvoice?,
+                      ),
+                      child: NewInvoicePage(
+                        type: type,
+                      ),
                     ),
                   );
                 },

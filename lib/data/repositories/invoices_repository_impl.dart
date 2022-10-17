@@ -60,4 +60,14 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   Future<void> deleteProduct(int productId) {
     return invoicesDao.deleteProduct(productId);
   }
+
+  @override
+  Future<void> deleteInvoice(int invoiceId) {
+    return invoicesDao.deleteInvoice(invoiceId);
+  }
+
+  @override
+  Future<void> removeUnit(int unitId) {
+    return invoicesDao.removeUnit(unitId);
+  }
 }
