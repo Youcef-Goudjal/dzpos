@@ -5,8 +5,10 @@ import 'package:dzpos/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/enums.dart';
+import '../../../core/manager/route/routes.dart';
 
 part 'new_invoice_state.dart';
 
@@ -354,5 +356,18 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
       invoicesRepository.deleteInvoice(state.invoice.invoiceId);
     }
     return super.close();
+  }
+
+  void printBluetooth(BuildContext context) {
+    if (state.save || state.state.isUpdating) {
+      // TODO:print directly when the printer is connected
+      context.pushNamed(AppRoutes.printingPreview.name);
+    }
+  }
+
+  void printWifi(BuildContext context) {
+    if (state.save || state.state.isUpdating) {
+      context.pushNamed(AppRoutes.printingPreview.name);
+    }
   }
 }

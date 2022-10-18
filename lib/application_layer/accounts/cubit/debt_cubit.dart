@@ -17,14 +17,15 @@ class DebtCubit extends Cubit<DebtState> {
   DebtCubit(this.accountsRepository, bool type) : super(DebtState(type: type));
 
   void accountSelected(Account account) {
-    _subscription =
-        accountsRepository.debtOfAccount(account.id).listen((event) {
-      emit(state.copyWith(
-        debts: event,
-        accountId: account.id,
-        account: account,
-      ));
-    });
+    _subscription = accountsRepository.debtOfAccount(account.id).listen(
+      (event) {
+        emit(state.copyWith(
+          debts: event,
+          accountId: account.id,
+          account: account,
+        ));
+      },
+    );
   }
 
   void onDescChanged(String desc) {

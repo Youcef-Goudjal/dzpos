@@ -29,10 +29,10 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
     FlexScheme? theme;
     ThemeMode? themeMode;
     if (oldTheme != null) {
-      theme = FlexScheme.values.byName(oldTheme);
+      theme = FlexScheme.values.byName(oldTheme.split(".").last);
     }
     if (oldThemeMode != null) {
-      themeMode = ThemeMode.values.byName(oldThemeMode);
+      themeMode = ThemeMode.values.byName(oldThemeMode.split(".").last);
     }
 
     if (theme != null || themeMode != null) {

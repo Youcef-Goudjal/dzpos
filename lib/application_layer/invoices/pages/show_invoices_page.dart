@@ -137,7 +137,9 @@ class _ActionsCard extends StatelessWidget {
           label: const Text("Update"),
         ),
         TextButton.icon(
-          onPressed: () {},
+          onPressed: () {
+            context.pushNamed(AppRoutes.printingPreview.name);
+          },
           icon: const Icon(Icons.print),
           label: const Text("Print"),
         ),

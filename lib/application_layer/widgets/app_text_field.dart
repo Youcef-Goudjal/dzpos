@@ -59,6 +59,7 @@ class _AppTextFieldState extends State<AppTextField> {
             keyboardType: widget.keyboardType,
             textInputAction: widget.textInputAction,
             obscureText: widget.obscureText && _isObscure,
+            style: context.textTheme.bodyMedium,
             textAlign: TextAlign.center,
             decoration: InputDecoration(
               isDense: widget.isDense,

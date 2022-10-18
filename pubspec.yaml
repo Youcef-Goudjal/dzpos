@@ -88,6 +88,8 @@ dependencies:
   esc_pos_utils: ^1.1.0
   esc_pos_printer: ^4.1.0
   esc_pos_bluetooth: ^0.4.1
+  charset_converter: ^2.1.0
+  esc_pos_utils_plus: ^2.0.1+6
 
 
 dev_dependencies:

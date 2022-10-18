@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../application_layer/application_layer.dart';
 import '../../common_blocs/common_blocs.dart';
+import '../../enums.dart';
 import 'routes.dart';
 
 abstract class AppRouter {
@@ -72,7 +73,12 @@ abstract class AppRouter {
               )
             ]),
             AppRoutes.reports.goRoute(),
-            AppRoutes.settings.goRoute(),
+            AppRoutes.settings.goRoute([
+              AppRoutes.defaultPrint.goRoute(),
+              AppRoutes.printLabels.goRoute(),
+              AppRoutes.printingPreview.goRoute(),
+              AppRoutes.printerModel.goRoute(),
+            ]),
           ], (context, state) {
             return MaterialPage(
               key: state.pageKey,

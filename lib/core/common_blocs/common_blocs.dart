@@ -23,6 +23,7 @@ class CommonBloc {
   static final phoneAuthBloc = PhoneAuthBloc(authImpl);
   static final themeBloc = ThemeBloc();
   static final profileBloc = ProfileBloc(authImpl, userImpl);
+  static final printerBloc = PrinterBloc();
 
   static final List<BlocProvider> blocProviders = [
     BlocProvider<ApplicationBloc>(
@@ -33,6 +34,9 @@ class CommonBloc {
     ),
     BlocProvider<ThemeBloc>(
       create: (context) => themeBloc,
+    ),
+    BlocProvider<PrinterBloc>(
+      create: (context) => printerBloc,
     ),
     BlocProvider<PhoneAuthBloc>(
       create: (context) => phoneAuthBloc,
@@ -48,6 +52,7 @@ class CommonBloc {
     themeBloc.close();
     authBloc.close();
     phoneAuthBloc.close();
+    printerBloc.close();
     profileBloc.close();
   }
 

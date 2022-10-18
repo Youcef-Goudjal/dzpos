@@ -14,31 +14,6 @@ import '../../../core/manager/route/routes.dart';
 import '../../auth/utils.dart';
 import '../../widgets/confirm_delete_dialog.dart';
 
-enum InvoiceType {
-  sell,
-  buy;
-
-  String get name {
-    switch (this) {
-      case InvoiceType.buy:
-        return "Purchase";
-      case InvoiceType.sell:
-        return "Sell";
-    }
-  }
-
-  static InvoiceType stringToType(String type) {
-    switch (type) {
-      case "Purchase":
-        return InvoiceType.buy;
-      case "Sell":
-        return InvoiceType.sell;
-      default:
-        return InvoiceType.sell;
-    }
-  }
-}
-
 class NewInvoicePage extends StatefulWidget {
   final InvoiceType type;
   const NewInvoicePage({super.key, this.type = InvoiceType.sell});
@@ -303,6 +278,7 @@ class _ActionsInvoice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final newInvoiceCubit = context.read<NewInvoiceCubit>();
     return SizedBox(
       height: 40,
       child: Row(
@@ -310,7 +286,9 @@ class _ActionsInvoice extends StatelessWidget {
         children: [
           Expanded(
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                newInvoiceCubit.printBluetooth(context);
+              },
               icon: const Icon(Icons.bluetooth_audio),
               label: const Text(
                 "Print Bluetooth",
@@ -320,7 +298,9 @@ class _ActionsInvoice extends StatelessWidget {
           10.w.widthBox,
           Expanded(
             child: ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () {
+                newInvoiceCubit.printWifi(context);
+              },
               icon: const Icon(Icons.print_outlined),
               label: const Text("Print wifi"),
             ),
