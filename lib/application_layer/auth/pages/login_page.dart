@@ -1,12 +1,14 @@
 import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/product/product.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/manager/route/routes.dart';
 import '../utils.dart';
 
@@ -57,7 +59,7 @@ class _LoginForm extends StatelessWidget {
                   image: const AssetImage(AppAssets.login),
                 ),
                 Text(
-                  "Login".toUpperCase(),
+                  LocaleKeys.Login.tr().toUpperCase(),
                   style: Theme.of(context).textTheme.headline3,
                 ),
                 10.h.heightBox,
@@ -69,12 +71,13 @@ class _LoginForm extends StatelessWidget {
                           previous.email != current.email,
                       builder: (context, state) {
                         return AppTextField(
-                          errorText:
-                              state.email.invalid ? "invalid email" : null,
+                          errorText: state.email.invalid
+                              ? "invalid email"
+                              : null, //TODO: add tr()
                           onChanged: loginCubit.emailChanged,
                           keyboardType: TextInputType.emailAddress,
                           prefix: const Icon(Icons.alternate_email_rounded),
-                          hint: "Email Address",
+                          hint: LocaleKeys.Email_Address.tr(),
                           textInputAction: TextInputAction.next,
                         );
                       },
@@ -92,7 +95,7 @@ class _LoginForm extends StatelessWidget {
                           obscureText: true,
                           prefix: const Icon(Icons.lock_outline_rounded),
                           suffix: const Icon(Icons.remove_red_eye_outlined),
-                          hint: "Password",
+                          hint: LocaleKeys.Password.tr(),
                           textInputAction: TextInputAction.done,
                         );
                       },
@@ -105,7 +108,7 @@ class _LoginForm extends StatelessWidget {
                     onPressed: () {
                       context.goNamed(AppRoutes.forgotPassword.name);
                     },
-                    child: const Text("Forgot Password ?"),
+                    child: Text(LocaleKeys.login_Forgot_Password.tr()),
                   ),
                 ),
                 SizedBox(
@@ -122,7 +125,7 @@ class _LoginForm extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: const Text("Login"),
+                    child: Text(LocaleKeys.Login.tr()),
                   ),
                 ),
                 10.heightBox,
@@ -132,11 +135,13 @@ class _LoginForm extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: "Don't have an Account ? ",
+                          text: LocaleKeys
+                              .verify_otp_An_6_Digit_code_has_been_sent_to
+                              .tr(args: ["0663519649"]),
                           style: Theme.of(context).textTheme.button,
                         ),
                         TextSpan(
-                          text: "Register here!",
+                          text: LocaleKeys.register.tr(),
                           style: Theme.of(context)
                               .textTheme
                               .button

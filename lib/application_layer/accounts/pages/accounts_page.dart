@@ -2,11 +2,13 @@ import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/product/product.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/manager/route/routes.dart';
 import '../../application_layer.dart';
 
@@ -92,10 +94,39 @@ enum Accounts {
   accountsList("Accounts List", AppAssets.userGroups), //
   openingAccount("Opening Account", AppAssets.customer); //
 
-  final String name;
+  String get name {
+    switch (this) {
+      case Accounts.payment:
+        return LocaleKeys.accounts_Payment_to_Account.tr();
+      case Accounts.catchFromAccount:
+        return LocaleKeys.accounts_Catch_From_Account.tr();
+      case Accounts.registerNewDebt:
+        return LocaleKeys.accounts_Register_New_debt.tr();
+      case Accounts.debtList:
+        return LocaleKeys.accounts_Debt_List.tr();
+      case Accounts.accountStatement:
+        return LocaleKeys.accounts_Account_Statement.tr();
+      case Accounts.boxMovement:
+        return LocaleKeys.accounts_Box_Movement.tr();
+      case Accounts.fundAndRepair:
+        return LocaleKeys.accounts_Fund_And_Repair.tr();
+      case Accounts.expenseRecording:
+        return LocaleKeys.accounts_Expense_Recording.tr();
+      case Accounts.externalRevenueRecording:
+        return LocaleKeys.accounts_External_Revenue_Recording.tr();
+      case Accounts.oldDebts:
+        return LocaleKeys.accounts_Old_Debts.tr();
+      case Accounts.accountsList:
+        return LocaleKeys.accounts_Accounts_List.tr();
+      case Accounts.openingAccount:
+        return LocaleKeys.accounts_Opening_Account.tr();
+    }
+  }
+
+  final String n;
   final String? iconPath;
 
-  const Accounts(this.name, [this.iconPath]);
+  const Accounts(this.n, [this.iconPath]);
 
   void onPressed(BuildContext context) {
     switch (this) {

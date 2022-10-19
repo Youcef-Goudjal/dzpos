@@ -1,10 +1,12 @@
 import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/product/product.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
 class ResetPasswordPage extends StatelessWidget {
@@ -55,7 +57,7 @@ class _ResetPasswordBody extends StatelessWidget {
               image: const AssetImage(AppAssets.resetPassword),
             ),
             Text(
-              "Reset\nPassword",
+              LocaleKeys.reset_password.tr(),
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             15.h.heightBox,
@@ -71,7 +73,7 @@ class _ResetPasswordBody extends StatelessWidget {
                       errorText:
                           state.code.invalid ? state.code.error!.name : null,
                       prefix: const Icon(Icons.lock),
-                      hint: "Code",
+                      hint: LocaleKeys.reset_password_Code.tr(),
                       textInputAction: TextInputAction.next,
                     );
                   },
@@ -85,7 +87,7 @@ class _ResetPasswordBody extends StatelessWidget {
                       onChanged: resetPasswordCubit.passwordChanged,
                       obscureText: true,
                       prefix: const Icon(Icons.lock_outline_rounded),
-                      hint: "New Password",
+                      hint: LocaleKeys.reset_password_New_Password.tr(),
                       suffix: const Icon(Icons.remove_red_eye_outlined),
                       textInputAction: TextInputAction.next,
                       errorText: state.newPassword.invalid
@@ -103,7 +105,7 @@ class _ResetPasswordBody extends StatelessWidget {
                       onChanged: resetPasswordCubit.confirmPasswordChanged,
                       obscureText: true,
                       prefix: const Icon(Icons.lock_outline_rounded),
-                      hint: "Confirm new Password",
+                      hint: LocaleKeys.Confirme_Password.tr(),
                       suffix: const Icon(Icons.remove_red_eye_outlined),
                       textInputAction: TextInputAction.done,
                       errorText: state.newPassword.invalid
@@ -127,7 +129,7 @@ class _ResetPasswordBody extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: const Text("Submit"),
+                child: Text(LocaleKeys.Submit.tr()),
               ),
             ),
             const SizedBox(),

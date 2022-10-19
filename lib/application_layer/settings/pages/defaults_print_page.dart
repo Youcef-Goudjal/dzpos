@@ -1,6 +1,9 @@
 import 'package:dzpos/application_layer/widgets/app_text_field.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/manager/language/locale_keys.g.dart';
 
 class DefaultPrintPage extends StatefulWidget {
   const DefaultPrintPage({super.key});
@@ -29,7 +32,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Default printing settings"),
+        title: Text(LocaleKeys.Default_printing_settings.tr()),
       ),
       body: Column(
         children: [
@@ -42,14 +45,14 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                   children: [
                     AppTextField(
                       initialValue: companyName,
-                      hint: "Company Name",
+                      hint: LocaleKeys.Company_Name.tr(),
                       onChanged: (input) {
                         companyName = input;
                       },
                     ),
                     AppTextField(
                       initialValue: companyNumbers,
-                      hint: "Company Numbers",
+                      hint: LocaleKeys.Company_Numbers.tr(),
                       onChanged: (input) {
                         companyNumbers = input;
                       },
@@ -57,7 +60,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                     10.heightBox,
                     AppTextField(
                       initialValue: companyNumbers,
-                      hint: "Company Numbers",
+                      hint: LocaleKeys.Company_Numbers.tr(),
                       onChanged: (input) {
                         companyNumbers = input;
                       },
@@ -65,7 +68,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                     10.heightBox,
                     AppTextField(
                       initialValue: companyActivity,
-                      hint: "Company Activity",
+                      hint: LocaleKeys.Company_Activity.tr(),
                       onChanged: (input) {
                         companyActivity = input;
                       },
@@ -73,7 +76,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                     10.heightBox,
                     AppTextField(
                       initialValue: companyAddress,
-                      hint: "Company Address",
+                      hint: LocaleKeys.Company_Address.tr(),
                       onChanged: (input) {
                         companyAddress = input;
                       },
@@ -96,7 +99,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                       10.heightBox,
                       CheckboxListTile(
                         value: checkBoxValues["printLogo"],
-                        title: const Text("Print Logo"),
+                        title: Text(LocaleKeys.Print_Logo.tr()),
                         onChanged: (value) {
                           setState(() {
                             checkBoxValues["printLogo"] = value!;
@@ -116,7 +119,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                   children: [
                     CheckboxListTile(
                       value: checkBoxValues["displayAccountAddress"],
-                      title: const Text("display Account Address"),
+                      title: Text(LocaleKeys.display_Account_Address.tr()),
                       onChanged: (value) {
                         setState(() {
                           checkBoxValues["displayAccountAddress"] = value!;
@@ -125,7 +128,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                     ),
                     CheckboxListTile(
                       value: checkBoxValues["DisplayTax"],
-                      title: const Text("Display Tax information"),
+                      title: Text(LocaleKeys.Display_Tax_information.tr()),
                       onChanged: (value) {
                         setState(() {
                           checkBoxValues["DisplayTax"] = value!;
@@ -134,7 +137,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                     ),
                     CheckboxListTile(
                       value: checkBoxValues["ShowMaterialNotes"],
-                      title: const Text("Show Material Notes"),
+                      title: Text(LocaleKeys.Show_Material_Notes.tr()),
                       onChanged: (value) {
                         setState(() {
                           checkBoxValues["ShowMaterialNotes"] = value!;
@@ -150,7 +153,8 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                   children: [
                     CheckboxListTile(
                       value: checkBoxValues["displayAccountContact"],
-                      title: const Text("display Account mobile number "),
+                      title:
+                          Text(LocaleKeys.display_Account_mobile_number.tr()),
                       onChanged: (value) {
                         setState(() {
                           checkBoxValues["displayAccountContact"] = value!;
@@ -159,7 +163,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                     ),
                     CheckboxListTile(
                       value: checkBoxValues["DisplayEmployeeName"],
-                      title: const Text("Display Employee Name"),
+                      title: Text(LocaleKeys.Display_Employee_Name.tr()),
                       onChanged: (value) {
                         setState(() {
                           checkBoxValues["DisplayEmployeeName"] = value!;
@@ -175,7 +179,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
             height: 40,
             color: context.colorScheme.primaryContainer,
             child: Text(
-              "Invoice contents",
+              LocaleKeys.Invoice_contents.tr(),
               style: context.textTheme.titleMedium!.copyWith(
                 color: context.colorScheme.onPrimaryContainer,
               ),
@@ -187,7 +191,8 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
               children: [
                 CheckboxListTile(
                   value: checkBoxValues["ViewBalanceBeforeAndAfter"],
-                  title: const Text("View balance before and after invoice"),
+                  title: Text(
+                      LocaleKeys.View_balance_before_and_after_invoice.tr()),
                   onChanged: (value) {
                     setState(() {
                       checkBoxValues["ViewBalanceBeforeAndAfter"] = value!;
@@ -197,7 +202,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                 10.heightBox,
                 CheckboxListTile(
                   value: checkBoxValues["DisplayPrintDateAndTime"],
-                  title: const Text("Display print date and time"),
+                  title: Text(LocaleKeys.Display_print_date_and_time.tr()),
                   onChanged: (value) {
                     setState(() {
                       checkBoxValues["DisplayPrintDateAndTime"] = value!;
@@ -207,14 +212,12 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                 10.heightBox,
                 AppTextField(
                   maxLine: 3,
-                  hint:
-                      "Information directly below the invoice,\n such as terms and conditions etc..",
+                  hint: LocaleKeys.bottom_header.tr(),
                 ),
                 10.heightBox,
                 AppTextField(
                   maxLine: 3,
-                  hint:
-                      "The bottom header\n- Write here mobile number, @ etc ...",
+                  hint: LocaleKeys.bottom_invoice.tr(),
                 ),
               ],
             ),

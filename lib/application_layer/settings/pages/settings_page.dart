@@ -4,6 +4,7 @@ import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/product/product.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:settings_ui/settings_ui.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/manager/route/routes.dart';
 import '../../../core/manager/theme/theme_manager.dart';
 
@@ -62,27 +64,27 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   late Map<String, Map<String, Map<String, dynamic>>> settings = {
-    "General Settings": {
-      "Display System information": {
+    LocaleKeys.settings_General_Settings.tr(): {
+      LocaleKeys.Display_System_information.tr(): {
         "type": SettingsActions.navigation,
         "routeName": "",
       },
-      "Users and Permission Settings": {
+      LocaleKeys.settings_Users_and_Permission_Settings.tr(): {
         "type": SettingsActions.navigation,
         "routeName": "",
       },
-      "PassCode Security on entry": {
+      LocaleKeys.settings_PassCode_Security_on_entry.tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {}
       },
-      "Always backup on exit": {
+      LocaleKeys.settings_Always_backup_on_exit.tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {}
       },
     },
-    "Language": {
+    LocaleKeys.Language.tr(): {
       "العربية": {
         "type": SettingsActions.svg,
         "svgPath": AppAssets.algeria,
@@ -96,8 +98,8 @@ class _SettingsPageState extends State<SettingsPage> {
         "svgPath": AppAssets.france,
       },
     },
-    "Theme Settings": {
-      "theme": {
+    LocaleKeys.settingsTheme_Settings.tr(): {
+      LocaleKeys.settings_theme.tr(): {
         "type": SettingsActions.custom,
         "onPressed": (BuildContext context) {},
         "kTitle": DropdownButton<FlexScheme>(
@@ -116,7 +118,7 @@ class _SettingsPageState extends State<SettingsPage> {
           },
         ),
       },
-      "Theme Mode": {
+      LocaleKeys.settings_Theme_Mode.tr(): {
         "type": SettingsActions.switchTile,
         "initialValue":
             ThemeManager.instance.defaultThemeMode == ThemeMode.dark,
@@ -127,33 +129,34 @@ class _SettingsPageState extends State<SettingsPage> {
         }
       },
     },
-    "Print Settings": {
-      'Reporting Components + Logo': {
+    LocaleKeys.settings_Print_Settings.tr(): {
+      LocaleKeys.settings_Reporting_ComponentsLogo.tr(): {
         "type": SettingsActions.navigation,
         "routeName": AppRoutes.defaultPrint.name,
       },
-      "Labels in print": {
+      LocaleKeys.settings_Labels_in_print.tr(): {
         "type": SettingsActions.navigation,
         "routeName": AppRoutes.printLabels.name,
       },
-      "Bluetooth Printer Settings": {
+      LocaleKeys.settings_Bluetooth_Printer_Settings.tr(): {
         "type": SettingsActions.navigation,
         "onPressed": (BuildContext context) {
           showPrinterSettings(context);
         },
       },
-      "Choose Printer Model": {
+      LocaleKeys.settings_Choose_Printer_Model.tr(): {
         "type": SettingsActions.navigation,
         "routeName": "",
       },
-      "Font Size": {
+      LocaleKeys.settings_Font_Size.tr(): {
         "type": SettingsActions.custom,
         "onPressed": (BuildContext context) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         },
         "title": Row(
           children: [
-            const Text("Font Size"),
+            Text(LocaleKeys.settings_Font_Size.tr()),
             20.w.widthBox,
             Expanded(
               child: TextField(
@@ -167,91 +170,105 @@ class _SettingsPageState extends State<SettingsPage> {
             10.w.widthBox,
             ElevatedButton(
               onPressed: () {},
-              child: const Text("Save"),
+              child: Text(LocaleKeys.Save.tr()),
             )
           ],
         ),
       },
     },
-    "Billing Settings": {
-      "Increase the quantity of the product in the invoice": {
+    LocaleKeys.settings_Billing_Settings.tr(): {
+      LocaleKeys.settings_Increase_the_quantity_of_the_product_in_the_invoice
+          .tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "Selling at less than cost": {
+      LocaleKeys.settings_Selling_at_less_than_cost.tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "Activate minimum quantities alert": {
+      LocaleKeys.settings_Activate_minimum_quantities_alert.tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "Allow selling while stocks last": {
+      LocaleKeys.settings_Allow_selling_while_stocks_last.tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "Separate customers and suppliers accounts in invoices": {
+      LocaleKeys.settings_Separate_customers_and_suppliers_accounts_in_invoices
+          .tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "Open the list of items on sale immediately": {
+      LocaleKeys.settings_Open_the_list_of_items_on_sale_immediately.tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "The default billing accounts is General Customer": {
+      LocaleKeys.settings_The_default_billing_accounts_is_General_Customer.tr():
+          {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "Show items frozen in the new invoice": {
+      LocaleKeys.settings_Show_items_frozen_in_the_new_invoice.tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "c": (value) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "Display frozen accounts in new invoices": {
+      LocaleKeys.settings_Display_frozen_accounts_in_new_invoices.tr(): {
         "type": SettingsActions.switchTile,
         "initialValue": false,
         "onToggle": (value) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
     },
-    "Maintenance": {
+    LocaleKeys.settings_Maintenance.tr(): {
       "Repair invoices": {
         "type": SettingsActions.custom,
         "onPressed": (BuildContext context) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "Fix Permissions": {
+      LocaleKeys.settings_Fix_Permissions.tr(): {
         "type": SettingsActions.custom,
         "onPressed": (BuildContext context) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "Modify and manage Databases": {
+      LocaleKeys.settings_Modify_and_manage_Databases.tr(): {
         "type": SettingsActions.custom,
         "leading": Icon(
           Icons.dangerous,
@@ -261,10 +278,11 @@ class _SettingsPageState extends State<SettingsPage> {
           color: context.error,
         ),
         "onPressed": (BuildContext context) {
-          statusHandler(context, Status.failure, msg: "Coming soon");
+          statusHandler(context, Status.failure,
+              msg: LocaleKeys.Coming_soon.tr());
         }
       },
-      "SignOut": {
+      LocaleKeys.SignOut.tr(): {
         "type": SettingsActions.custom,
         "leading": Icon(
           Icons.logout,

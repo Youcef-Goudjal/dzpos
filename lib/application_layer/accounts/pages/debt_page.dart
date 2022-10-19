@@ -1,9 +1,11 @@
 import 'package:dzpos/application_layer/accounts/cubit/debt_cubit.dart';
 import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
 class DebtPage extends StatelessWidget {
@@ -34,9 +36,8 @@ class DebtPage extends StatelessWidget {
                   ),
                   BlocBuilder<DebtCubit, DebtState>(
                     builder: (context, state) {
-
                       return AccountCard(
-                        initialValue: state.account?.name ,
+                        initialValue: state.account?.name,
                         isCreditor: state.type,
                         onSelected: debtCubit.accountSelected,
                         onChangeNote: debtCubit.onDescChanged,
@@ -68,20 +69,22 @@ class DebtPage extends StatelessWidget {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: const Text("Delete Debt"),
-                                      content: const Text(" delete a debt ??"),
+                                      title:
+                                          Text(LocaleKeys.delete_a_debt.tr()),
+                                      content:
+                                          Text(LocaleKeys.delete_a_debt.tr()),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
                                             Navigator.pop(context, "yes");
                                           },
-                                          child: const Text("Yes"),
+                                          child: Text(LocaleKeys.Yes.tr()),
                                         ),
                                         TextButton(
                                           onPressed: () {
                                             Navigator.pop(context, "No");
                                           },
-                                          child: const Text("No"),
+                                          child: Text(LocaleKeys.No.tr()),
                                         ),
                                       ],
                                     );

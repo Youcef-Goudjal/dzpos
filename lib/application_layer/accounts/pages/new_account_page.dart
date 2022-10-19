@@ -1,10 +1,12 @@
 import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/services/database.dart';
 
 class NewAccountPage extends StatelessWidget {
@@ -26,7 +28,10 @@ class NewAccountPage extends StatelessWidget {
         child: Builder(builder: (context) {
           return Scaffold(
             appBar: AppBar(
-              title: Text("${(account != null) ? "Updating" : "New"} Account"),
+              title: Text(((account != null)
+                      ? LocaleKeys.Updating.tr()
+                      : LocaleKeys.New.tr()) +
+                  LocaleKeys.Account.tr()),
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: context.read<NewAccountCubit>().save,
@@ -121,7 +126,7 @@ class _NewAccountBody extends StatelessWidget {
                 return AppTextField(
                   initialValue: newAccountCubit.state.name,
                   onChanged: newAccountCubit.onChangeName,
-                  hint: "Name",
+                  hint: LocaleKeys.Name.tr(),
                 );
               },
             ),
@@ -132,7 +137,7 @@ class _NewAccountBody extends StatelessWidget {
                 return AppTextField(
                   initialValue: newAccountCubit.state.email,
                   onChanged: newAccountCubit.onChangeEmail,
-                  hint: "Email",
+                  hint: LocaleKeys.Email_Address.tr(),
                 );
               },
             ),
@@ -145,7 +150,7 @@ class _NewAccountBody extends StatelessWidget {
                   initialValue: newAccountCubit.state.contact,
                   keyboardType: TextInputType.number,
                   onChanged: newAccountCubit.onChangeContact,
-                  hint: "Contact",
+                  hint: LocaleKeys.Contact.tr(),
                 );
               },
             ),

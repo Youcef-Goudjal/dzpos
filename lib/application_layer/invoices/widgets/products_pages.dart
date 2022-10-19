@@ -1,8 +1,10 @@
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
 class ProductsPage extends StatelessWidget {
@@ -14,7 +16,7 @@ class ProductsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Products List"),
+        title: Text(LocaleKeys.Products_List.tr()),
       ),
       body: StreamBuilder<List<FullProduct>>(
           stream: invoicesRepository.watchProducts,
@@ -26,8 +28,8 @@ class ProductsPage extends StatelessWidget {
             }
             final products = snapshot.data!;
             if (products.isEmpty) {
-              return const Center(
-                child: Text("No Product Fount"),
+              return Center(
+                child: Text(LocaleKeys.No_Product_Fount.tr()),
               );
             }
             return BlocBuilder<NewInvoiceCubit, NewInvoiceState>(
@@ -71,7 +73,8 @@ class ProductsPage extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                "rest: $index",
+                                LocaleKeys.rest
+                                    .tr(args: ["${product.unitInStock}"]),
                                 style: style,
                               ), //TODO: calucalte rest
                               const Spacer(),

@@ -3,11 +3,13 @@ import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/application_layer/widgets/app_text_field.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/utils/date_utils.dart';
 import '../../../data/data.dart';
 import '../../../domain/domain.dart';
@@ -55,14 +57,12 @@ class _AccountStatementBodyState extends State<_AccountStatementBody> {
       return const Center(
         child: CircularProgressIndicator(),
       );
-      
     }
     return BlocProvider(
       create: (context) => AccountStatementCubit(accountsRepository, account!),
       child: BlocListener<AccountStatementCubit, AccountStatementState>(
         listener: (context, state) {
           statusHandler(context, state.status, msg: state.msg);
-
         },
         child: Builder(builder: (context) {
           final accountStatementCubit = context.read<AccountStatementCubit>();
@@ -81,47 +81,52 @@ class _AccountStatementBodyState extends State<_AccountStatementBody> {
                     accountStatementCubit.onDateChanged(date);
                   },
                   child: Text(
-                      "From :${accountStatementCubit.state.from}  To:${accountStatementCubit.state.to}"),
+                    LocaleKeys.From.tr(
+                            args: [accountStatementCubit.state.from]) +
+                        LocaleKeys.To.tr(
+                            args: [accountStatementCubit.state.to]),
+                  ),
                 ),
               ),
             ),
             body: Column(
               children: [
                 Expanded(
-              child: BlocBuilder<AccountStatementCubit, AccountStatementState>(
-                builder: (context, state) {
-                  if (state.status.isLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  return ListView.separated(
-                    itemCount: state.debts.length,
-                    separatorBuilder: (context, index) => 15.h.heightBox,
-                    itemBuilder: (context, index) {
-                      final debt = state.debts[index];
-                      return ListTile(
-                        title: Text(
-                          "${debt.amount}",
-                          style: context.textTheme.titleLarge,
-                        ),
-                        subtitle: Text(
-                            "${DateToYMD(debt.dateRecorded)}  ${state.account.name}"),
-                        leading: debt.isCredit
-                            ? const Icon(
-                                Icons.arrow_circle_up_outlined,
-                                color: Colors.green,
-                              )
-                            : const Icon(
-                                Icons.arrow_circle_down_outlined,
-                                color: Colors.red,
-                              ),
+                  child:
+                      BlocBuilder<AccountStatementCubit, AccountStatementState>(
+                    builder: (context, state) {
+                      if (state.status.isLoading) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return ListView.separated(
+                        itemCount: state.debts.length,
+                        separatorBuilder: (context, index) => 15.h.heightBox,
+                        itemBuilder: (context, index) {
+                          final debt = state.debts[index];
+                          return ListTile(
+                            title: Text(
+                              "${debt.amount}",
+                              style: context.textTheme.titleLarge,
+                            ),
+                            subtitle: Text(
+                                "${DateToYMD(debt.dateRecorded)}  ${state.account.name}"),
+                            leading: debt.isCredit
+                                ? const Icon(
+                                    Icons.arrow_circle_up_outlined,
+                                    color: Colors.green,
+                                  )
+                                : const Icon(
+                                    Icons.arrow_circle_down_outlined,
+                                    color: Colors.red,
+                                  ),
+                          );
+                        },
                       );
                     },
-                  );
-                },
-              ),
-            ),
+                  ),
+                ),
                 Container(
                   decoration: BoxDecoration(
                     color: context.secondaryColor,
@@ -132,9 +137,9 @@ class _AccountStatementBodyState extends State<_AccountStatementBody> {
                   ),
                   height: 30,
                   child: Row(
-                    children: const [
-                      Icon(Icons.print),
-                      Text("Print detailed Report")
+                    children: [
+                      const Icon(Icons.print),
+                      Text(LocaleKeys.Print_detailed_Report.tr())
                     ],
                   ),
                 )
@@ -195,7 +200,7 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
             10.heightBox,
             Row(
               children: [
-                const Text("From :"),
+                Text(LocaleKeys.From.tr()),
                 InkWell(
                   onTap: () async {
                     await showDateRangePicker(
@@ -210,7 +215,7 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
                     enabled: false,
                   ),
                 ),
-                const Text("To :"),
+                Text(LocaleKeys.To.tr()),
                 InkWell(
                   onTap: () async {
                     dateRange = await showDateRangePicker(
@@ -237,8 +242,8 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
                     Navigator.pop(context, [account, dateRange]);
                   }
                 },
-                child: const Center(
-                  child: Text("Show Result"),
+                child: Center(
+                  child: Text(LocaleKeys.Show_Result.tr()),
                 ),
               ),
             ),

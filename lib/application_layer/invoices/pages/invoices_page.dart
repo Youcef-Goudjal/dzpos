@@ -1,14 +1,15 @@
-import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/data/repositories/repositories.dart';
 import 'package:dzpos/domain/domain.dart';
 import 'package:dzpos/product/product.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/enums.dart';
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/manager/route/routes.dart';
 import '../../auth/utils.dart';
 
@@ -131,13 +132,43 @@ enum Invoices {
   inventoryInvoice("Inventory Invoice", AppAssets.trolley),
   storeReconciliationAndRepair(
       "Store Reconciliation And Repair", AppAssets.maintenance),
-  listOfMaterials("List Of Materials", AppAssets.box), //
-  barCodeDesigner("Barcode Designer", AppAssets.qrCode);
+  listOfMaterials("List Of Materials", AppAssets.box); //
+  // barCodeDesigner("Barcode Designer", AppAssets.qrCode);
 
-  final String name;
+  String get name {
+    switch (this) {
+      case Invoices.newSaleInvoice:
+        return LocaleKeys.invoices_New_Sale_Invoice.tr();
+
+      case Invoices.newPurchaseInvoice:
+        return LocaleKeys.register_TermsCondition.tr();
+      case Invoices.storeInventory:
+        return LocaleKeys.invoices_New_Purchase_Invoice.tr();
+      case Invoices.returnedDamaged:
+        return LocaleKeys.invoices_ReturnedDamaged.tr();
+      case Invoices.showInvoices:
+        return LocaleKeys.invoices_Show_Invoices.tr();
+      case Invoices.totalDailyInvoicesReports:
+        return LocaleKeys.invoices_Total_Daily_Invoices_Reports.tr();
+      case Invoices.activityOfTheMaterial:
+        return LocaleKeys.invoices_Activity_Of_The_Material.tr();
+      case Invoices.editPrices:
+        return LocaleKeys.invoices_Edit_Prices.tr();
+      case Invoices.pricingPolicy:
+        return LocaleKeys.invoices_Pricing_Policy.tr();
+      case Invoices.inventoryInvoice:
+        return LocaleKeys.invoices_Inventory_Invoice.tr();
+      case Invoices.storeReconciliationAndRepair:
+        return LocaleKeys.invoices_Store_Reconciliation_And_Repair.tr();
+      case Invoices.listOfMaterials:
+        return LocaleKeys.invoices_List_Of_Materials.tr();
+    }
+  }
+
+  final String n;
   final String? iconPath;
 
-  const Invoices(this.name, [this.iconPath]);
+  const Invoices(this.n, [this.iconPath]);
 
   void onPressed(BuildContext context) {
     switch (this) {
@@ -192,7 +223,7 @@ enum Invoices {
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 
-      case Invoices.barCodeDesigner:
+      // case Invoices.barCodeDesigner:
       // break;
       default:
         statusHandler(context, Status.failure, msg: "Coming soon!!");

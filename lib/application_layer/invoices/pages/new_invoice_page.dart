@@ -4,12 +4,14 @@ import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:dzpos/core/utils/date_utils.dart';
 import 'package:dzpos/product/constants/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/manager/route/routes.dart';
 import '../../auth/utils.dart';
 import '../../widgets/confirm_delete_dialog.dart';
@@ -71,7 +73,7 @@ class _NewInvoicePageState extends State<NewInvoicePage> {
                       previous.invoice.account != current.invoice.account,
                   builder: (context, state) {
                     return Text(
-                        "${widget.type.name} to :${state.invoice.account.name}");
+                        "${widget.type.name} ${LocaleKeys.To.tr()} ${state.invoice.account.name}");
                   },
                 ),
                 bottom: const _BottomAppBar(),
@@ -121,10 +123,10 @@ class StartDialog extends StatelessWidget {
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  Text("Time"),
-                  Text("Date"),
-                  Text("Invoice"),
+                children: [
+                  Text(LocaleKeys.Time.tr()),
+                  Text(LocaleKeys.Date.tr()),
+                  Text(LocaleKeys.Invoice.tr()),
                 ],
               ),
             ),
@@ -197,7 +199,7 @@ class StartDialog extends StatelessWidget {
                           }
                           final accounts = snapshot.data!;
                           if (accounts.isEmpty) {
-                            return const Text("No account fount");
+                            return Text(LocaleKeys.No_account_fount.tr());
                           }
                           newInvoiceCubit.onAccountChanged(accounts.first);
                           return BlocBuilder<NewInvoiceCubit, NewInvoiceState>(
@@ -237,14 +239,14 @@ class StartDialog extends StatelessWidget {
                       groupValue:
                           state.invoice.paymentType == PaymentType.cache,
                       onChanged: newInvoiceCubit.onPaymentTypeChanged,
-                      title: const Text("Cash"),
+                      title: Text(LocaleKeys.Cash.tr()),
                     ),
                     RadioListTile(
                       value: false,
                       groupValue:
                           state.invoice.paymentType == PaymentType.cache,
                       onChanged: newInvoiceCubit.onPaymentTypeChanged,
-                      title: const Text("On credit"),
+                      title: Text(LocaleKeys.On_credit.tr()),
                     ),
                   ],
                 );
@@ -255,8 +257,8 @@ class StartDialog extends StatelessWidget {
               child: SizedBox(
                 height: 50,
                 child: ElevatedButton(
-                  child: const Center(
-                    child: Text("Start"),
+                  child: Center(
+                    child: Text(LocaleKeys.Start.tr()),
                   ),
                   onPressed: () {
                     newInvoiceCubit.onStart(context);
@@ -290,8 +292,8 @@ class _ActionsInvoice extends StatelessWidget {
                 newInvoiceCubit.printBluetooth(context);
               },
               icon: const Icon(Icons.bluetooth_audio),
-              label: const Text(
-                "Print Bluetooth",
+              label: Text(
+                LocaleKeys.Print_Bluetooth.tr(),
               ),
             ),
           ),
@@ -302,7 +304,7 @@ class _ActionsInvoice extends StatelessWidget {
                 newInvoiceCubit.printWifi(context);
               },
               icon: const Icon(Icons.print_outlined),
-              label: const Text("Print wifi"),
+              label: Text(LocaleKeys.Print_wifi.tr()),
             ),
           ),
           10.w.widthBox,
@@ -315,7 +317,7 @@ class _ActionsInvoice extends StatelessWidget {
                 );
               },
               icon: const Icon(Icons.new_label_outlined),
-              label: const Text("New Invoice"),
+              label: Text(LocaleKeys.New_Invoice.tr()),
             ),
           ),
         ],

@@ -1,12 +1,16 @@
+import 'package:dzpos/application_layer/auth/utils.dart';
+import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/manager/route/routes.dart';
 import 'package:dzpos/product/product.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
 class VerifyOTPPage extends StatelessWidget {
@@ -19,14 +23,7 @@ class VerifyOTPPage extends StatelessWidget {
       child: BlocListener<PhoneAuthBloc, PhoneAuthState>(
         listener: (context, state) {
           if (state is PhoneAuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: context.theme.errorColor,
-                content: Text(
-                  "Oops !! \n ${state.error}",
-                ),
-              ),
-            );
+            statusHandler(context, Status.failure, msg: state.error);
           }
           if (state is PhoneAuthVerified) {
             context.goNamed(AppRoutes.home.name);
@@ -69,12 +66,12 @@ class _VerifyOTPBody extends StatelessWidget {
             ),
             24.h.heightBox,
             Text(
-              "Enter OTP",
+              LocaleKeys.verify_otp_Enter_OTP.tr(),
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             10.h.heightBox,
             Text(
-              "An 6 Digit code has been sent to \n +2130663519649",
+              LocaleKeys.register_TermsCondition.tr(),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium

@@ -3,9 +3,11 @@ import 'package:dzpos/application_layer/settings/widgets/search_printers_dialog.
 import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
 class PrintingPreviewPage extends StatelessWidget {
@@ -15,7 +17,7 @@ class PrintingPreviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Printing Preview"),
+        title:  Text(LocaleKeys.Printing_Preview.tr()),
         actions: [
           IconButton(
             style: IconButton.styleFrom(
@@ -46,16 +48,16 @@ class PrintingPreviewPage extends StatelessWidget {
                   text: "Wifi",
                 ),
                 5.widthBox,
-                const KButton(
+                KButton(
                   icon: Icons.share,
                   msg: "Sharing Not supported Yet!!",
-                  text: "Share",
+                  text: LocaleKeys.Share.tr(),
                 ),
                 5.widthBox,
                 const KButton(
                   icon: Icons.picture_as_pdf,
                   msg: "PDF supported Yet!!",
-                  text: "open",
+                  text: "PDF",
                 ),
                 5.widthBox,
                 const KButton(
@@ -98,7 +100,7 @@ class _PrintingActions extends StatelessWidget {
                 return KButton(
                   alignment: false,
                   icon: Icons.bluetooth,
-                  text: "Bluetooth",
+                  text: LocaleKeys.Bluetooth.tr(),
                   onPressed: () {
                     bloc.add(PrintRequested());
                   },
@@ -107,7 +109,7 @@ class _PrintingActions extends StatelessWidget {
                 return KButton(
                   alignment: false,
                   icon: Icons.search,
-                  text: "Connect",
+                  text: LocaleKeys.Connect.tr(),
                   onPressed: () {
                     showSearchForPrintersDialog(context);
                   },
@@ -119,7 +121,7 @@ class _PrintingActions extends StatelessWidget {
           KButton(
             alignment: false,
             icon: Icons.bluetooth_disabled,
-            text: "UnPair",
+            text: LocaleKeys.UnPair.tr(),
             onPressed: () {
               CommonBloc.printerBloc.add(UnPaireRequested());
             },
@@ -128,7 +130,7 @@ class _PrintingActions extends StatelessWidget {
           KButton(
             alignment: false,
             icon: Icons.settings_bluetooth,
-            text: "Settings",
+            text: LocaleKeys.settings.tr(),
             onPressed: () {
               showPrinterSettings(context);
             },

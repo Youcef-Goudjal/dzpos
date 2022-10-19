@@ -1,11 +1,13 @@
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/manager/route/routes.dart';
 import 'package:dzpos/product/product.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 import '../utils.dart';
 
@@ -71,7 +73,7 @@ class _RegisterBody extends StatelessWidget {
               image: const AssetImage(AppAssets.register),
             ),
             Text(
-              "Register".toUpperCase(),
+              LocaleKeys.register.tr().toUpperCase(),
               style: Theme.of(context).textTheme.headline3,
             ),
             24.h.heightBox,
@@ -85,7 +87,7 @@ class _RegisterBody extends StatelessWidget {
                     return AppTextField(
                       onChanged: registerCubit.onUsernameChanged,
                       prefix: const Icon(Icons.person_outline),
-                      hint: "Username",
+                      hint: LocaleKeys.Username.tr(),
                       textInputAction: TextInputAction.done,
                       errorText: state.username.invalid
                           ? state.username.error.toString()
@@ -102,7 +104,7 @@ class _RegisterBody extends StatelessWidget {
                       onChanged: registerCubit.onEmailChanged,
                       keyboardType: TextInputType.emailAddress,
                       prefix: const Icon(Icons.alternate_email_rounded),
-                      hint: "Email Address",
+                      hint: LocaleKeys.Email_Address.tr(),
                       textInputAction: TextInputAction.done,
                       errorText: state.email.invalid
                           ? state.email.error.toString()
@@ -119,7 +121,7 @@ class _RegisterBody extends StatelessWidget {
                       onChanged: registerCubit.onPhoneChanged,
                       keyboardType: TextInputType.number,
                       prefix: const Icon(Icons.phone_outlined),
-                      hint: "Phone Number",
+                      hint: LocaleKeys.Phone_Number.tr(),
                       errorText: state.phone.invalid
                           ? state.phone.error.toString()
                           : null,
@@ -137,7 +139,7 @@ class _RegisterBody extends StatelessWidget {
                       obscureText: true,
                       prefix: const Icon(Icons.lock_outline_rounded),
                       suffix: const Icon(Icons.remove_red_eye_outlined),
-                      hint: "Password",
+                      hint: LocaleKeys.Password.tr(),
                       errorText: state.password.invalid
                           ? state.password.error.toString()
                           : null,
@@ -155,7 +157,7 @@ class _RegisterBody extends StatelessWidget {
                       obscureText: true,
                       prefix: const Icon(Icons.lock_outline_rounded),
                       suffix: const Icon(Icons.remove_red_eye_outlined),
-                      hint: "Confirme Password",
+                      hint: LocaleKeys.Confirme_Password.tr(),
                       errorText: state.confirmedPassword.invalid
                           ? state.confirmedPassword.error.toString()
                           : null,
@@ -175,22 +177,24 @@ class _RegisterBody extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "By signing up, you're agree to our ",
+                        text: LocaleKeys
+                            .register_By_signing_up_youre_agree_to_our
+                            .tr(),
                         style: Theme.of(context).textTheme.button,
                       ),
                       TextSpan(
-                        text: "Term & Condition",
+                        text: LocaleKeys.register_TermsCondition.tr(),
                         style: Theme.of(context)
                             .textTheme
                             .button
                             ?.copyWith(color: context.theme.primaryColor),
                       ),
                       TextSpan(
-                        text: " and ",
+                        text: LocaleKeys.register_and.tr(),
                         style: Theme.of(context).textTheme.button,
                       ),
                       TextSpan(
-                        text: "privacy Policy",
+                        text: LocaleKeys.register_privacy_Policy.tr(),
                         style: Theme.of(context)
                             .textTheme
                             .button
@@ -212,7 +216,7 @@ class _RegisterBody extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: const Text("Register"),
+                    child: Text(LocaleKeys.register.tr()),
                   ),
                 ),
                 24.h.heightBox,

@@ -1,10 +1,12 @@
 import 'package:dzpos/application_layer/widgets/confirm_delete_dialog.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/manager/route/routes.dart';
 import '../../../core/services/database.dart';
 import '../../application_layer.dart';
@@ -41,7 +43,7 @@ class _MaterialsBody extends StatelessWidget {
         headerSliverBuilder: (context, innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              title: const Text("Materials List"),
+              title: Text(LocaleKeys.invoices_List_Of_Materials.tr()),
               actions: [
                 BlocBuilder<ListOfProductsCubit, ListOfProductsState>(
                   builder: (context, state) {
@@ -80,7 +82,7 @@ class _MaterialsBody extends StatelessWidget {
                       onPressed: () {},
                       child: Center(
                         child: Text(
-                          "Import from an Excel",
+                          LocaleKeys.Import_from_an_Excel.tr(),
                           style: TextStyle(
                             color: context.theme.colorScheme.onPrimary,
                             fontWeight: FontWeight.bold,
@@ -98,7 +100,7 @@ class _MaterialsBody extends StatelessWidget {
                       onPressed: () {},
                       child: Center(
                         child: Text(
-                          "Export to Excel",
+                          LocaleKeys.Export_to_Excel.tr(),
                           style: TextStyle(
                             color: context.theme.colorScheme.onSecondary,
                             fontWeight: FontWeight.bold,
@@ -132,7 +134,8 @@ class _MaterialsBody extends StatelessWidget {
                         background: Container(color: context.error),
                         onDismissed: (direction) async {
                           final result = await confirmDeleteDialog(context,
-                              msg: "deleting ${product.productName}");
+                              msg:
+                                  "${LocaleKeys.deleting.tr()} ${product.productName}");
                           if (result == "Yes") {
                             listOfProductsCubit.deleteProduct(product);
                           }
@@ -155,11 +158,14 @@ class _MaterialsBody extends StatelessWidget {
                             title: Text(product.productName),
                             subtitle: Row(
                               children: [
-                                Text(
-                                    "Units In stock ${product.unitInStock}\n category:${product.category.name}"),
+                                Text(LocaleKeys.Units_In_stock_category_name.tr(
+                                    args: [
+                                      "${product.unitInStock}",
+                                      (product.categoryName)
+                                    ])),
                                 const Spacer(),
                                 Text(
-                                    "price :${product.getUnit?.price ?? "0.0"}")
+                                    "${LocaleKeys.price.tr()} ${product.getUnit?.price ?? "0.0"}")
                               ],
                             ),
                           ),
@@ -183,7 +189,7 @@ class _MaterialsBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Number of results:  ",
+                   LocaleKeys.Number_of_results.tr(),
                     style: TextStyle(
                       color: context.theme.colorScheme.onPrimaryContainer,
                     ),

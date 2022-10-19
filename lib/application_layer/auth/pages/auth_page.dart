@@ -1,10 +1,12 @@
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/manager/route/routes.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../product/product.dart';
 import '../../application_layer.dart';
 
@@ -46,7 +48,7 @@ class AuthPage extends StatelessWidget {
               ),
               const Spacer(flex: 2),
               Text(
-                "Pick Login Option".toUpperCase(),
+                LocaleKeys.auth_Pick_Login_Option.tr().toUpperCase(),
                 style: Theme.of(context).textTheme.headline3,
               ),
               const Spacer(),
@@ -69,7 +71,7 @@ class AuthPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: const Text("Login with email And Password"),
+                      child: Text(LocaleKeys.auth_Login_With_Phone_number.tr()),
                     ),
                   ),
                   10.heightBox,
@@ -88,7 +90,7 @@ class AuthPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: const Text("Login With Phone number"),
+                      child: Text(LocaleKeys.auth_Login_With_Phone_number.tr()),
                     ),
                   ),
                 ],

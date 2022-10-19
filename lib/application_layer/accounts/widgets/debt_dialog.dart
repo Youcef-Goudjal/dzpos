@@ -2,8 +2,11 @@ import 'package:drift/drift.dart' show Value;
 import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+
+import '../../../core/manager/language/locale_keys.g.dart';
 
 showDebtDialog(BuildContext context, {bool? isCreditor}) {
   showDialog(
@@ -80,7 +83,7 @@ class _DebtBodyState extends State<_DebtBody> {
               AppTextField(
                 initialValue: "0.00",
                 keyboardType: TextInputType.number,
-                hint: "Amount",
+                hint: LocaleKeys.Amount.tr(),
               ),
               10.heightBox,
               Row(
@@ -93,7 +96,7 @@ class _DebtBodyState extends State<_DebtBody> {
                       onChanged: (value) => setState(() {
                         isCreditor = value!;
                       }),
-                      title: const Text("Creditor"),
+                      title: Text(LocaleKeys.Creditor.tr()),
                     ),
                   ),
                   Expanded(
@@ -103,7 +106,7 @@ class _DebtBodyState extends State<_DebtBody> {
                       onChanged: (value) => setState(() {
                         isCreditor = value!;
                       }),
-                      title: const Text("Debtor"),
+                      title: Text(LocaleKeys.Debtor.tr()),
                     ),
                   ),
                 ],
@@ -121,7 +124,7 @@ class _DebtBodyState extends State<_DebtBody> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        child: const Text("Save"),
+                        child: Text(LocaleKeys.Save.tr()),
                         onPressed: () {
                           final amountD = double.tryParse(amount);
                           if (amountD != null && accountId != null) {
@@ -141,7 +144,7 @@ class _DebtBodyState extends State<_DebtBody> {
                     10.widthBox,
                     Expanded(
                       child: ElevatedButton(
-                        child: const Text("Cancel"),
+                        child: Text(LocaleKeys.No.tr()),
                         onPressed: () {
                           Navigator.pop(context);
                         },

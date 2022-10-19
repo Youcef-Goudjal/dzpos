@@ -1,8 +1,10 @@
 import 'package:dzpos/application_layer/invoices/pages/invoices_page.dart';
 import 'package:dzpos/application_layer/widgets/type_ahead_widget.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/services/database.dart';
 
 enum PricingPolicy {
@@ -13,11 +15,11 @@ enum PricingPolicy {
   String get name {
     switch (this) {
       case PricingPolicy.fixed:
-        return "Last sale price";
+        return LocaleKeys.Fixed_Price.tr();
       case PricingPolicy.last:
-        return "Fixed Price";
+        return LocaleKeys.Last_sale_price.tr();
       case PricingPolicy.lastAccount:
-        return "last account operation";
+        return LocaleKeys.last_account_operation.tr();
     }
   }
 

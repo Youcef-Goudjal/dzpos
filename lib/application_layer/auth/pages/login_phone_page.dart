@@ -1,9 +1,11 @@
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/manager/route/routes.dart';
 import '../../../product/product.dart';
 import '../../application_layer.dart';
@@ -76,12 +78,12 @@ class _LoginPhoneBody extends StatelessWidget {
             ),
             24.h.heightBox,
             Text(
-              "Enter Ur Phone number",
+              LocaleKeys.login_phone_Enter_Ur_Phone_number.tr(),
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             10.h.heightBox,
             Text(
-              "a 6 Digit code will be sent to ur phone number",
+              LocaleKeys.login_phone_a_6_Digit_code_will_be_sent_to_ur_phone_number.tr(),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium
@@ -95,7 +97,7 @@ class _LoginPhoneBody extends StatelessWidget {
                   onChanged: loginPhoneCubit.onPhoneChanged,
                   prefix: const Icon(Icons.phone),
                   keyboardType: TextInputType.number,
-                  hint: "Phone Number",
+                  hint: LocaleKeys.Phone_Number.tr(),
                   textInputAction: TextInputAction.done,
                   errorText:
                       state.phone.invalid ? state.phone.error.toString() : null,
@@ -115,7 +117,7 @@ class _LoginPhoneBody extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: const Text("Sent"),
+                child:  Text(LocaleKeys.login_phone_Send.tr()),
               ),
             ),
             const SizedBox(),

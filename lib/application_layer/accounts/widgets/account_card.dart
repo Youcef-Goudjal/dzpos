@@ -1,9 +1,11 @@
 import 'package:dzpos/application_layer/accounts/accounts.dart';
 import 'package:dzpos/application_layer/widgets/widgets.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/services/database.dart';
 
 class AccountCard extends StatelessWidget {
@@ -48,7 +50,9 @@ class AccountCard extends StatelessWidget {
                 itemBuilder: (context, dynamic itemData) {
                   return ListTile(
                     title: Text(itemData.name),
-                    subtitle: Text("phone : ${itemData.contact}"),
+                    subtitle: Text(
+                      LocaleKeys.Phone.tr(args: [itemData.contact]),
+                    ),
                   );
                 },
                 suggestionsCallback: (pattern) async {
@@ -66,7 +70,7 @@ class AccountCard extends StatelessWidget {
                       value: true,
                       groupValue: isCreditor,
                       onChanged: onTypeChanged,
-                      title: const Text("Creditor"),
+                      title: Text(LocaleKeys.Creditor.tr()),
                     ),
                   ),
                   Expanded(
@@ -74,7 +78,7 @@ class AccountCard extends StatelessWidget {
                       value: false,
                       groupValue: isCreditor,
                       onChanged: onTypeChanged,
-                      title: const Text("Debtor"),
+                      title: Text(LocaleKeys.Debtor.tr()),
                     ),
                   ),
                 ],
@@ -88,7 +92,7 @@ class AccountCard extends StatelessWidget {
                         SizedBox(
                           height: 50,
                           child: AppTextField(
-                            hint: "Amount",
+                            hint: LocaleKeys.Amount.tr(),
                             onChanged: onChangedAmount,
                             keyboardType: TextInputType.number,
                           ),
@@ -97,7 +101,7 @@ class AccountCard extends StatelessWidget {
                         SizedBox(
                           height: 40,
                           child: AppTextField(
-                            hint: "Notes",
+                            hint: LocaleKeys.Notes.tr(),
                             // maxLine: 2,
                             onChanged: onChangeNote,
                           ),
@@ -111,9 +115,9 @@ class AccountCard extends StatelessWidget {
                       onPressed: onSave,
                       child: Center(
                         child: Column(
-                          children: const [
-                            Icon(Icons.save),
-                            Text("Save"),
+                          children: [
+                            const Icon(Icons.save),
+                            Text(LocaleKeys.Save.tr()),
                           ],
                         ),
                       ),

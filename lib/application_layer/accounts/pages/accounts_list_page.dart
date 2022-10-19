@@ -1,8 +1,10 @@
 import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/services/database.dart';
 
 class AccountsListPage extends StatefulWidget {
@@ -35,7 +37,7 @@ class _AccountsListPageState extends State<AccountsListPage>
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
-                    title: const Text("Accounts List"),
+                    title: Text(LocaleKeys.accounts_Accounts_List.tr()),
                     actions: [
                       BlocBuilder<AccountsListCubit, AccountsListState>(
                         builder: (context, state) {
@@ -55,12 +57,12 @@ class _AccountsListPageState extends State<AccountsListPage>
                     ],
                     bottom: TabBar(
                       controller: _tabController,
-                      tabs: const [
+                      tabs: [
                         Tab(
-                          text: "Customer",
+                          text: LocaleKeys.Customer.tr(),
                         ),
                         Tab(
-                          text: "Supplier",
+                          text: LocaleKeys.Supplier.tr(),
                         )
                       ],
                     ),
@@ -114,7 +116,7 @@ class _SuppliersList extends StatelessWidget {
                     .read<AccountsListCubit>()
                     .importFromContactsAccounts(context, AccountType.supplier);
               },
-              child: const Center(child: Text("Import Suppliers")),
+              child: Center(child: Text(LocaleKeys.Import_Suppliers.tr())),
             ),
           ),
           Expanded(
@@ -125,8 +127,8 @@ class _SuppliersList extends StatelessWidget {
                       (element) => element.accountType == AccountType.supplier)
                   .toList();
               if (suppliers.isEmpty) {
-                return const Center(
-                  child: Text("No Supplier found"),
+                return Center(
+                  child: Text(LocaleKeys.No_Supplier_found.tr()),
                 );
               }
               return ListView.builder(
@@ -135,7 +137,8 @@ class _SuppliersList extends StatelessWidget {
                   final element = suppliers[index];
                   return ListTile(
                     title: Text(element.name),
-                    subtitle: Text("Phone : ${element.contact}"),
+                    subtitle: Text(
+                        LocaleKeys.Phone.tr(args: [element.contact ?? ""])),
                   );
                 },
               );
@@ -154,7 +157,7 @@ class _SuppliersList extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Number of results:  ",
+                  LocaleKeys.Number_of_results.tr(),
                   style: TextStyle(
                     color: context.theme.colorScheme.onPrimaryContainer,
                   ),
@@ -202,7 +205,7 @@ class _CustomersList extends StatelessWidget {
                     .read<AccountsListCubit>()
                     .importFromContactsAccounts(context, AccountType.customer);
               },
-              child: const Center(child: Text("Import Customers")),
+              child: Center(child: Text(LocaleKeys.Import_Customers.tr())),
             ),
           ),
           Expanded(
@@ -215,8 +218,8 @@ class _CustomersList extends StatelessWidget {
                           element.accountType == AccountType.customer)
                       .toList();
                   if (customers.isEmpty) {
-                    return const Center(
-                      child: Text("No customer found"),
+                    return Center(
+                      child: Text(LocaleKeys.No_customer_found.tr()),
                     );
                   }
                   return ListView.builder(
@@ -225,7 +228,9 @@ class _CustomersList extends StatelessWidget {
                       final element = state.accounts[index];
                       return ListTile(
                         title: Text(element.name),
-                        subtitle: Text("Phone : ${element.contact}"),
+                        subtitle: Text(
+                          LocaleKeys.Phone.tr(args: [element.contact ?? ""]),
+                        ),
                       );
                     },
                   );
@@ -244,7 +249,7 @@ class _CustomersList extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Number of results:  ",
+                  LocaleKeys.Number_of_results.tr(),
                   style: TextStyle(
                     color: context.theme.colorScheme.onPrimaryContainer,
                   ),
@@ -334,7 +339,9 @@ class AccountsSearchDelegate extends SearchDelegate {
 
         return ListTile(
           title: Text(element.name),
-          subtitle: Text("Phone : ${element.contact}"),
+          subtitle: Text(
+            LocaleKeys.Phone.tr(args: [element.contact ?? ""]),
+          ),
           onTap: () {
             selectedIndex = index;
             showResults(context);

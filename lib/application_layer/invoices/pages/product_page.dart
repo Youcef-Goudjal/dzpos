@@ -1,10 +1,12 @@
 import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/services/database.dart';
 import '../../../product/product.dart';
 import '../../application_layer.dart';
@@ -47,17 +49,17 @@ class _ProductPageState extends State<ProductPage>
               headerSliverBuilder: (context, innerBoxIsScrolled) {
                 return [
                   SliverAppBar(
-                    title: const Text("Product"),
+                    title: Text(LocaleKeys.Product.tr()),
                     bottom: TabBar(
                       controller: _tabController,
-                      tabs: const [
+                      tabs: [
                         Tab(
-                          icon: Icon(Icons.home),
-                          text: "Material info",
+                          icon: const Icon(Icons.home),
+                          text: LocaleKeys.Material_info.tr(),
                         ),
                         Tab(
-                          icon: Icon(Icons.qr_code_2_rounded),
-                          text: "Units & Barcode",
+                          icon: const Icon(Icons.qr_code_2_rounded),
+                          text: LocaleKeys.Units_Barcode.tr(),
                         ),
                       ],
                     ),
@@ -99,7 +101,7 @@ class _UnitsBarcode extends StatelessWidget {
             if (index >= productCubit.state.product.unitsList.length) {
               return ElevatedButton(
                 onPressed: productCubit.addEmptyUnit,
-                child: const Text("Add new Unit"),
+                child: Text(LocaleKeys.Add_new_Unit.tr()),
               );
             }
             return _ProductCard(
@@ -151,7 +153,7 @@ class _ProductCard extends StatelessWidget {
                 10.h.heightBox,
                 Row(
                   children: [
-                    const Text("Price :"),
+                    Text(LocaleKeys.price.tr()),
                     10.w.widthBox,
                     Expanded(
                       child: AppTextField(
@@ -169,7 +171,7 @@ class _ProductCard extends StatelessWidget {
                 10.h.heightBox,
                 Row(
                   children: [
-                    const Text("box:"),
+                    Text(LocaleKeys.box.tr()),
                     10.w.widthBox,
                     Expanded(
                       child: AppTextField(
@@ -240,7 +242,7 @@ class _ProductInfo extends StatelessWidget {
           builder: (context, state) {
             return AppTextField(
               initialValue: state.product.productName,
-              hint: "Product name",
+              hint: LocaleKeys.Product_name.tr(),
               onChanged: productCubit.onNameChanged,
             );
           },
@@ -248,7 +250,7 @@ class _ProductInfo extends StatelessWidget {
         15.h.heightBox,
         Row(
           children: [
-            const Text("Category :"),
+            Text(LocaleKeys.Category.tr()),
             20.widthBox,
             Expanded(
               child: StreamBuilder<List<ProductCategory>>(
@@ -262,7 +264,7 @@ class _ProductInfo extends StatelessWidget {
                   final categories = snapshot.data!;
 
                   if (categories.isEmpty) {
-                    return const Text("No category found !!");
+                    return Text(LocaleKeys.No_category_found.tr());
                   }
                   productCubit.onCategorySelected(categories.first);
                   return BlocBuilder<ProductCubit, ProductState>(
@@ -309,8 +311,8 @@ class _ProductInfo extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: const Center(
-                                    child: Text("Save"),
+                                  child: Center(
+                                    child: Text(LocaleKeys.Save.tr()),
                                   ),
                                 )
                               ],
@@ -330,7 +332,7 @@ class _ProductInfo extends StatelessWidget {
         15.h.heightBox,
         Row(
           children: [
-            const Text("unitInStock :"),
+            Text(LocaleKeys.unitInStock.tr()),
             20.widthBox,
             Expanded(
               child: AppTextField(

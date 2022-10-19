@@ -1,8 +1,11 @@
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/product/product.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../core/manager/language/locale_keys.g.dart';
 
 class ReportsPage extends StatelessWidget {
   const ReportsPage({Key? key}) : super(key: key);
@@ -85,7 +88,31 @@ enum Reports {
   lessMovingMaterials("Less moving materials", AppAssets.emptyBox),
   lessMobileClients("Less mobile clients", AppAssets.cv);
 
-  final String name;
+  final String n;
+  String get name {
+    switch (this) {
+      case Reports.profitLoss:
+        return LocaleKeys.reports_ProfitLoss.tr();
+      case Reports.dailyTransaction:
+        return LocaleKeys.reports_Daily_Transaction.tr();
+      case Reports.budget:
+        return LocaleKeys.reports_CapitalBudget.tr();
+      case Reports.theMostActiveCustomers:
+        return LocaleKeys.reports_The_most_Active_Customers.tr();
+      case Reports.theMostSoldMaterials:
+        return LocaleKeys.reports_The_most_sold_materials.tr();
+      case Reports.displayItemsWhoseQuantityIsLessThan:
+        return LocaleKeys.reports_Display_Items_whose_quantity_is_less_than
+            .tr();
+      case Reports.lessMobileClients:
+        return LocaleKeys.reports_Less_mobile_clients.tr();
+      case Reports.lessMovingMaterials:
+        return LocaleKeys.reports_Less_moving_materials.tr();
+      case Reports.showItemsThatHaveReachedAMinimum:
+        return LocaleKeys.reports_Show_Items_that_have_reached_a_minimum.tr();
+    }
+  }
+
   final String? iconPath;
-  const Reports(this.name, [this.iconPath]);
+  const Reports(this.n, [this.iconPath]);
 }

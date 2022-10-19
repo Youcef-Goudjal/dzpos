@@ -1,7 +1,10 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../../../core/manager/language/locale_keys.g.dart';
 
 class ContactSelector extends StatefulWidget {
   const ContactSelector({super.key});
@@ -27,7 +30,7 @@ class _ContactSelectorState extends State<ContactSelector> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Select accounts"),
+        title:  Text(LocaleKeys.Select_accounts.tr()),
       ),
       body: Column(
         children: [
@@ -62,7 +65,7 @@ class _ContactSelectorState extends State<ContactSelector> {
                 });
                 Navigator.pop(context, result);
               },
-              label: const Center(child: Text("Save")),
+              label:  Center(child: Text(LocaleKeys.Save.tr())),
             ),
           ),
           const SizedBox(

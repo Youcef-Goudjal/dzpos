@@ -3,10 +3,12 @@ import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/manager/route/routes.dart';
 import 'package:dzpos/core/services/database.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
 class ShowInvoicesPage extends StatelessWidget {
@@ -35,7 +37,7 @@ class _ShowInvoicesBody extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("invoices List"),
+          title: Text(LocaleKeys.invoices_List.tr()),
         ),
         floatingActionButton: BlocBuilder<ShowInvoicesCubit, ShowInvoicesState>(
           builder: (context, state) {
@@ -63,8 +65,8 @@ class _ShowInvoicesBody extends StatelessWidget {
             }
 
             if (state.invoices.isEmpty) {
-              return const Center(
-                child: Text("No Invoice"),
+              return Center(
+                child: Text(LocaleKeys.No_Invoice.tr()),
               );
             } else {
               return ListView.separated(
@@ -134,14 +136,14 @@ class _ActionsCard extends StatelessWidget {
             );
           },
           icon: const Icon(Icons.edit),
-          label: const Text("Update"),
+          label: Text(LocaleKeys.Update.tr()),
         ),
         TextButton.icon(
           onPressed: () {
             context.pushNamed(AppRoutes.printingPreview.name);
           },
           icon: const Icon(Icons.print),
-          label: const Text("Print"),
+          label: Text(LocaleKeys.Print.tr()),
         ),
         TextButton.icon(
           style: TextButton.styleFrom(),
@@ -153,7 +155,7 @@ class _ActionsCard extends StatelessWidget {
             color: context.error,
           ),
           label: Text(
-            "Delete",
+            LocaleKeys.Delete.tr(),
             style: context.textTheme.titleSmall!.copyWith(
               color: context.error,
             ),

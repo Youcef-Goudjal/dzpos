@@ -2,10 +2,13 @@ import 'package:dzpos/application_layer/accounts/accounts.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/utils/date_utils.dart';
 import 'package:dzpos/product/constants/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+
+import '../../../core/manager/language/locale_keys.g.dart';
 
 enum DebtType {
   all,
@@ -15,11 +18,11 @@ enum DebtType {
   String get name {
     switch (this) {
       case DebtType.debtor:
-        return "Debtor";
+        return LocaleKeys.Debtor.tr();
       case DebtType.creditor:
-        return "We pay";
+        return LocaleKeys.We_pay.tr();
       default:
-        return "All debts";
+        return LocaleKeys.All_debts.tr();
     }
   }
 
@@ -36,9 +39,9 @@ class DebtListPage extends StatefulWidget {
 class _DebtListPageState extends State<DebtListPage> {
   DebtType debtTypeSelected = DebtType.all;
   Map<String, bool> checkList = {
-    "customers": false,
-    "suppliers": true,
-    "other": true,
+    LocaleKeys.customers.tr(): false,
+    LocaleKeys.suppliers.tr(): true,
+    LocaleKeys.others.tr(): true,
   };
 
   @override
@@ -50,7 +53,7 @@ class _DebtListPageState extends State<DebtListPage> {
           headerSliverBuilder: (context, innerBoxIsScrolled) {
             return [
               SliverAppBar(
-                title: const Text("Debt List"),
+                title: Text(LocaleKeys.accounts_Debt_List.tr()),
                 actions: [
                   IconButton(
                     onPressed: () {
@@ -71,20 +74,20 @@ class _DebtListPageState extends State<DebtListPage> {
           },
           body: Column(
             children: [
-              const Text("Debt Show"),
+              Text(LocaleKeys.Debt_Show.tr()),
               Row(
                 children: [
                   Expanded(
                     child: CheckboxListTile(
-                      value: checkList["customers"],
+                      value: checkList[LocaleKeys.customers.tr()],
                       onChanged: (value) {
                         setState(() {
-                          checkList["customers"] = value!;
+                          checkList[LocaleKeys.customers.tr()] = value!;
                         });
                       },
-                      title: const Text(
-                        "Customers",
-                        style: TextStyle(
+                      title: Text(
+                        LocaleKeys.customers.tr(),
+                        style: const TextStyle(
                           overflow: TextOverflow.fade,
                         ),
                       ),
@@ -92,15 +95,15 @@ class _DebtListPageState extends State<DebtListPage> {
                   ),
                   Expanded(
                     child: CheckboxListTile(
-                      value: checkList["suppliers"],
+                      value: checkList[LocaleKeys.suppliers.tr()],
                       onChanged: (value) {
                         setState(() {
-                          checkList["suppliers"] = value!;
+                          checkList[LocaleKeys.suppliers.tr()] = value!;
                         });
                       },
-                      title: const Text(
-                        "Suppliers",
-                        style: TextStyle(
+                      title: Text(
+                        LocaleKeys.suppliers.tr(),
+                        style: const TextStyle(
                           overflow: TextOverflow.fade,
                         ),
                       ),
@@ -108,15 +111,15 @@ class _DebtListPageState extends State<DebtListPage> {
                   ),
                   Expanded(
                     child: CheckboxListTile(
-                      value: checkList["other"],
+                      value: checkList[LocaleKeys.others.tr()],
                       onChanged: (value) {
                         setState(() {
-                          checkList["other"] = value!;
+                          checkList[LocaleKeys.others.tr()] = value!;
                         });
                       },
-                      title: const Text(
-                        "Other",
-                        style: TextStyle(
+                      title: Text(
+                        LocaleKeys.others.tr(),
+                        style: const TextStyle(
                           overflow: TextOverflow.fade,
                         ),
                       ),
@@ -296,7 +299,7 @@ class _ActionsDebt extends StatelessWidget {
               showDebtDialog(context);
             },
             icon: const Icon(Icons.note_add_rounded),
-            label: const Center(child: Text("New debt")),
+            label: Center(child: Text(LocaleKeys.New_debt.tr())),
           ),
         ),
         10.w.widthBox,
@@ -306,10 +309,10 @@ class _ActionsDebt extends StatelessWidget {
               showDebtDialog(context, isCreditor: true);
             },
             icon: SvgPicture.asset(AppAssets.cashInHand),
-            label: const Center(
+            label: Center(
               child: Text(
-                "Pay for an account",
-                style: TextStyle(overflow: TextOverflow.ellipsis),
+                LocaleKeys.Pay_for_an_account.tr(),
+                style: const TextStyle(overflow: TextOverflow.ellipsis),
               ),
             ),
           ),
@@ -321,10 +324,10 @@ class _ActionsDebt extends StatelessWidget {
               showDebtDialog(context, isCreditor: false);
             },
             icon: SvgPicture.asset(AppAssets.receiveCash),
-            label: const Center(
+            label: Center(
               child: Text(
-                "Receive from an account",
-                style: TextStyle(overflow: TextOverflow.ellipsis),
+                LocaleKeys.Receive_from_an_account.tr(),
+                style: const TextStyle(overflow: TextOverflow.ellipsis),
               ),
             ),
           ),

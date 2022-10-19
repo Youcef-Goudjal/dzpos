@@ -1,6 +1,9 @@
 import 'package:dzpos/application_layer/widgets/app_text_field.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/manager/language/locale_keys.g.dart';
 
 class PrintLabels extends StatelessWidget {
   const PrintLabels({super.key});
@@ -9,7 +12,7 @@ class PrintLabels extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Printer Labels"),
+        title: Text(LocaleKeys.Printer_Labels.tr()),
       ),
       body: ListView.separated(
         itemBuilder: (context, index) {
@@ -23,9 +26,9 @@ class PrintLabels extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {},
-                child: const Text(
-                  "Edit",
-                  style: TextStyle(color: Colors.green),
+                child: Text(
+                  LocaleKeys.Edit.tr(),
+                  style: const TextStyle(color: Colors.green),
                 ),
               ),
             ],

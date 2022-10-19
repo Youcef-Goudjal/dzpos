@@ -1,10 +1,12 @@
 import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/product/constants/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
@@ -55,11 +57,11 @@ class _ForgotPasswordBody extends StatelessWidget {
               image: const AssetImage(AppAssets.forgotPassword),
             ),
             Text(
-              "Forgot\nPassword",
+              LocaleKeys.forgot_password_ForgotPassword.tr(),
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             Text(
-              "Don't worry! It happens. Please enter the email that associated with yout Account.",
+              LocaleKeys.forgot_password_desc.tr(),
               style: Theme.of(context)
                   .textTheme
                   .button
@@ -74,7 +76,7 @@ class _ForgotPasswordBody extends StatelessWidget {
                   errorText:
                       state.email.invalid ? "${state.email.error}" : null,
                   prefix: const Icon(Icons.alternate_email_rounded),
-                  hint: "Email Address",
+                  hint: LocaleKeys.Email_Address.tr(),
                   textInputAction: TextInputAction.done,
                 );
               },
@@ -92,7 +94,7 @@ class _ForgotPasswordBody extends StatelessWidget {
                     ),
                   ),
                 ),
-                child: const Text("Submit"),
+                child: Text(LocaleKeys.Submit.tr()),
               ),
             ),
             20.h.heightBox,
