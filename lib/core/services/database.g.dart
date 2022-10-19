@@ -1600,16 +1600,18 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
 
 class Invoice extends DataClass implements Insertable<Invoice> {
   final int id;
-  final int customerId;
+  final int accountId;
   final PaymentType paymentType;
+  final InvoiceType invoiceType;
   final double? totalAmount;
   final double amountTendered;
   final DateTime dateRecorded;
   final int? userId;
   const Invoice(
       {required this.id,
-      required this.customerId,
+      required this.accountId,
       required this.paymentType,
+      required this.invoiceType,
       this.totalAmount,
       required this.amountTendered,
       required this.dateRecorded,
@@ -1618,10 +1620,14 @@ class Invoice extends DataClass implements Insertable<Invoice> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['customer_id'] = Variable<int>(customerId);
+    map['account_id'] = Variable<int>(accountId);
     {
       final converter = $InvoicesTable.$converter0;
       map['payment_type'] = Variable<int>(converter.toSql(paymentType));
+    }
+    {
+      final converter = $InvoicesTable.$converter1;
+      map['invoice_type'] = Variable<int>(converter.toSql(invoiceType));
     }
     if (!nullToAbsent || totalAmount != null) {
       map['total_amount'] = Variable<double>(totalAmount);
@@ -1637,8 +1643,9 @@ class Invoice extends DataClass implements Insertable<Invoice> {
   InvoicesCompanion toCompanion(bool nullToAbsent) {
     return InvoicesCompanion(
       id: Value(id),
-      customerId: Value(customerId),
+      accountId: Value(accountId),
       paymentType: Value(paymentType),
+      invoiceType: Value(invoiceType),
       totalAmount: totalAmount == null && nullToAbsent
           ? const Value.absent()
           : Value(totalAmount),
@@ -1654,8 +1661,9 @@ class Invoice extends DataClass implements Insertable<Invoice> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Invoice(
       id: serializer.fromJson<int>(json['id']),
-      customerId: serializer.fromJson<int>(json['customerId']),
+      accountId: serializer.fromJson<int>(json['accountId']),
       paymentType: serializer.fromJson<PaymentType>(json['paymentType']),
+      invoiceType: serializer.fromJson<InvoiceType>(json['invoiceType']),
       totalAmount: serializer.fromJson<double?>(json['totalAmount']),
       amountTendered: serializer.fromJson<double>(json['amountTendered']),
       dateRecorded: serializer.fromJson<DateTime>(json['dateRecorded']),
@@ -1667,8 +1675,9 @@ class Invoice extends DataClass implements Insertable<Invoice> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'customerId': serializer.toJson<int>(customerId),
+      'accountId': serializer.toJson<int>(accountId),
       'paymentType': serializer.toJson<PaymentType>(paymentType),
+      'invoiceType': serializer.toJson<InvoiceType>(invoiceType),
       'totalAmount': serializer.toJson<double?>(totalAmount),
       'amountTendered': serializer.toJson<double>(amountTendered),
       'dateRecorded': serializer.toJson<DateTime>(dateRecorded),
@@ -1678,16 +1687,18 @@ class Invoice extends DataClass implements Insertable<Invoice> {
 
   Invoice copyWith(
           {int? id,
-          int? customerId,
+          int? accountId,
           PaymentType? paymentType,
+          InvoiceType? invoiceType,
           Value<double?> totalAmount = const Value.absent(),
           double? amountTendered,
           DateTime? dateRecorded,
           Value<int?> userId = const Value.absent()}) =>
       Invoice(
         id: id ?? this.id,
-        customerId: customerId ?? this.customerId,
+        accountId: accountId ?? this.accountId,
         paymentType: paymentType ?? this.paymentType,
+        invoiceType: invoiceType ?? this.invoiceType,
         totalAmount: totalAmount.present ? totalAmount.value : this.totalAmount,
         amountTendered: amountTendered ?? this.amountTendered,
         dateRecorded: dateRecorded ?? this.dateRecorded,
@@ -1697,8 +1708,9 @@ class Invoice extends DataClass implements Insertable<Invoice> {
   String toString() {
     return (StringBuffer('Invoice(')
           ..write('id: $id, ')
-          ..write('customerId: $customerId, ')
+          ..write('accountId: $accountId, ')
           ..write('paymentType: $paymentType, ')
+          ..write('invoiceType: $invoiceType, ')
           ..write('totalAmount: $totalAmount, ')
           ..write('amountTendered: $amountTendered, ')
           ..write('dateRecorded: $dateRecorded, ')
@@ -1708,15 +1720,16 @@ class Invoice extends DataClass implements Insertable<Invoice> {
   }
 
   @override
-  int get hashCode => Object.hash(id, customerId, paymentType, totalAmount,
-      amountTendered, dateRecorded, userId);
+  int get hashCode => Object.hash(id, accountId, paymentType, invoiceType,
+      totalAmount, amountTendered, dateRecorded, userId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Invoice &&
           other.id == this.id &&
-          other.customerId == this.customerId &&
+          other.accountId == this.accountId &&
           other.paymentType == this.paymentType &&
+          other.invoiceType == this.invoiceType &&
           other.totalAmount == this.totalAmount &&
           other.amountTendered == this.amountTendered &&
           other.dateRecorded == this.dateRecorded &&
@@ -1725,16 +1738,18 @@ class Invoice extends DataClass implements Insertable<Invoice> {
 
 class InvoicesCompanion extends UpdateCompanion<Invoice> {
   final Value<int> id;
-  final Value<int> customerId;
+  final Value<int> accountId;
   final Value<PaymentType> paymentType;
+  final Value<InvoiceType> invoiceType;
   final Value<double?> totalAmount;
   final Value<double> amountTendered;
   final Value<DateTime> dateRecorded;
   final Value<int?> userId;
   const InvoicesCompanion({
     this.id = const Value.absent(),
-    this.customerId = const Value.absent(),
+    this.accountId = const Value.absent(),
     this.paymentType = const Value.absent(),
+    this.invoiceType = const Value.absent(),
     this.totalAmount = const Value.absent(),
     this.amountTendered = const Value.absent(),
     this.dateRecorded = const Value.absent(),
@@ -1742,19 +1757,22 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
   });
   InvoicesCompanion.insert({
     this.id = const Value.absent(),
-    required int customerId,
+    required int accountId,
     required PaymentType paymentType,
+    required InvoiceType invoiceType,
     this.totalAmount = const Value.absent(),
     required double amountTendered,
     this.dateRecorded = const Value.absent(),
     this.userId = const Value.absent(),
-  })  : customerId = Value(customerId),
+  })  : accountId = Value(accountId),
         paymentType = Value(paymentType),
+        invoiceType = Value(invoiceType),
         amountTendered = Value(amountTendered);
   static Insertable<Invoice> custom({
     Expression<int>? id,
-    Expression<int>? customerId,
+    Expression<int>? accountId,
     Expression<int>? paymentType,
+    Expression<int>? invoiceType,
     Expression<double>? totalAmount,
     Expression<double>? amountTendered,
     Expression<DateTime>? dateRecorded,
@@ -1762,8 +1780,9 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (customerId != null) 'customer_id': customerId,
+      if (accountId != null) 'account_id': accountId,
       if (paymentType != null) 'payment_type': paymentType,
+      if (invoiceType != null) 'invoice_type': invoiceType,
       if (totalAmount != null) 'total_amount': totalAmount,
       if (amountTendered != null) 'amount_tendered': amountTendered,
       if (dateRecorded != null) 'date_recorded': dateRecorded,
@@ -1773,16 +1792,18 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
 
   InvoicesCompanion copyWith(
       {Value<int>? id,
-      Value<int>? customerId,
+      Value<int>? accountId,
       Value<PaymentType>? paymentType,
+      Value<InvoiceType>? invoiceType,
       Value<double?>? totalAmount,
       Value<double>? amountTendered,
       Value<DateTime>? dateRecorded,
       Value<int?>? userId}) {
     return InvoicesCompanion(
       id: id ?? this.id,
-      customerId: customerId ?? this.customerId,
+      accountId: accountId ?? this.accountId,
       paymentType: paymentType ?? this.paymentType,
+      invoiceType: invoiceType ?? this.invoiceType,
       totalAmount: totalAmount ?? this.totalAmount,
       amountTendered: amountTendered ?? this.amountTendered,
       dateRecorded: dateRecorded ?? this.dateRecorded,
@@ -1796,12 +1817,16 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (customerId.present) {
-      map['customer_id'] = Variable<int>(customerId.value);
+    if (accountId.present) {
+      map['account_id'] = Variable<int>(accountId.value);
     }
     if (paymentType.present) {
       final converter = $InvoicesTable.$converter0;
       map['payment_type'] = Variable<int>(converter.toSql(paymentType.value));
+    }
+    if (invoiceType.present) {
+      final converter = $InvoicesTable.$converter1;
+      map['invoice_type'] = Variable<int>(converter.toSql(invoiceType.value));
     }
     if (totalAmount.present) {
       map['total_amount'] = Variable<double>(totalAmount.value);
@@ -1822,8 +1847,9 @@ class InvoicesCompanion extends UpdateCompanion<Invoice> {
   String toString() {
     return (StringBuffer('InvoicesCompanion(')
           ..write('id: $id, ')
-          ..write('customerId: $customerId, ')
+          ..write('accountId: $accountId, ')
           ..write('paymentType: $paymentType, ')
+          ..write('invoiceType: $invoiceType, ')
           ..write('totalAmount: $totalAmount, ')
           ..write('amountTendered: $amountTendered, ')
           ..write('dateRecorded: $dateRecorded, ')
@@ -1845,10 +1871,10 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
-  final VerificationMeta _customerIdMeta = const VerificationMeta('customerId');
+  final VerificationMeta _accountIdMeta = const VerificationMeta('accountId');
   @override
-  late final GeneratedColumn<int> customerId = GeneratedColumn<int>(
-      'customer_id', aliasedName, false,
+  late final GeneratedColumn<int> accountId = GeneratedColumn<int>(
+      'account_id', aliasedName, false,
       type: DriftSqlType.int,
       requiredDuringInsert: true,
       defaultConstraints: 'REFERENCES "accounts" ("id")');
@@ -1859,6 +1885,13 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
       GeneratedColumn<int>('payment_type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
           .withConverter<PaymentType>($InvoicesTable.$converter0);
+  final VerificationMeta _invoiceTypeMeta =
+      const VerificationMeta('invoiceType');
+  @override
+  late final GeneratedColumnWithTypeConverter<InvoiceType, int> invoiceType =
+      GeneratedColumn<int>('invoice_type', aliasedName, false,
+              type: DriftSqlType.int, requiredDuringInsert: true)
+          .withConverter<InvoiceType>($InvoicesTable.$converter1);
   final VerificationMeta _totalAmountMeta =
       const VerificationMeta('totalAmount');
   @override
@@ -1889,8 +1922,9 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
   @override
   List<GeneratedColumn> get $columns => [
         id,
-        customerId,
+        accountId,
         paymentType,
+        invoiceType,
         totalAmount,
         amountTendered,
         dateRecorded,
@@ -1908,15 +1942,14 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('customer_id')) {
-      context.handle(
-          _customerIdMeta,
-          customerId.isAcceptableOrUnknown(
-              data['customer_id']!, _customerIdMeta));
+    if (data.containsKey('account_id')) {
+      context.handle(_accountIdMeta,
+          accountId.isAcceptableOrUnknown(data['account_id']!, _accountIdMeta));
     } else if (isInserting) {
-      context.missing(_customerIdMeta);
+      context.missing(_accountIdMeta);
     }
     context.handle(_paymentTypeMeta, const VerificationResult.success());
+    context.handle(_invoiceTypeMeta, const VerificationResult.success());
     if (data.containsKey('total_amount')) {
       context.handle(
           _totalAmountMeta,
@@ -1952,11 +1985,14 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
     return Invoice(
       id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      customerId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}customer_id'])!,
+      accountId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}account_id'])!,
       paymentType: $InvoicesTable.$converter0.fromSql(attachedDatabase
           .options.types
           .read(DriftSqlType.int, data['${effectivePrefix}payment_type'])!),
+      invoiceType: $InvoicesTable.$converter1.fromSql(attachedDatabase
+          .options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}invoice_type'])!),
       totalAmount: attachedDatabase.options.types
           .read(DriftSqlType.double, data['${effectivePrefix}total_amount']),
       amountTendered: attachedDatabase.options.types.read(
@@ -1975,6 +2011,8 @@ class $InvoicesTable extends Invoices with TableInfo<$InvoicesTable, Invoice> {
 
   static TypeConverter<PaymentType, int> $converter0 =
       const EnumIndexConverter<PaymentType>(PaymentType.values);
+  static TypeConverter<InvoiceType, int> $converter1 =
+      const EnumIndexConverter<InvoiceType>(InvoiceType.values);
 }
 
 class Sale extends DataClass implements Insertable<Sale> {

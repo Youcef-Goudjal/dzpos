@@ -57,7 +57,7 @@ class _ForgotPasswordBody extends StatelessWidget {
               image: const AssetImage(AppAssets.forgotPassword),
             ),
             Text(
-              LocaleKeys.forgot_password_ForgotPassword.tr(),
+              LocaleKeys.login_Forgot_Password.tr(),
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             Text(

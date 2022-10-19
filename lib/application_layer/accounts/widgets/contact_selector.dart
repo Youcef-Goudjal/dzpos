@@ -79,7 +79,7 @@ class _ContactSelectorState extends State<ContactSelector> {
 
   Future<List<Contact>> requestContact() async {
     if (await Permission.contacts.request().isGranted) {
-      print("permission is granted");
+      // print("permission is granted");
       final contacts = await ContactsService.getContacts(withThumbnails: false);
       return contacts;
     } else {

@@ -13,13 +13,13 @@ abstract class  LocaleKeys {
   static const auth_Pick_Login_Option = 'auth_Pick_Login_Option';
   static const auth_Login_with_email_And_Password = 'auth_Login_with_email_And_Password';
   static const auth_Login_With_Phone_number = 'auth_Login_With_Phone_number';
-  static const forgot_password_ForgotPassword = 'forgot_password_ForgotPassword';
+  static const login_Forgot_Password = 'login_Forgot_Password';
   static const forgot_password_desc = 'forgot_password_desc';
   static const Email_Address = 'Email_Address';
   static const Submit = 'Submit';
   static const Login = 'Login';
   static const Password = 'Password';
-  static const login_Forgot_Password = 'login_Forgot_Password';
+  static const Enter_Ur_Phone_number = 'Enter_Ur_Phone_number';
   static const login_Dont_have_an_Account = 'login_Dont_have_an_Account';
   static const login_Register_here = 'login_Register_here';
   static const login_phone_Enter_Ur_Phone_number = 'login_phone_Enter_Ur_Phone_number';
@@ -149,7 +149,7 @@ abstract class  LocaleKeys {
   static const Add_new_Unit = 'Add_new_Unit';
   static const Barcode = 'Barcode';
   static const Price = 'Price';
-  static const box: = 'box:';
+  static const box = 'box';
   static const Product_name = 'Product_name';
   static const Category = 'Category';
   static const No_category_found = 'No_category_found';
@@ -159,7 +159,7 @@ abstract class  LocaleKeys {
   static const Update = 'Update';
   static const Print = 'Print';
   static const Delete = 'Delete';
-  static const Sale_in_type_n°_id = 'Sale_in_type_n°_id';
+  static const Sale_in_type_n_id = 'Sale_in_type_n_id';
   static const Treated = 'Treated';
   static const accounts_Payment_to_Account = 'accounts_Payment_to_Account';
   static const accounts_Catch_From_Account = 'accounts_Catch_From_Account';

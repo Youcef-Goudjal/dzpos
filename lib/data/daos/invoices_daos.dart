@@ -48,13 +48,15 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   @override
   Future<FullInvoice> createEmptyInvoice() async {
     final id = await into(invoices).insert(InvoicesCompanion.insert(
-      customerId: -1,
+      accountId: -1,
       paymentType: PaymentType.cache,
+      invoiceType: InvoiceType.sell,
       amountTendered: 0,
     ));
     final invoice = Invoice(
       id: id,
-      customerId: -1,
+      accountId: -1,
+      invoiceType: InvoiceType.sell,
       paymentType: PaymentType.cache,
       amountTendered: 0,
       dateRecorded: DateTime.now(),
@@ -165,7 +167,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   Future<void> writeInvoice(FullInvoice entry) {
     return transaction(() async {
       final invoice = entry.invoice.copyWith(
-        customerId: entry.account.id,
+        accountId: entry.account.id,
       );
       // first we replace the invoice
       await into(invoices).insert(invoice, mode: InsertMode.replace);
@@ -232,7 +234,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       print("invoice ids : $ids");
 
       final query = select(invoices).join([
-        innerJoin(accounts, accounts.id.equalsExp(invoices.customerId)),
+        innerJoin(accounts, accounts.id.equalsExp(invoices.accountId)),
         innerJoin(sales, sales.invoiceId.equalsExp(invoices.id)),
       ]);
 

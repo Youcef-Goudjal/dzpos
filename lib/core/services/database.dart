@@ -165,8 +165,9 @@ class FullInvoice extends Equatable {
   static final empty = FullInvoice(
     Invoice(
       id: -1,
-      customerId: -1,
+      accountId: -1,
       paymentType: PaymentType.cache,
+      invoiceType: InvoiceType.sell,
       amountTendered: 0,
       dateRecorded: DateTime(2022),
     ),

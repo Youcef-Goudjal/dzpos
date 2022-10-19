@@ -15,8 +15,8 @@ class AccountCard extends StatelessWidget {
   final void Function(bool?)? onTypeChanged;
   final bool isCreditor;
   final void Function()? onSave;
-  final TextEditingController _controller = TextEditingController();
-  AccountCard({
+
+  const AccountCard({
     super.key,
     this.onSave,
     this.onTypeChanged,

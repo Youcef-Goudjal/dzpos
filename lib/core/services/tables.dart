@@ -154,8 +154,9 @@ class Sales extends Table {
 @DataClassName("Invoice")
 class Invoices extends Table {
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get customerId => integer().references(Accounts, #id)();
+  IntColumn get accountId => integer().references(Accounts, #id)();
   IntColumn get paymentType => intEnum<PaymentType>()();
+  IntColumn get invoiceType => intEnum<InvoiceType>()();
   RealColumn get totalAmount => real().nullable()();
   RealColumn get amountTendered => real()();
   DateTimeColumn get dateRecorded =>

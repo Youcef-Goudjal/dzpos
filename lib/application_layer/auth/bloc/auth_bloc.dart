@@ -16,7 +16,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
   final UserRepository userRepository;
-  late final StreamSubscription<UserEntity> _userSubscription;
+  late final StreamSubscription<UserEntity> userSubscription;
   AuthBloc(
     this.authRepository,
     this.userRepository,
@@ -29,7 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ForgotPasswordRequested>(_onForgotPassword);
     on<ConfirmPasswordResetRequested>(_confirmPasswordReset);
     on<SingUpRequested>(_onSingUp);
-    _userSubscription = authRepository.user.listen((user) {
+    userSubscription = authRepository.user.listen((user) {
       if (i != 0) {
         add(UserStateChanged(user));
       } else {
