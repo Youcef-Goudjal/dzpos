@@ -6,27 +6,42 @@ class PrinterState extends Equatable {
     this.msg,
     this.printer,
     this.devices = const [],
+    this.scanning = false,
+    this.invoice,
   }) : isConnected = printer != null;
 
   final Status status;
+  final bool scanning;
   final String? msg;
-  final PrinterBluetooth? printer;
-  final List<PrinterBluetooth> devices;
+  final BluetoothDevice? printer;
+  final List<BluetoothDevice> devices;
   final bool isConnected;
+  final FullInvoice? invoice;
 
   @override
-  List<Object?> get props => [status, printer, isConnected, devices];
+  List<Object?> get props => [
+        status,
+        printer,
+        isConnected,
+        devices,
+        scanning,
+        invoice,
+      ];
 
   PrinterState copyWith({
     Status? status,
     String? msg,
-    PrinterBluetooth? printer,
-    List<PrinterBluetooth>? devices,
+    BluetoothDevice? printer,
+    List<BluetoothDevice>? devices,
+    bool? scanning,
+    FullInvoice? invoice,
   }) =>
       PrinterState(
+        scanning: scanning ?? this.scanning,
         status: status ?? Status.initial,
         printer: printer ?? this.printer,
         devices: devices ?? this.devices,
+        invoice: invoice ?? this.invoice,
         msg: msg,
       );
 }

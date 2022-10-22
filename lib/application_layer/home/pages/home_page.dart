@@ -1,6 +1,8 @@
 import 'package:dzpos/application_layer/application_layer.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../product/product.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,14 +13,26 @@ class HomePage extends StatefulWidget {
 }
 
 enum AppTabs {
-  invoices("Invoices", InvoicesPage()),
-  accounts("Accounts", AccountsPage()),
-  reports("Reports", ReportsPage()),
-  settings("Settings", SettingsPage());
+  invoices(InvoicesPage()),
+  accounts(AccountsPage()),
+  reports(ReportsPage()),
+  settings(SettingsPage());
 
-  const AppTabs(this.name, this.page);
+  const AppTabs(this.page);
 
-  final String name;
+  String get name {
+    switch (this) {
+      case AppTabs.invoices:
+        return LocaleKeys.invoices.tr();
+      case AppTabs.accounts:
+        return LocaleKeys.Accounts.tr();
+      case AppTabs.reports:
+        return LocaleKeys.Reports.tr();
+      case AppTabs.settings:
+        return LocaleKeys.settings.tr();
+    }
+  }
+
   final Widget page;
 }
 

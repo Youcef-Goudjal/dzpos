@@ -20,7 +20,7 @@ abstract class UserRepository {
   /// Update a doc in users collection
   /// [updatedUser] is updated data of user
   Future<void> updateUserData(
-    UserModel updatedUser, {
+    UserEntity updatedUser, {
     Map<String, dynamic>? additionalData,
   });
 }

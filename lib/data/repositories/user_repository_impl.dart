@@ -15,7 +15,7 @@ class UserRepositoryImpl implements UserRepository {
       dataSource.loggedUserStream(loggedUser);
 
   @override
-  Future<void> updateUserData(UserModel updatedUser,
+  Future<void> updateUserData(UserEntity updatedUser,
           {Map<String, dynamic>? additionalData}) =>
       dataSource.updateUserData(updatedUser,additionalData: additionalData);
 }

@@ -79,17 +79,42 @@ abstract class AppRouter {
               AppRoutes.printingPreview.goRoute(),
               AppRoutes.printerModel.goRoute(),
             ]),
-          ], (context, state) {
+          ], (context, goState) {
+            CommonBloc.profileBloc.add(LoadProfile());
+            print("path : ${goState.path}");
             return MaterialPage(
-              key: state.pageKey,
+              key: goState.pageKey,
               child: BlocBuilder<ProfileBloc, ProfileState>(
                 builder: (context, state) {
+                  print("profile bloc rebuild $state");
                   if (state is ProfileLoaded) {
-                    print("profile loaded");
-                    // TODO: handel if the client profile is activate
-                    return AppRoutes.home.view;
+                    if (state.loggedUser.isNotEmpty) {
+                      final user = state.loggedUser;
+                      final localImei =
+                          CommonBloc.applicationBloc.application.imei;
+                      if (localImei != null) {
+                        if (user.devices.isEmpty) {
+                          CommonBloc.authBloc.add(AddDeviceImei(localImei));
+                        } else {
+                          if (user.devices.contains(localImei)) {
+                            if (user.isActive) {
+                              return AppRoutes.home.view;
+                            } else {
+                              return const UserNotActive();
+                            }
+                          } else if (user.devices.length < user.maxDevices) {
+                            CommonBloc.authBloc.add(AddDeviceImei(localImei));
+                          } else {
+                            CommonBloc.authBloc.add(
+                              SignOutRequested(
+                                  CommonBloc.applicationBloc.application.imei),
+                            );
+                          }
+                        }
+                      }
+                    }
                   }
-                  print("Profile not loaded");
+
                   return AppRoutes.splash.view;
                 },
               ),
@@ -122,7 +147,7 @@ abstract class AppRouter {
               return null;
             }
             if (!state.subloc.startsWith(AppRoutes.home.path)) {
-              CommonBloc.profileBloc.add(LoadProfile());
+              print(state.subloc);
               return AppRoutes.home.path;
             }
           }

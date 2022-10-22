@@ -28,6 +28,13 @@ class UserEntity extends Equatable {
   /// small version of [photo]
   final String? photoThumbail;
 
+  //devices [code IMEI]
+  final List<String> devices;
+  final int maxDevices;
+
+  //is the account is activa
+  final bool isActive;
+
   // Empty user which represents an unauthenticated user.
   static const empty = UserEntity(uid: "");
 
@@ -40,6 +47,9 @@ class UserEntity extends Equatable {
   const UserEntity({
     this.email,
     required this.uid,
+    this.devices = const [],
+    this.isActive = false,
+    this.maxDevices = 1,
     this.userName,
     this.firstName,
     this.lastName,
@@ -49,10 +59,16 @@ class UserEntity extends Equatable {
     this.photoThumbail,
   });
   @override
-  List<Object?> get props => [email, uid, userName, phoneNumber, photo];
-
-  
-
+  List<Object?> get props => [
+        email,
+        uid,
+        userName,
+        phoneNumber,
+        photo,
+        devices,
+        maxDevices,
+        isActive,
+      ];
 
   UserEntity copyWith({
     String? id,
@@ -61,6 +77,9 @@ class UserEntity extends Equatable {
     String? photo,
     String? phoneNumber,
     bool? isDeveloper,
+    bool? isActive,
+    List<String>? devices,
+    int? maxDevices,
   }) {
     return UserEntity(
       uid: id ?? uid,
@@ -68,6 +87,9 @@ class UserEntity extends Equatable {
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       photo: photo ?? this.photo,
+      devices: devices ?? this.devices,
+      isActive: isActive ?? this.isActive,
+      maxDevices: maxDevices ?? this.maxDevices,
     );
   }
 }

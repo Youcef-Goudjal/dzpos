@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import '../../../core/manager/language/locale_keys.g.dart';
-import '../../../core/utils/date_utils.dart';
+import '../../../core/utils/utils.dart';
 import '../../../data/data.dart';
 import '../../../domain/domain.dart';
 
@@ -186,7 +186,7 @@ class __AccountStatementDialogState extends State<_AccountStatementDialog> {
               },
               itemBuilder: (context, dynamic suggestion) {
                 return ListTile(
-                  title: Text(suggestion.name),
+                  title: Text(suggestion.value),
                   subtitle: Text(suggestion.contact),
                 );
               },

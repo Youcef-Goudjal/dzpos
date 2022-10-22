@@ -135,9 +135,7 @@ class _LoginForm extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: LocaleKeys
-                              .verify_otp_An_6_Digit_code_has_been_sent_to
-                              .tr(args: ["0663519649"]),
+                          text: LocaleKeys.login_Dont_have_an_Account.tr(),
                           style: Theme.of(context).textTheme.button,
                         ),
                         TextSpan(

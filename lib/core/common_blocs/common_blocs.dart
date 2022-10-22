@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../application_layer/application_layer.dart';
 import '../../data/data.dart';
+import 'printer/printer_bloc.dart';
 
 export 'application/application_bloc.dart';
 export 'theme/theme_bloc.dart';

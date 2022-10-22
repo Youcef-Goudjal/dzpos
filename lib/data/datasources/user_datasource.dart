@@ -55,8 +55,7 @@ class UserDataSourceImpl implements UserDataSource {
       {Map<String, dynamic>? additionalData}) async {
     await _userCollection.doc(updatedUser.uid).get().then(
       (doc) async {
-        Map<String, dynamic> data = (updatedUser as UserModel).toJson();
-
+        Map<String, dynamic> data = UserModel.fromEntity(updatedUser).toJson();
         if (additionalData != null) data.addAll(additionalData);
         if (doc.exists) {
           // update

@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/manager/language/locale_keys.g.dart';
+import '../../../product/product.dart';
 
 class PrintLabels extends StatelessWidget {
   const PrintLabels({super.key});
@@ -21,7 +22,7 @@ class PrintLabels extends StatelessWidget {
               Expanded(
                 flex: 3,
                 child: AppTextField(
-                  initialValue: PrinterLabels.values[index].name,
+                  initialValue: PrinterLabels.values[index].value,
                 ),
               ),
               TextButton(
@@ -43,6 +44,7 @@ class PrintLabels extends StatelessWidget {
 
 enum PrinterLabels {
   invoice,
+  invoiceId,
   product,
   quantity,
   unit,
@@ -52,40 +54,67 @@ enum PrinterLabels {
   totalQuantity,
   net,
   discount,
+  date,
+  time,
   add,
   total,
+  mr,
   amountTreated;
 
-  String get name {
+  String get value {
     switch (this) {
       case PrinterLabels.invoice:
-        return "فاتورة";
+        return storedValue ?? "فاتورة";
+        case PrinterLabels.invoiceId:
+        return storedValue ?? " رقم الفاتورة";
       case PrinterLabels.product:
-        return "اسم المادة";
+        return storedValue ?? "اسم المادة";
       case PrinterLabels.quantity:
-        return "الكمية";
+        return storedValue ?? "الكمية";
       case PrinterLabels.unit:
-        return "الوحدة";
+        return storedValue ?? "الوحدة";
       case PrinterLabels.subTotal1:
-        return "الإفرادي";
+        return storedValue ?? "الإفرادي";
       case PrinterLabels.subTotal2:
-        return "الإجمالي";
+        return storedValue ?? "الإجمالي";
       case PrinterLabels.notes:
-        return "ملاحظات";
+        return storedValue ?? "ملاحظات";
       case PrinterLabels.totalQuantity:
-        return "مجموع الكمية";
+        return storedValue ?? "مجموع الكمية";
       case PrinterLabels.net:
-        return "الصافي";
+        return storedValue ?? "الصافي";
       case PrinterLabels.discount:
-        return "الخصم";
+        return storedValue ?? "الخصم";
       case PrinterLabels.add:
-        return "اضافة";
+        return storedValue ?? "اضافة";
       case PrinterLabels.total:
-        return "مجموع الفاتورة";
+        return storedValue ?? "مجموع الفاتورة";
       case PrinterLabels.amountTreated:
-        return "دفعة نقدية";
+        return storedValue ?? "دفعة نقدية";
+      case PrinterLabels.date:
+        return storedValue ?? "تاريخ الفاتورة";
+      case PrinterLabels.time:
+        return storedValue ?? "وقت الفاتورة";
+      case PrinterLabels.mr:
+        return storedValue ?? "السيد";
       default:
         return "";
     }
+  }
+
+  String? get storedValue {
+    return Application.pref
+        .getStringList(StorageKeys.printLabels.name)
+        ?.elementAt(index);
+  }
+
+  void storeValue(String value) {
+    List<String> list = [];
+    list.addAll(
+      Application.pref.getStringList(StorageKeys.printLabels.name) ??
+          PrinterLabels.values.map((e) => "").toList(),
+    );
+    list.insert(index, value);
+    Application.pref.setStringList(StorageKeys.printLabels.name, list);
   }
 }

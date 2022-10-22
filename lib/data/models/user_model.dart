@@ -5,6 +5,9 @@ class UserModel extends UserEntity {
   const UserModel({
     required super.uid,
     super.email,
+    super.devices,
+    super.maxDevices,
+    super.isActive,
     super.userName,
     super.firstName,
     super.lastName,
@@ -20,7 +23,10 @@ class UserModel extends UserEntity {
       "name": userName,
       "email": email,
       "phoneNumber": phoneNumber,
+      "devices": devices,
+      "maxDevices": maxDevices,
       "photo": photo,
+      "isActive": isActive,
       "firstName": firstName,
       "lastName": lastName,
       "photoResized": photoResized,
@@ -37,7 +43,16 @@ class UserModel extends UserEntity {
   bool get isNotEmpty => !isEmpty;
 
   @override
-  List<Object?> get props => [uid];
+  List<Object?> get props => [
+        uid,
+        email,
+        devices,
+        maxDevices,
+        isActive,
+        userName,
+        firstName,
+        lastName,
+      ];
 
   static UserModel fromMap(Map<String, dynamic>? data) {
     if (data == null) {
@@ -53,8 +68,28 @@ class UserModel extends UserEntity {
         lastName: data["lastName"],
         photoResized: data["photoResized"],
         photoThumbail: data["photoThumbail"],
+        devices: (data["devices"] as List).map((e) => e.toString()).toList(),
+        maxDevices: data["maxDevices"],
+        isActive: data["isActive"],
       );
     }
+  }
+
+  static UserModel fromEntity(UserEntity entity) {
+    return UserModel(
+      uid: entity.uid,
+      devices: entity.devices,
+      email: entity.email,
+      firstName: entity.firstName,
+      isActive: entity.isActive,
+      lastName: entity.lastName,
+      maxDevices: entity.maxDevices,
+      phoneNumber: entity.phoneNumber,
+      photo: entity.photo,
+      photoResized: entity.photoResized,
+      photoThumbail: entity.photoThumbail,
+      userName: entity.userName,
+    );
   }
 }
 

@@ -5,6 +5,10 @@ abstract class  LocaleKeys {
   static const Phone = 'Phone';
   static const Creditor = 'Creditor';
   static const Notes = 'Notes';
+  static const invoices = 'invoices';
+  static const Accounts = 'Accounts';
+  static const Reports = 'Reports';
+  static const Settings = 'Settings';
   static const Permission_Not_Granted = 'Permission_Not_Granted';
   static const Select_accounts = 'Select_accounts';
   static const No_Product_Fount = 'No_Product_Fount';

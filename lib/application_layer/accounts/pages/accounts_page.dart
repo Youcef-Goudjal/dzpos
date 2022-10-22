@@ -63,16 +63,20 @@ class AccountsPage extends StatelessWidget {
           Accounts.values.length - 3,
           (index) => Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: OutlinedButton.icon(
-              style: OutlinedButton.styleFrom(
-                alignment: Alignment.centerLeft,
-              ),
-              onPressed: () => Accounts.values[index + 3].onPressed(context),
-              icon: SvgPicture.asset(
-                Accounts.values[index + 3].iconPath!,
-              ),
-              label: Text(Accounts.values[index + 3].name),
-            ),
+            child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  alignment: Alignment.centerLeft,
+                ),
+                onPressed: () => Accounts.values[index + 3].onPressed(context),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(
+                      Accounts.values[index + 3].iconPath!,
+                    ),
+                    5.widthBox,
+                    Expanded(child: Text(Accounts.values[index + 3].name)),
+                  ],
+                )),
           ),
         )
       ],

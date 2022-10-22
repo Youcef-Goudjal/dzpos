@@ -38,27 +38,30 @@ class _InvoiceBody extends StatelessWidget {
         vertical: 15.h,
       ),
       children: [
-        AspectRatio(
-          aspectRatio: 2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: List.generate(
-              2,
-              (index) => Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: ElevatedButton(
-                    onPressed: () => Invoices.values[index].onPressed(context),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset(
-                          Invoices.values[index].iconPath!,
-                        ),
-                        5.h.heightBox,
-                        Text(Invoices.values[index].name),
-                      ],
+        Center(
+          child: AspectRatio(
+            aspectRatio: 2,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: List.generate(
+                2,
+                (index) => Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: ElevatedButton(
+                      onPressed: () =>
+                          Invoices.values[index].onPressed(context),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(
+                            Invoices.values[index].iconPath!,
+                          ),
+                          5.h.heightBox,
+                          Text(Invoices.values[index].name),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -70,6 +73,7 @@ class _InvoiceBody extends StatelessWidget {
         AspectRatio(
           aspectRatio: 2,
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               2,
               (index) => Expanded(
@@ -97,20 +101,27 @@ class _InvoiceBody extends StatelessWidget {
             ),
           ),
         ),
-        20.h.heightBox,
+        10.h.heightBox,
         ...List.generate(
           Invoices.values.length - 4,
           (index) => Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
-            child: OutlinedButton.icon(
+            child: OutlinedButton(
               style: OutlinedButton.styleFrom(
                 alignment: Alignment.centerLeft,
               ),
               onPressed: () => Invoices.values[index + 4].onPressed(context),
-              icon: SvgPicture.asset(
-                Invoices.values[index + 4].iconPath!,
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    Invoices.values[index + 4].iconPath!,
+                  ),
+                  5.widthBox,
+                  Expanded(
+                    child: Text(Invoices.values[index + 4].name),
+                  ),
+                ],
               ),
-              label: Text(Invoices.values[index + 4].name),
             ),
           ),
         )
@@ -141,9 +152,9 @@ enum Invoices {
         return LocaleKeys.invoices_New_Sale_Invoice.tr();
 
       case Invoices.newPurchaseInvoice:
-        return LocaleKeys.register_TermsCondition.tr();
-      case Invoices.storeInventory:
         return LocaleKeys.invoices_New_Purchase_Invoice.tr();
+      case Invoices.storeInventory:
+        return LocaleKeys.invoices_Store_Inventory.tr();
       case Invoices.returnedDamaged:
         return LocaleKeys.invoices_ReturnedDamaged.tr();
       case Invoices.showInvoices:

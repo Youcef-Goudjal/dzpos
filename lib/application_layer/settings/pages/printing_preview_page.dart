@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dzpos/application_layer/auth/utils.dart';
 import 'package:dzpos/application_layer/settings/widgets/search_printers_dialog.dart';
 import 'package:dzpos/core/common_blocs/common_blocs.dart';
@@ -6,8 +8,13 @@ import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/src/pdf/page_format.dart';
+import 'package:printing/printing.dart';
 
+import '../../../core/common_blocs/printer/printer_bloc.dart';
 import '../../../core/manager/language/locale_keys.g.dart';
+import '../../../core/utils/utils.dart';
 import '../../application_layer.dart';
 
 class PrintingPreviewPage extends StatelessWidget {
@@ -17,7 +24,7 @@ class PrintingPreviewPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text(LocaleKeys.Printing_Preview.tr()),
+        title: Text(LocaleKeys.Printing_Preview.tr()),
         actions: [
           IconButton(
             style: IconButton.styleFrom(
@@ -36,39 +43,39 @@ class PrintingPreviewPage extends StatelessWidget {
             ),
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(60),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                const KButton(
-                  icon: Icons.print,
-                  msg: "Printing on Wifi Not supported Yet!!",
-                  text: "Wifi",
-                ),
-                5.widthBox,
-                KButton(
-                  icon: Icons.share,
-                  msg: "Sharing Not supported Yet!!",
-                  text: LocaleKeys.Share.tr(),
-                ),
-                5.widthBox,
-                const KButton(
-                  icon: Icons.picture_as_pdf,
-                  msg: "PDF supported Yet!!",
-                  text: "PDF",
-                ),
-                5.widthBox,
-                const KButton(
-                  icon: Icons.inventory,
-                  msg: "Excel Not supported Yet!!",
-                  text: "EXCEL",
-                ),
-              ],
-            ),
-          ),
-        ),
+        // bottom: PreferredSize(
+        //   preferredSize: const Size.fromHeight(60),
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Row(
+        //       children: [
+        //         const KButton(
+        //           icon: Icons.print,
+        //           msg: "Printing on Wifi Not supported Yet!!",
+        //           text: "Wifi",
+        //         ),
+        //         5.widthBox,
+        //         KButton(
+        //           icon: Icons.share,
+        //           msg: "Sharing Not supported Yet!!",
+        //           text: LocaleKeys.Share.tr(),
+        //         ),
+        //         5.widthBox,
+        //         const KButton(
+        //           icon: Icons.picture_as_pdf,
+        //           msg: "PDF supported Yet!!",
+        //           text: "PDF",
+        //         ),
+        //         5.widthBox,
+        //         const KButton(
+        //           icon: Icons.inventory,
+        //           msg: "Excel Not supported Yet!!",
+        //           text: "EXCEL",
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ),
       body: Column(
         children: [
@@ -102,7 +109,7 @@ class _PrintingActions extends StatelessWidget {
                   icon: Icons.bluetooth,
                   text: LocaleKeys.Bluetooth.tr(),
                   onPressed: () {
-                    bloc.add(PrintRequested());
+                    // start print Bluetooth
                   },
                 );
               } else {
@@ -149,9 +156,53 @@ class _PreviewCore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("Preview not seported Yet!!"),
+    final actions = <PdfPreviewAction>[
+      PdfPreviewAction(
+        icon: const Icon(Icons.save),
+        onPressed: _saveAsFile,
+      )
+    ];
+    final bloc = context.read<PrinterBloc>();
+    return PdfPreview(
+      maxPageWidth: 700,
+      actions: actions,
+      onPrinted: _showPrintedToast,
+      onShared: _showSharedToast,
+      pdfFileName:
+          "${bloc.state.invoice?.invoiceId}-${formatDate(DateTime.now())}",
+      build: (format) {
+        return bloc.generatePdf(format);
+      },
     );
+  }
+
+  void _showSharedToast(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Document shared successfully'),
+      ),
+    );
+  }
+
+  void _showPrintedToast(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Document printed successfully'),
+      ),
+    );
+  }
+
+  void _saveAsFile(BuildContext context, LayoutCallback build,
+      PdfPageFormat pageFormat) async {
+    final bloc = context.read<PrinterBloc>();
+    final bytes = await build(pageFormat);
+    final appDocDir = await getApplicationDocumentsDirectory();
+    final appDocPath = appDocDir.path;
+    final file = File(
+        '$appDocPath/${bloc.state.invoice?.invoiceId}-${formatDate(DateTime.now())}.pdf');
+    print('Save as file ${file.path} ...');
+    await file.writeAsBytes(bytes);
+    // todo: open file
   }
 }
 

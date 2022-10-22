@@ -58,15 +58,20 @@ class ReportsPage extends StatelessWidget {
           Reports.values.length - 2,
           (index) => Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: OutlinedButton.icon(
+            child: OutlinedButton(
               style: OutlinedButton.styleFrom(
                 alignment: Alignment.centerLeft,
               ),
               onPressed: () {},
-              icon: SvgPicture.asset(
-                Reports.values[index + 2].iconPath!,
+              child: Row(
+                children: [
+                  SvgPicture.asset(
+                    Reports.values[index + 2].iconPath!,
+                  ),
+                  5.widthBox,
+                  Text(Reports.values[index + 2].name),
+                ],
               ),
-              label: Text(Reports.values[index + 2].name),
             ),
           ),
         )

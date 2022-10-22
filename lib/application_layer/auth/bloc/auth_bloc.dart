@@ -29,6 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ForgotPasswordRequested>(_onForgotPassword);
     on<ConfirmPasswordResetRequested>(_confirmPasswordReset);
     on<SingUpRequested>(_onSingUp);
+    on<AddDeviceImei>(_onAddDeviceImei);
     userSubscription = authRepository.user.listen((user) {
       if (i != 0) {
         add(UserStateChanged(user));
@@ -79,6 +80,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future<void> _signOut(SignOutRequested event, Emitter emit) async {
     try {
+      // first we remove the imei code from firestore
+      final currentUser = CommonBloc.profileBloc.user;
+      List<String> devices = [];
+      devices.addAll(currentUser.devices);
+      devices.remove(event.imei);
+      await userRepository.updateUserData(currentUser.copyWith(
+        devices: devices,
+      ));
       await authRepository.logOut();
 
       emit(const Unauthenticated());
@@ -123,7 +132,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await userRepository.addUserData(UserModel(
         uid: uid,
         email: event.email,
-        phoneNumber: event.phone, 
+        phoneNumber: event.phone,
         userName: event.username,
       ));
       CommonBloc.phoneAuthBloc.add(SendOtpToPhoneEvent(
@@ -132,5 +141,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       add(AuthFailed(exception: Exception(e)));
     }
+  }
+
+  FutureOr<void> _onAddDeviceImei(
+      AddDeviceImei event, Emitter<AuthState> emit) async {
+    // first we add the imei code from firestore
+    final currentUser = CommonBloc.profileBloc.user;
+    List<String> devices = [];
+    devices.addAll(currentUser.devices);
+    devices.add(event.imei);
+    await userRepository.updateUserData(currentUser.copyWith(
+      devices: devices,
+    ));
   }
 }

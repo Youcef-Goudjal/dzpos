@@ -8,6 +8,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../enums.dart';
+import '../utils/utils.dart';
 
 part 'database.g.dart';
 part 'tables.dart';
@@ -234,4 +235,20 @@ class FullSale extends Equatable {
         sale ?? this.sale,
         product ?? this.product,
       );
+
+  String getIndex(int col) {
+    switch (col) {
+      case 0:
+        return "$productId";
+      case 1:
+        return productName;
+      case 2:
+        return formatCurrency(unitPrice);
+      case 3:
+        return quantity.toString();
+      case 4:
+        formatCurrency(subTotal);
+    }
+    return "";
+  }
 }

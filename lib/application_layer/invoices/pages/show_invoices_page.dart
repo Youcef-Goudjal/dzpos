@@ -1,4 +1,5 @@
 import 'package:dzpos/application_layer/auth/utils.dart';
+import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/manager/route/routes.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/common_blocs/printer/printer_bloc.dart';
 import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
@@ -140,6 +142,7 @@ class _ActionsCard extends StatelessWidget {
         ),
         TextButton.icon(
           onPressed: () {
+            CommonBloc.printerBloc.add(PrintRequested(invoice));
             context.pushNamed(AppRoutes.printingPreview.name);
           },
           icon: const Icon(Icons.print),

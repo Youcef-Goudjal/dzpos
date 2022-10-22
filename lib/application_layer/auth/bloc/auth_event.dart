@@ -4,7 +4,7 @@ abstract class AuthEvent extends Equatable {
   const AuthEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class AuthenticationStarted extends AuthEvent {}
@@ -24,7 +24,10 @@ class SignInRequested extends AuthEvent {
 }
 
 class SignOutRequested extends AuthEvent {
-  const SignOutRequested();
+  final String? imei;
+  const SignOutRequested(this.imei);
+  @override
+  List<Object?> get props => [imei];
 }
 
 class AuthFailed extends AuthEvent {
@@ -70,6 +73,10 @@ class SingUpRequested extends AuthEvent {
   List<Object> get props => [username, email, password, phone];
 }
 
-class LinkCrede {
-  
+class AddDeviceImei extends AuthEvent {
+  final String imei;
+
+  const AddDeviceImei(this.imei);
+  @override
+  List<Object> get props => [imei];
 }

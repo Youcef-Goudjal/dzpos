@@ -68,7 +68,7 @@ class _DebtBodyState extends State<_DebtBody> {
                 initialValue: account?.name ?? "",
                 itemBuilder: (context, dynamic suggestion) {
                   return ListTile(
-                    title: Text(suggestion.name),
+                    title: Text(suggestion.value),
                     subtitle: Text(suggestion.contact),
                   );
                 },

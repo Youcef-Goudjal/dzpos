@@ -2,7 +2,7 @@ import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/core/utils/date_utils.dart';
+import 'package:dzpos/core/utils/utils.dart';
 import 'package:dzpos/product/constants/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,6 @@ import 'package:go_router/go_router.dart';
 import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/manager/route/routes.dart';
 import '../../auth/utils.dart';
-import '../../widgets/confirm_delete_dialog.dart';
 
 class NewInvoicePage extends StatefulWidget {
   final InvoiceType type;

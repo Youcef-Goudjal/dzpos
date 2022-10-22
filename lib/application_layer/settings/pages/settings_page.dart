@@ -88,14 +88,23 @@ class _SettingsPageState extends State<SettingsPage> {
       "العربية": {
         "type": SettingsActions.svg,
         "svgPath": AppAssets.algeria,
+        "onPressed": (BuildContext context) {
+          context.setLocale(const Locale("ar"));
+        }
       },
       "English": {
         "type": SettingsActions.svg,
         "svgPath": AppAssets.usa,
+        "onPressed": (BuildContext context) {
+          context.setLocale(const Locale("en"));
+        }
       },
       "Français": {
         "type": SettingsActions.svg,
         "svgPath": AppAssets.france,
+        "onPressed": (BuildContext context) {
+          context.setLocale(const Locale("fr"));
+        }
       },
     },
     LocaleKeys.settingsTheme_Settings.tr(): {
@@ -292,7 +301,8 @@ class _SettingsPageState extends State<SettingsPage> {
           color: context.error,
         ),
         "onPressed": (BuildContext context) {
-          CommonBloc.authBloc.add(const SignOutRequested());
+          CommonBloc.authBloc.add(
+              SignOutRequested(CommonBloc.applicationBloc.application.imei));
         },
       },
     }

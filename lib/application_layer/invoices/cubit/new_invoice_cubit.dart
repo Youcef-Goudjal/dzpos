@@ -1,4 +1,4 @@
-import 'package:dzpos/application_layer/widgets/widgets.dart';
+import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:dzpos/domain/domain.dart';
@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/common_blocs/printer/printer_bloc.dart';
 import '../../../core/enums.dart';
 import '../../../core/manager/route/routes.dart';
+import '../../application_layer.dart';
 
 part 'new_invoice_state.dart';
 
@@ -360,7 +362,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
 
   void printBluetooth(BuildContext context) {
     if (state.save || state.state.isUpdating) {
-      // TODO:print directly when the printer is connected
+      CommonBloc.printerBloc.add(PrintRequested(state.invoice));
       context.pushNamed(AppRoutes.printingPreview.name);
     }
   }

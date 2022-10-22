@@ -71,7 +71,8 @@ class AuthPage extends StatelessWidget {
                           ),
                         ),
                       ),
-                      child: Text(LocaleKeys.auth_Login_With_Phone_number.tr()),
+                      child: Text(
+                          LocaleKeys.auth_Login_with_email_And_Password.tr()),
                     ),
                   ),
                   10.heightBox,

@@ -73,6 +73,7 @@ class AppAssets {
   static const String wallet = "$svg/wallet.svg";
   static const String clearFilters = "$svg/clear_filters.svg";
   static const String invoice = "$svg/invoice.svg";
+  static const String bgInvoice = "$svg/bg_invoice.svg";
   static const String sale = "$svg/sale.svg";
   static const String wi = "$svg/wi-fi.svg";
   static const String clouds = "$svg/clouds.svg";

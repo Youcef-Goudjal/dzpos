@@ -49,7 +49,7 @@ class AccountCard extends StatelessWidget {
                 onSuggestionSelected: onSelected,
                 itemBuilder: (context, dynamic itemData) {
                   return ListTile(
-                    title: Text(itemData.name),
+                    title: Text(itemData.value),
                     subtitle: Text(
                       LocaleKeys.Phone.tr(args: [itemData.contact]),
                     ),

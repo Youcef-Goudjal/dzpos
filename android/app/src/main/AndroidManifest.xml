@@ -2,6 +2,7 @@
     package="dz.goudjal.dzpos">
     <uses-permission android:name="android.permission.READ_CONTACTS" />  
     <uses-permission android:name="android.permission.WRITE_CONTACTS" /> 
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
    <application
         android:label="dzpos"
         android:name="${applicationName}"

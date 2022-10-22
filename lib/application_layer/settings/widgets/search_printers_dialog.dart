@@ -1,8 +1,9 @@
-import 'package:dzpos/application_layer/settings/settings.dart';
 import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/common_blocs/printer/printer_bloc.dart';
 
 Future showSearchForPrintersDialog(BuildContext context) async {
   final bloc = context.read<PrinterBloc>();
@@ -43,16 +44,11 @@ class _SearchForDevicesDialogState extends State<SearchForDevicesDialog> {
           appBar: AppBar(
             title: const Text("Printers"),
           ),
-          floatingActionButton: StreamBuilder<bool>(
-            stream: bloc.printerManager.isScanningStream,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState.isLoading) {
-                return FloatingActionButton(
-                  onPressed: () {},
-                  child: const CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.data!) {
+          floatingActionButton: BlocBuilder<PrinterBloc, PrinterState>(
+            buildWhen: (previous, current) =>
+                previous.scanning != current.scanning,
+            builder: (context, state) {
+              if (state.scanning) {
                 return FloatingActionButton(
                   onPressed: () {
                     bloc.add(StopScanDevices());
