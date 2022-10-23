@@ -33,7 +33,7 @@ class DebtState extends Equatable {
   }) =>
       DebtState(
         debts: debts ?? this.debts,
-        status: status ?? this.status,
+        status: status ?? Status.initial,
         type: type ?? this.type,
         desc: desc ?? this.desc,
         amount: amount ?? this.amount,

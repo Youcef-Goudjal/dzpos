@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-String DateToYMD(DateTime date) {
+String dateToYMD(DateTime date) {
   return "${date.day}-${date.month}-${date.year}";
 }
 

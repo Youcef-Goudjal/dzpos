@@ -3,8 +3,10 @@ import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/manager/language/locale_keys.g.dart';
+import '../../../core/manager/route/routes.dart';
 import '../../../core/services/database.dart';
 
 class AccountsListPage extends StatefulWidget {
@@ -135,10 +137,18 @@ class _SuppliersList extends StatelessWidget {
                 itemCount: suppliers.length,
                 itemBuilder: (context, index) {
                   final element = suppliers[index];
-                  return ListTile(
-                    title: Text(element.name),
-                    subtitle: Text(
-                        LocaleKeys.Phone.tr(args: [element.contact ?? ""])),
+                  return Card(
+                    child: ListTile(
+                      title: Text(element.name),
+                      onTap: () {
+                        context.pushNamed(
+                          AppRoutes.newAccount.name,
+                          extra: element,
+                        );
+                      },
+                      subtitle: Text(
+                          LocaleKeys.Phone.tr(args: [element.contact ?? ""])),
+                    ),
                   );
                 },
               );
@@ -226,10 +236,18 @@ class _CustomersList extends StatelessWidget {
                     itemCount: customers.length,
                     itemBuilder: (context, index) {
                       final element = state.accounts[index];
-                      return ListTile(
-                        title: Text(element.name),
-                        subtitle: Text(
-                          LocaleKeys.Phone.tr(args: [element.contact ?? ""]),
+                      return Card(
+                        child: ListTile(
+                          title: Text(element.name),
+                          onTap: () {
+                            context.pushNamed(
+                              AppRoutes.newAccount.name,
+                              extra: element,
+                            );
+                          },
+                          subtitle: Text(
+                            LocaleKeys.Phone.tr(args: [element.contact ?? ""]),
+                          ),
                         ),
                       );
                     },

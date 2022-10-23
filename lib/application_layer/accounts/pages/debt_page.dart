@@ -24,9 +24,9 @@ class DebtPage extends StatelessWidget {
           final debtCubit = context.read<DebtCubit>();
           return Scaffold(
             body: NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [],
-              body: Column(
-                children: [
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverList(
+                    delegate: SliverChildListDelegate.fixed([
                   Container(
                     height: 30,
                     decoration: BoxDecoration(
@@ -47,74 +47,75 @@ class DebtPage extends StatelessWidget {
                       );
                     },
                   ),
-                  Expanded(
-                    child: BlocBuilder<DebtCubit, DebtState>(
-                      buildWhen: (previous, current) =>
-                          previous.debts != current.debts,
-                      builder: (context, state) {
-                        if (state.status.isLoading) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
+                ]))
+              ],
+              body: BlocBuilder<DebtCubit, DebtState>(
+                buildWhen: (previous, current) =>
+                    previous.debts != current.debts,
+                builder: (context, state) {
+                  if (state.status.isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-                        return ListView.separated(
-                          itemCount: state.debts.length,
-                          itemBuilder: (context, index) {
-                            final debt = state.debts[index];
-                            return ListTile(
-                              onLongPress: () async {
-                                final result = await showDialog(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title:
-                                          Text(LocaleKeys.delete_a_debt.tr()),
-                                      content:
-                                          Text(LocaleKeys.delete_a_debt.tr()),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context, "yes");
-                                          },
-                                          child: Text(LocaleKeys.Yes.tr()),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context, "No");
-                                          },
-                                          child: Text(LocaleKeys.No.tr()),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                                if (result == "Yes") {
-                                  debtCubit.onLongPressedTile(debt.id);
-                                }
-                              },
-                              title: Text(
-                                "${debt.amount}",
-                                style: context.textTheme.titleLarge,
+                  if (state.debts.isEmpty) {
+                    return const Center(
+                      child: Text("No data"),
+                    );
+                  }
+                  return ListView.separated(
+                    itemCount: state.debts.length,
+                    itemBuilder: (context, index) {
+                      final debt = state.debts[index];
+                      return ListTile(
+                        onLongPress: () async {
+                          final result = await showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text(LocaleKeys.delete_a_debt.tr()),
+                                content: Text(LocaleKeys.delete_a_debt.tr()),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, "yes");
+                                    },
+                                    child: Text(LocaleKeys.Yes.tr()),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context, "No");
+                                    },
+                                    child: Text(LocaleKeys.No.tr()),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                          if (result == "Yes") {
+                            debtCubit.onLongPressedTile(debt.id);
+                          }
+                        },
+                        title: Text(
+                          "${debt.amount}",
+                          style: context.textTheme.titleLarge,
+                        ),
+                        leading: debt.isCredit
+                            ? const Icon(
+                                Icons.arrow_circle_up_outlined,
+                                color: Colors.green,
+                              )
+                            : const Icon(
+                                Icons.arrow_circle_down_outlined,
+                                color: Colors.red,
                               ),
-                              leading: debt.isCredit
-                                  ? const Icon(
-                                      Icons.arrow_circle_up_outlined,
-                                      color: Colors.green,
-                                    )
-                                  : const Icon(
-                                      Icons.arrow_circle_down_outlined,
-                                      color: Colors.red,
-                                    ),
-                            );
-                          },
-                          separatorBuilder: (context, index) => 10.heightBox,
-                        );
-                      },
-                    ),
-                  )
-                ],
+                      );
+                    },
+                    separatorBuilder: (context, index) => 10.heightBox,
+                  );
+                },
               ),
             ),
           );

@@ -79,6 +79,7 @@ abstract class  LocaleKeys {
   static const settings_theme = 'settings_theme';
   static const settings_Theme_Mode = 'settings_Theme_Mode';
   static const settings_Print_Settings = 'settings_Print_Settings';
+  static const settings_useBox = 'settings_useBox';
   static const settings_Reporting_ComponentsLogo = 'settings_Reporting_ComponentsLogo';
   static const settings_Labels_in_print = 'settings_Labels_in_print';
   static const settings_Bluetooth_Printer_Settings = 'settings_Bluetooth_Printer_Settings';

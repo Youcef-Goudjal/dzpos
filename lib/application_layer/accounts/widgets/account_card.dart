@@ -8,7 +8,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import '../../../core/manager/language/locale_keys.g.dart';
 import '../../../core/services/database.dart';
 
-class AccountCard extends StatelessWidget {
+class AccountCard extends StatefulWidget {
   final String? initialValue;
   final void Function(Account account) onSelected;
   final void Function(String input)? onChangedAmount, onChangeNote;
@@ -28,6 +28,11 @@ class AccountCard extends StatelessWidget {
   });
 
   @override
+  State<AccountCard> createState() => _AccountCardState();
+}
+
+class _AccountCardState extends State<AccountCard> {
+  @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
     return Padding(
@@ -45,13 +50,18 @@ class AccountCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TypeAheadFormField<Account>(
-                initialValue: initialValue,
-                onSuggestionSelected: onSelected,
-                itemBuilder: (context, dynamic itemData) {
+                loadingBuilder: (context) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                initialValue: widget.initialValue,
+                onSuggestionSelected: widget.onSelected,
+                itemBuilder: (context, Account itemData) {
                   return ListTile(
-                    title: Text(itemData.value),
+                    title: Text(itemData.name),
                     subtitle: Text(
-                      LocaleKeys.Phone.tr(args: [itemData.contact]),
+                      LocaleKeys.Phone.tr(args: [itemData.contact.toString()]),
                     ),
                   );
                 },
@@ -68,16 +78,16 @@ class AccountCard extends StatelessWidget {
                   Expanded(
                     child: RadioListTile<bool>(
                       value: true,
-                      groupValue: isCreditor,
-                      onChanged: onTypeChanged,
+                      groupValue: widget.isCreditor,
+                      onChanged: widget.onTypeChanged,
                       title: Text(LocaleKeys.Creditor.tr()),
                     ),
                   ),
                   Expanded(
                     child: RadioListTile<bool>(
                       value: false,
-                      groupValue: isCreditor,
-                      onChanged: onTypeChanged,
+                      groupValue: widget.isCreditor,
+                      onChanged: widget.onTypeChanged,
                       title: Text(LocaleKeys.Debtor.tr()),
                     ),
                   ),
@@ -93,7 +103,7 @@ class AccountCard extends StatelessWidget {
                           height: 50,
                           child: AppTextField(
                             hint: LocaleKeys.Amount.tr(),
-                            onChanged: onChangedAmount,
+                            onChanged: widget.onChangedAmount,
                             keyboardType: TextInputType.number,
                           ),
                         ),
@@ -103,7 +113,7 @@ class AccountCard extends StatelessWidget {
                           child: AppTextField(
                             hint: LocaleKeys.Notes.tr(),
                             // maxLine: 2,
-                            onChanged: onChangeNote,
+                            onChanged: widget.onChangeNote,
                           ),
                         ),
                       ],
@@ -112,7 +122,7 @@ class AccountCard extends StatelessWidget {
                   5.widthBox,
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: onSave,
+                      onPressed: widget.onSave,
                       child: Center(
                         child: Column(
                           children: [

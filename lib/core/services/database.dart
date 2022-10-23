@@ -201,8 +201,6 @@ class FullInvoice extends Equatable {
       );
 }
 
-bool useBox = true;
-
 class FullSale extends Equatable {
   final Sale sale;
   final FullProduct product;
@@ -220,7 +218,7 @@ class FullSale extends Equatable {
 
   double get subTotal {
     double t = 0;
-
+    final useBox = StorageKeys.settingsUseBox.storedValue ?? false;
     double box = useBox ? (product.unitById(unitId)?.box) ?? 1 : 1;
     t = quantity * unitPrice * box;
     return t;

@@ -26,6 +26,278 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
+    Map<String, Map<String, Map<String, dynamic>>> settings = {
+      LocaleKeys.settings_General_Settings.tr(): {
+        LocaleKeys.Display_System_information.tr(): {
+          "type": SettingsActions.navigation,
+          "routeName": "",
+        },
+        LocaleKeys.settings_Users_and_Permission_Settings.tr(): {
+          "type": SettingsActions.navigation,
+          "routeName": "",
+        },
+        LocaleKeys.settings_PassCode_Security_on_entry.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue": false,
+          "onToggle": (value) {}
+        },
+        LocaleKeys.settings_Always_backup_on_exit.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue": StorageKeys.settingsAlwaysBackup.storedValue ?? false,
+          "onToggle": (bool? value) {
+            StorageKeys.settingsAlwaysBackup.setValue(value ?? false);
+            setState(() {});
+          },
+        },
+      },
+      LocaleKeys.Language.tr(): {
+        "العربية": {
+          "type": SettingsActions.svg,
+          "svgPath": AppAssets.algeria,
+          "onPressed": (BuildContext context) {
+            context.setLocale(const Locale("ar"));
+          }
+        },
+        "English": {
+          "type": SettingsActions.svg,
+          "svgPath": AppAssets.usa,
+          "onPressed": (BuildContext context) {
+            context.setLocale(const Locale("en"));
+          }
+        },
+        "Français": {
+          "type": SettingsActions.svg,
+          "svgPath": AppAssets.france,
+          "onPressed": (BuildContext context) {
+            context.setLocale(const Locale("fr"));
+          }
+        },
+      },
+      LocaleKeys.settingsTheme_Settings.tr(): {
+        LocaleKeys.settings_theme.tr(): {
+          "type": SettingsActions.custom,
+          "onPressed": (BuildContext context) {},
+          "kTitle": DropdownButton<FlexScheme>(
+            isExpanded: true,
+            value: ThemeManager.instance.defaultFlexScheme,
+            items: FlexScheme.values
+                .map((e) => DropdownMenuItem(
+                      value: e,
+                      child: Text(e.name),
+                    ))
+                .toList(),
+            onChanged: (value) {
+              CommonBloc.themeBloc.add(ThemeChanged(
+                flexScheme: value,
+              ));
+            },
+          ),
+        },
+        LocaleKeys.settings_Theme_Mode.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue":
+              ThemeManager.instance.defaultThemeMode == ThemeMode.dark,
+          "onToggle": (value) {
+            CommonBloc.themeBloc.add(ThemeChanged(
+              themeMode: (value) ? ThemeMode.dark : ThemeMode.light,
+            ));
+          }
+        },
+      },
+      LocaleKeys.settings_Print_Settings.tr(): {
+        LocaleKeys.settings_Reporting_ComponentsLogo.tr(): {
+          "type": SettingsActions.navigation,
+          "routeName": AppRoutes.defaultPrint.name,
+        },
+        LocaleKeys.settings_Labels_in_print.tr(): {
+          "type": SettingsActions.navigation,
+          "routeName": AppRoutes.printLabels.name,
+        },
+        LocaleKeys.settings_Bluetooth_Printer_Settings.tr(): {
+          "type": SettingsActions.navigation,
+          "onPressed": (BuildContext context) {
+            showPrinterSettings(context);
+          },
+        },
+        LocaleKeys.settings_Choose_Printer_Model.tr(): {
+          "type": SettingsActions.navigation,
+          "routeName": "",
+        },
+        LocaleKeys.settings_Font_Size.tr(): {
+          "type": SettingsActions.custom,
+          "onPressed": (BuildContext context) {
+            statusHandler(context, Status.failure,
+                msg: LocaleKeys.Coming_soon.tr());
+          },
+          "title": Row(
+            children: [
+              Text(LocaleKeys.settings_Font_Size.tr()),
+              20.w.widthBox,
+              Expanded(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {},
+                ),
+              ),
+              10.w.widthBox,
+              ElevatedButton(
+                onPressed: () {},
+                child: Text(LocaleKeys.Save.tr()),
+              )
+            ],
+          ),
+        },
+      },
+      LocaleKeys.settings_Billing_Settings.tr(): {
+        LocaleKeys.settings_Increase_the_quantity_of_the_product_in_the_invoice
+            .tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue": StorageKeys.settingsAddQuantity.storedValue ?? false,
+          "onToggle": (value) {
+            StorageKeys.settingsAddQuantity.setValue(value ?? false);
+            setState(() {});
+          }
+        },
+        LocaleKeys.settings_useBox.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue": StorageKeys.settingsUseBox.storedValue ?? false,
+          "onToggle": (value) {
+            StorageKeys.settingsUseBox.setValue(value ?? false);
+            setState(() {});
+          }
+        },
+        LocaleKeys.settings_Selling_at_less_than_cost.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue":
+              StorageKeys.settingsSellLestThanCost.storedValue ?? false,
+          "onToggle": (value) {
+            StorageKeys.settingsSellLestThanCost.setValue(value ?? false);
+            setState(() {});
+          }
+        },
+        LocaleKeys.settings_Activate_minimum_quantities_alert.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue":
+              StorageKeys.settingsActivateNotificationOfQuantity.storedValue ??
+                  false,
+          "onToggle": (value) {
+            StorageKeys.settingsActivateNotificationOfQuantity
+                .setValue(value ?? false);
+            setState(() {});
+          }
+        },
+        LocaleKeys.settings_Allow_selling_while_stocks_last.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue":
+              StorageKeys.settingsAllowSellWhenQuantityIsZero.storedValue ??
+                  false,
+          "onToggle": (value) {
+            StorageKeys.settingsAllowSellWhenQuantityIsZero
+                .setValue(value ?? false);
+            setState(() {});
+          }
+        },
+        LocaleKeys
+            .settings_Separate_customers_and_suppliers_accounts_in_invoices
+            .tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue": StorageKeys
+                  .settingsSeparateBetweenCustomersAndSuppliers.storedValue ??
+              false,
+          "onToggle": (value) {
+            StorageKeys.settingsSeparateBetweenCustomersAndSuppliers
+                .setValue(value ?? false);
+            setState(() {});
+          }
+        },
+        LocaleKeys.settings_Open_the_list_of_items_on_sale_immediately.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue":
+              StorageKeys.settingsOpenSellInvoicesOnStart.storedValue ?? false,
+          "onToggle": (value) {
+            StorageKeys.settingsOpenSellInvoicesOnStart
+                .setValue(value ?? false);
+            setState(() {});
+          }
+        },
+        LocaleKeys.settings_The_default_billing_accounts_is_General_Customer
+            .tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue":
+              StorageKeys.settingsDefaultIsGeneralCustomer.storedValue ?? false,
+          "onToggle": (value) {
+            StorageKeys.settingsDefaultIsGeneralCustomer
+                .setValue(value ?? false);
+            setState(() {});
+          }
+        },
+        LocaleKeys.settings_Show_items_frozen_in_the_new_invoice.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue":
+              StorageKeys.settingsShowFrozenProducts.storedValue ?? false,
+          "onToggle": (value) {
+            StorageKeys.settingsShowFrozenProducts.setValue(value ?? false);
+            setState(() {});
+          }
+        },
+        LocaleKeys.settings_Display_frozen_accounts_in_new_invoices.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue":
+              StorageKeys.settingsShowFrozenAccounts.storedValue ?? false,
+          "onToggle": (value) {
+            StorageKeys.settingsShowFrozenAccounts.setValue(value ?? false);
+            setState(() {});
+          }
+        },
+      },
+      LocaleKeys.settings_Maintenance.tr(): {
+        "Repair invoices": {
+          "type": SettingsActions.custom,
+          "onPressed": (BuildContext context) {
+            statusHandler(context, Status.failure,
+                msg: LocaleKeys.Coming_soon.tr());
+          }
+        },
+        LocaleKeys.settings_Fix_Permissions.tr(): {
+          "type": SettingsActions.custom,
+          "onPressed": (BuildContext context) {
+            statusHandler(context, Status.failure,
+                msg: LocaleKeys.Coming_soon.tr());
+          }
+        },
+        LocaleKeys.settings_Modify_and_manage_Databases.tr(): {
+          "type": SettingsActions.custom,
+          "leading": Icon(
+            Icons.dangerous,
+            color: context.error,
+          ),
+          "kStyle": context.textTheme.titleMedium!.copyWith(
+            color: context.error,
+          ),
+          "onPressed": (BuildContext context) {
+            statusHandler(context, Status.failure,
+                msg: LocaleKeys.Coming_soon.tr());
+          }
+        },
+        LocaleKeys.SignOut.tr(): {
+          "type": SettingsActions.custom,
+          "leading": Icon(
+            Icons.logout,
+            color: context.error,
+          ),
+          "kStyle": context.textTheme.titleMedium!.copyWith(
+            color: context.error,
+          ),
+          "onPressed": (BuildContext context) {
+            CommonBloc.authBloc.add(
+                SignOutRequested(CommonBloc.applicationBloc.application.imei));
+          },
+        },
+      }
+    };
     return SettingsList(
       physics: const BouncingScrollPhysics(),
       platform: DevicePlatform.android,
@@ -62,254 +334,6 @@ class _SettingsPageState extends State<SettingsPage> {
       }).toList(),
     );
   }
-
-  late Map<String, Map<String, Map<String, dynamic>>> settings = {
-    LocaleKeys.settings_General_Settings.tr(): {
-      LocaleKeys.Display_System_information.tr(): {
-        "type": SettingsActions.navigation,
-        "routeName": "",
-      },
-      LocaleKeys.settings_Users_and_Permission_Settings.tr(): {
-        "type": SettingsActions.navigation,
-        "routeName": "",
-      },
-      LocaleKeys.settings_PassCode_Security_on_entry.tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {}
-      },
-      LocaleKeys.settings_Always_backup_on_exit.tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": StorageKeys.settingsAlwaysBackup.storedValue ?? false,
-        "onToggle": (bool? value) {
-          StorageKeys.settingsAlwaysBackup.setValue(value ?? false);
-          setState(() {});
-        },
-      },
-    },
-    LocaleKeys.Language.tr(): {
-      "العربية": {
-        "type": SettingsActions.svg,
-        "svgPath": AppAssets.algeria,
-        "onPressed": (BuildContext context) {
-          context.setLocale(const Locale("ar"));
-        }
-      },
-      "English": {
-        "type": SettingsActions.svg,
-        "svgPath": AppAssets.usa,
-        "onPressed": (BuildContext context) {
-          context.setLocale(const Locale("en"));
-        }
-      },
-      "Français": {
-        "type": SettingsActions.svg,
-        "svgPath": AppAssets.france,
-        "onPressed": (BuildContext context) {
-          context.setLocale(const Locale("fr"));
-        }
-      },
-    },
-    LocaleKeys.settingsTheme_Settings.tr(): {
-      LocaleKeys.settings_theme.tr(): {
-        "type": SettingsActions.custom,
-        "onPressed": (BuildContext context) {},
-        "kTitle": DropdownButton<FlexScheme>(
-          isExpanded: true,
-          value: ThemeManager.instance.defaultFlexScheme,
-          items: FlexScheme.values
-              .map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(e.name),
-                  ))
-              .toList(),
-          onChanged: (value) {
-            CommonBloc.themeBloc.add(ThemeChanged(
-              flexScheme: value,
-            ));
-          },
-        ),
-      },
-      LocaleKeys.settings_Theme_Mode.tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue":
-            ThemeManager.instance.defaultThemeMode == ThemeMode.dark,
-        "onToggle": (value) {
-          CommonBloc.themeBloc.add(ThemeChanged(
-            themeMode: (value) ? ThemeMode.dark : ThemeMode.light,
-          ));
-        }
-      },
-    },
-    LocaleKeys.settings_Print_Settings.tr(): {
-      LocaleKeys.settings_Reporting_ComponentsLogo.tr(): {
-        "type": SettingsActions.navigation,
-        "routeName": AppRoutes.defaultPrint.name,
-      },
-      LocaleKeys.settings_Labels_in_print.tr(): {
-        "type": SettingsActions.navigation,
-        "routeName": AppRoutes.printLabels.name,
-      },
-      LocaleKeys.settings_Bluetooth_Printer_Settings.tr(): {
-        "type": SettingsActions.navigation,
-        "onPressed": (BuildContext context) {
-          showPrinterSettings(context);
-        },
-      },
-      LocaleKeys.settings_Choose_Printer_Model.tr(): {
-        "type": SettingsActions.navigation,
-        "routeName": "",
-      },
-      LocaleKeys.settings_Font_Size.tr(): {
-        "type": SettingsActions.custom,
-        "onPressed": (BuildContext context) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        },
-        "title": Row(
-          children: [
-            Text(LocaleKeys.settings_Font_Size.tr()),
-            20.w.widthBox,
-            Expanded(
-              child: TextField(
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.zero,
-                ),
-                keyboardType: TextInputType.number,
-                onChanged: (value) {},
-              ),
-            ),
-            10.w.widthBox,
-            ElevatedButton(
-              onPressed: () {},
-              child: Text(LocaleKeys.Save.tr()),
-            )
-          ],
-        ),
-      },
-    },
-    LocaleKeys.settings_Billing_Settings.tr(): {
-      LocaleKeys.settings_Increase_the_quantity_of_the_product_in_the_invoice
-          .tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_Selling_at_less_than_cost.tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_Activate_minimum_quantities_alert.tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_Allow_selling_while_stocks_last.tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_Separate_customers_and_suppliers_accounts_in_invoices
-          .tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_Open_the_list_of_items_on_sale_immediately.tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_The_default_billing_accounts_is_General_Customer.tr():
-          {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_Show_items_frozen_in_the_new_invoice.tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "c": (value) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_Display_frozen_accounts_in_new_invoices.tr(): {
-        "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-    },
-    LocaleKeys.settings_Maintenance.tr(): {
-      "Repair invoices": {
-        "type": SettingsActions.custom,
-        "onPressed": (BuildContext context) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_Fix_Permissions.tr(): {
-        "type": SettingsActions.custom,
-        "onPressed": (BuildContext context) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.settings_Modify_and_manage_Databases.tr(): {
-        "type": SettingsActions.custom,
-        "leading": Icon(
-          Icons.dangerous,
-          color: context.error,
-        ),
-        "kStyle": context.textTheme.titleMedium!.copyWith(
-          color: context.error,
-        ),
-        "onPressed": (BuildContext context) {
-          statusHandler(context, Status.failure,
-              msg: LocaleKeys.Coming_soon.tr());
-        }
-      },
-      LocaleKeys.SignOut.tr(): {
-        "type": SettingsActions.custom,
-        "leading": Icon(
-          Icons.logout,
-          color: context.error,
-        ),
-        "kStyle": context.textTheme.titleMedium!.copyWith(
-          color: context.error,
-        ),
-        "onPressed": (BuildContext context) {
-          CommonBloc.authBloc.add(
-              SignOutRequested(CommonBloc.applicationBloc.application.imei));
-        },
-      },
-    }
-  };
 }
 
 enum SettingsActions {

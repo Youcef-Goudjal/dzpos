@@ -2,7 +2,7 @@ import 'package:dzpos/application_layer/accounts/accounts.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/utils/utils.dart';
 import 'package:dzpos/product/constants/constants.dart';
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -46,6 +46,7 @@ class _DebtListPageState extends State<DebtListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale.languageCode == "ar";
     return BlocProvider(
       create: (context) => DeptListCubit(accountsRepository),
       child: Scaffold(
@@ -85,10 +86,12 @@ class _DebtListPageState extends State<DebtListPage> {
                           checkList[LocaleKeys.customers.tr()] = value!;
                         });
                       },
-                      title: Text(
-                        LocaleKeys.customers.tr(),
-                        style: const TextStyle(
-                          overflow: TextOverflow.fade,
+                      title: FittedBox(
+                        child: Text(
+                          LocaleKeys.customers.tr(),
+                          style: const TextStyle(
+                            overflow: TextOverflow.fade,
+                          ),
                         ),
                       ),
                     ),
@@ -101,10 +104,12 @@ class _DebtListPageState extends State<DebtListPage> {
                           checkList[LocaleKeys.suppliers.tr()] = value!;
                         });
                       },
-                      title: Text(
-                        LocaleKeys.suppliers.tr(),
-                        style: const TextStyle(
-                          overflow: TextOverflow.fade,
+                      title: FittedBox(
+                        child: Text(
+                          LocaleKeys.suppliers.tr(),
+                          style: const TextStyle(
+                            overflow: TextOverflow.fade,
+                          ),
                         ),
                       ),
                     ),
@@ -117,10 +122,12 @@ class _DebtListPageState extends State<DebtListPage> {
                           checkList[LocaleKeys.others.tr()] = value!;
                         });
                       },
-                      title: Text(
-                        LocaleKeys.others.tr(),
-                        style: const TextStyle(
-                          overflow: TextOverflow.fade,
+                      title: FittedBox(
+                        child: Text(
+                          LocaleKeys.others.tr(),
+                          style: const TextStyle(
+                            overflow: TextOverflow.fade,
+                          ),
                         ),
                       ),
                     ),
@@ -138,98 +145,112 @@ class _DebtListPageState extends State<DebtListPage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   height: 50,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              debtTypeSelected = DebtType.creditor;
-                            });
-                          },
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: debtTypeSelected == DebtType.creditor
-                                  ? context.primaryColor
-                                  : null,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                bottomLeft: Radius.circular(20),
+                  child: Directionality(
+                    textDirection: context.locale.languageCode == "ar"
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                debtTypeSelected = DebtType.creditor;
+                              });
+                            },
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                color: debtTypeSelected == DebtType.creditor
+                                    ? context.primaryColor
+                                    : null,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(!isArabic ? 20 : 0),
+                                  bottomLeft:
+                                      Radius.circular(!isArabic ? 20 : 0),
+                                  topRight: Radius.circular(!isArabic ? 0 : 20),
+                                  bottomRight:
+                                      Radius.circular(!isArabic ? 0 : 20),
+                                ),
                               ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                DebtType.creditor.name,
-                                style: TextStyle(
-                                  color: context.onSecondaryColor,
-                                  fontWeight: FontWeight.bold,
+                              child: Center(
+                                child: Text(
+                                  DebtType.creditor.name,
+                                  style: TextStyle(
+                                    color: context.onSecondaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      VerticalDivider(
-                        color: context.primaryColor,
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              debtTypeSelected = DebtType.debtor;
-                            });
-                          },
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: debtTypeSelected == DebtType.debtor
-                                  ? context.primaryColor
-                                  : null,
-                            ),
-                            child: Center(
-                              child: Text(
-                                DebtType.debtor.name,
-                                style: TextStyle(
-                                  color: context.onSecondaryColor,
-                                  fontWeight: FontWeight.bold,
+                        VerticalDivider(
+                          color: context.primaryColor,
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                debtTypeSelected = DebtType.debtor;
+                              });
+                            },
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                color: debtTypeSelected == DebtType.debtor
+                                    ? context.primaryColor
+                                    : null,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  DebtType.debtor.name,
+                                  style: TextStyle(
+                                    color: context.onSecondaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      VerticalDivider(
-                        color: context.primaryColor,
-                      ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              debtTypeSelected = DebtType.all;
-                            });
-                          },
-                          child: Ink(
-                            decoration: BoxDecoration(
-                              color: debtTypeSelected == DebtType.all
-                                  ? context.primaryColor
-                                  : null,
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
+                        VerticalDivider(
+                          color: context.primaryColor,
+                          indent: 0,
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                debtTypeSelected = DebtType.all;
+                              });
+                            },
+                            child: Ink(
+                              decoration: BoxDecoration(
+                                color: debtTypeSelected == DebtType.all
+                                    ? context.primaryColor
+                                    : null,
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(!isArabic ? 20 : 0),
+                                  bottomRight:
+                                      Radius.circular(!isArabic ? 20 : 0),
+                                  topLeft: Radius.circular(!isArabic ? 0 : 20),
+                                  bottomLeft:
+                                      Radius.circular(!isArabic ? 0 : 20),
+                                ),
                               ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                DebtType.all.name,
-                                style: TextStyle(
-                                  color: context.onSecondaryColor,
-                                  fontWeight: FontWeight.bold,
+                              child: Center(
+                                child: Text(
+                                  DebtType.all.name,
+                                  style: TextStyle(
+                                    color: context.onSecondaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -253,7 +274,7 @@ class _DebtListPageState extends State<DebtListPage> {
                             style: context.textTheme.titleLarge,
                           ),
                           subtitle: Text(
-                              "${DateToYMD(debt.debt.dateRecorded)}  ${debt.account?.name}"),
+                              "${dateToYMD(debt.debt.dateRecorded)}  ${debt.account?.name}"),
                           leading: debt.debt.isCredit
                               ? const Icon(
                                   Icons.arrow_circle_up_outlined,

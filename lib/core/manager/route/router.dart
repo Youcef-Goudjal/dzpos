@@ -56,7 +56,14 @@ abstract class AppRouter {
               ),
             ]),
             AppRoutes.accounts.goRoute([
-              AppRoutes.newAccount.goRoute(),
+              AppRoutes.newAccount.goRoute([], (context, state) {
+                return MaterialPage(
+                  key: state.pageKey,
+                  child: NewAccountPage(
+                    account: state.extra as Account,
+                  ),
+                );
+              }),
               AppRoutes.accountsList.goRoute(),
               AppRoutes.debtList.goRoute(),
               AppRoutes.accountStatement.goRoute(),

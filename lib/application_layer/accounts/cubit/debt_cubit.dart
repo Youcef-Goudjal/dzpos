@@ -12,7 +12,7 @@ part 'debt_state.dart';
 
 class DebtCubit extends Cubit<DebtState> {
   final AccountsRepository accountsRepository;
-  late StreamSubscription? _subscription;
+   StreamSubscription? _subscription;
 
   DebtCubit(this.accountsRepository, bool type) : super(DebtState(type: type));
 
@@ -31,21 +31,21 @@ class DebtCubit extends Cubit<DebtState> {
   void onDescChanged(String desc) {
     emit(state.copyWith(
       desc: desc,
-      status: Status.initial,
+     
     ));
   }
 
   void onAmountChanged(String amount) {
     emit(state.copyWith(
       amount: amount,
-      status: Status.initial,
+      
     ));
   }
 
   void onTypeChanged(bool? input) {
     emit(state.copyWith(
       type: input,
-      status: Status.initial,
+      
     ));
   }
 

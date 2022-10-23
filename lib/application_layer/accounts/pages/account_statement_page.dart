@@ -111,7 +111,7 @@ class _AccountStatementBodyState extends State<_AccountStatementBody> {
                               style: context.textTheme.titleLarge,
                             ),
                             subtitle: Text(
-                                "${DateToYMD(debt.dateRecorded)}  ${state.account.name}"),
+                                "${dateToYMD(debt.dateRecorded)}  ${state.account.name}"),
                             leading: debt.isCredit
                                 ? const Icon(
                                     Icons.arrow_circle_up_outlined,

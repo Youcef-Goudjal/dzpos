@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dzpos/application_layer/application_layer.dart';
 import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/product/firebase_options.dart';
@@ -6,6 +8,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 import 'core/manager/language/language_manager.dart';
 import 'core/manager/route/router.dart';
@@ -26,6 +30,7 @@ Future<void> main() async {
         path: LanguageManager.instance.path,
         fallbackLocale: LanguageManager.instance.defaultLanguage,
         saveLocale: true,
+        startLocale: const Locale("ar"),
         useOnlyLangCode: true,
         child: ScreenUtilInit(
           builder: (context, child) {
@@ -61,9 +66,18 @@ class _DzposState extends State<Dzpos> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.detached) {
-      CommonBloc.applicationBloc.add(ApplicationWillClose());
+      if (StorageKeys.settingsAlwaysBackup.storedValue ?? false) {
+        try {
+          final dbFolder = await getApplicationDocumentsDirectory();
+          final dbPath = p.join(dbFolder.path, 'db.sqlite');
+          final file = File(dbPath);
+          await CommonBloc.userImpl.uploadDB(db: file);
+        } on Exception {
+          // TODO
+        }
+      }
     }
     super.didChangeAppLifecycleState(state);
   }

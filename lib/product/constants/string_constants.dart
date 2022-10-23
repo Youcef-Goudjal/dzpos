@@ -12,7 +12,7 @@ enum StorageKeys {
   thermalPrinterProfile,
   thermalPaperSize,
   pdfPageFormat,
-  showLogo,
+  showLogo(StoredType.bool),
   logo(StoredType.list),
   printerMac,
   printerName,
@@ -35,6 +35,16 @@ enum StorageKeys {
   showBalanceBeforeAndAfter(StoredType.bool),
   showPrintDateAndTime(StoredType.bool),
   settingsAlwaysBackup(StoredType.bool),
+  settingsAddQuantity(StoredType.bool),
+  settingsUseBox(StoredType.bool),
+  settingsSellLestThanCost(StoredType.bool),
+  settingsActivateNotificationOfQuantity(StoredType.bool),
+  settingsAllowSellWhenQuantityIsZero(StoredType.bool),
+  settingsSeparateBetweenCustomersAndSuppliers(StoredType.bool),
+  settingsOpenSellInvoicesOnStart(StoredType.bool),
+  settingsDefaultIsGeneralCustomer(StoredType.bool),
+  settingsShowFrozenProducts(StoredType.bool),
+  settingsShowFrozenAccounts(StoredType.bool),
   ;
 
   final StoredType type;

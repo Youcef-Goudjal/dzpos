@@ -84,14 +84,14 @@ class _VerifyOTPBody extends StatelessWidget {
               text: TextSpan(
                 children: [
                   TextSpan(
-                    text: "Don't receive code ? ",
+                    text: LocaleKeys.verify_otp_Dont_receive_code.tr(),
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium
                         ?.copyWith(color: Colors.grey),
                   ),
                   TextSpan(
-                    text: "Send again!",
+                    text: LocaleKeys.verify_otp_Send_again.tr(),
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium

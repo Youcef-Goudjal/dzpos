@@ -45,6 +45,7 @@ class Products extends Table {
   RealColumn get discountPercentage =>
       real().check(discountPercentage.isNotNull())();
   RealColumn get reorderLevel => real()();
+  BoolColumn get isFrozen => boolean().withDefault(const Constant(false))();
   IntColumn get userId => integer().nullable().references(Users, #id)();
 }
 
@@ -98,6 +99,7 @@ class Accounts extends Table {
   TextColumn get address => text().nullable().withLength(max: 100)();
   TextColumn get email => text().nullable().withLength(max: 50)();
   IntColumn get accountType => intEnum<AccountType>()();
+  BoolColumn get isFrozen => boolean().withDefault(const Constant(false))();
 }
 
 /// sales (sales_id, invoice_id, product_id, quantity, unit_price, sub_total)

@@ -38,7 +38,7 @@ Iterable<int> _contentHeader(Generator generator, FullInvoice invoice) {
     "${PrinterLabels.invoiceId.value}# : ${invoice.invoiceId}",
   );
   bytes += generator.text(
-    "${PrinterLabels.date.value}# : ${DateToYMD(invoice.dateRecorded)}",
+    "${PrinterLabels.date.value}# : ${dateToYMD(invoice.dateRecorded)}",
   );
   bytes += generator.text(
     "${PrinterLabels.date.value}# : ${getTime(invoice.dateRecorded)}",

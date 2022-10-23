@@ -66,27 +66,30 @@ class _NewAccountBody extends StatelessWidget {
                 builder: (context, state) {
                   return Center(
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                         AccountType.values.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            onPressed: () =>
-                                newAccountCubit.onChangeIsAccountType(
-                              AccountType.values[index],
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  AccountType.values[index] == state.accountType
-                                      ? context.secondaryColor
-                                      : null,
-                            ),
-                            child: Center(
-                              child: Text(
-                                AccountType.values[index]
-                                    .toString()
-                                    .split(".")
-                                    .last,
+                        (index) => Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                              onPressed: () =>
+                                  newAccountCubit.onChangeIsAccountType(
+                                AccountType.values[index],
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AccountType.values[index] ==
+                                        state.accountType
+                                    ? context.secondaryColor
+                                    : null,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  AccountType.values[index]
+                                      .toString()
+                                      .split(".")
+                                      .last,
+                                ),
                               ),
                             ),
                           ),
