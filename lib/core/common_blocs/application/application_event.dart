@@ -8,3 +8,5 @@ abstract class ApplicationEvent extends Equatable {
 }
 
 class SetupApplication extends ApplicationEvent {}
+
+class ApplicationWillClose extends ApplicationEvent {}

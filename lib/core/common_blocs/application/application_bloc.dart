@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../product/product.dart';
+import '../profile/profile_bloc.dart';
 
 part 'application_event.dart';
 part 'application_state.dart';
@@ -16,6 +17,7 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
   final application = Application();
   ApplicationBloc() : super(ApplicationInitial()) {
     on<SetupApplication>(_onSetupApplication);
+    on<ApplicationWillClose>(_onApplicationWillClose);
   }
 
   Future<void> _onSetupApplication(
@@ -47,5 +49,13 @@ class ApplicationBloc extends Bloc<ApplicationEvent, ApplicationState> {
 
     // check Authentication
     emit(ApplicationCompleted());
+  }
+
+  FutureOr<void> _onApplicationWillClose(
+      ApplicationWillClose event, Emitter<ApplicationState> emit) {
+    print('Application closed');
+    if (StorageKeys.settingsAlwaysBackup.storedValue ?? false) {
+      CommonBloc.profileBloc.add(UploadDBRequested());
+    }
   }
 }

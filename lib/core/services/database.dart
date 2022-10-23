@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
+import '../../product/product.dart';
 import '../enums.dart';
 import '../utils/utils.dart';
 
@@ -43,6 +44,7 @@ LazyDatabase _openConnection() {
     // for your app.
     final dbFolder = await getApplicationDocumentsDirectory();
     final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    StorageKeys.dbPath.setValue(file.path);
     return NativeDatabase(file);
   });
 }

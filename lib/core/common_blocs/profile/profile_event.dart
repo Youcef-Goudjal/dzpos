@@ -19,3 +19,6 @@ class ProfileUpdated extends ProfileEvent {
   @override
   List<Object> get props => [updatedUser];
 }
+
+// upload Database to storage
+class UploadDBRequested extends ProfileEvent {}

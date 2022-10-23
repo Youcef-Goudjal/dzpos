@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dzpos/domain/domain.dart';
 
 import '../../data/data.dart';
@@ -23,4 +25,6 @@ abstract class UserRepository {
     UserEntity updatedUser, {
     Map<String, dynamic>? additionalData,
   });
+
+  Future<void> uploadDB({required File db});
 }

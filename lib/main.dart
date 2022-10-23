@@ -45,17 +45,27 @@ class Dzpos extends StatefulWidget {
   State<Dzpos> createState() => _DzposState();
 }
 
-class _DzposState extends State<Dzpos> {
+class _DzposState extends State<Dzpos> with WidgetsBindingObserver {
   @override
   void initState() {
     CommonBloc.applicationBloc.add(SetupApplication());
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     CommonBloc.dispose();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      CommonBloc.applicationBloc.add(ApplicationWillClose());
+    }
+    super.didChangeAppLifecycleState(state);
   }
 
   @override

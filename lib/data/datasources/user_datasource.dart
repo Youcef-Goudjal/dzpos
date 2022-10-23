@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dzpos/domain/entities/user_entity.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../data.dart';
 
@@ -24,11 +28,13 @@ abstract class UserDataSource {
     UserEntity updatedUser, {
     Map<String, dynamic>? additionalData,
   });
+
+  Future<void> uploadDB({required File db});
 }
 
 class UserDataSourceImpl implements UserDataSource {
   final _userCollection = FirebaseFirestore.instance.collection("users");
-
+  final storage = FirebaseStorage.instance.ref("db");
   @override
   Future<void> addUserData(UserModel newUser) async {
     return await _userCollection.doc(newUser.uid).set(newUser.toJson());
@@ -65,5 +71,10 @@ class UserDataSourceImpl implements UserDataSource {
         }
       },
     );
+  }
+
+  @override
+  Future<void> uploadDB({required File db}) async {
+     storage.child(FirebaseAuth.instance.currentUser!.uid).putFile(db);
   }
 }

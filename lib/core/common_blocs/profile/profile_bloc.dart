@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:dzpos/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -17,6 +20,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       : super(ProfileLoading()) {
     on<LoadProfile>(_onLoadProfile);
     on<ProfileUpdated>(_onProfileUpdated);
+    on<UploadDBRequested>(_onUploadDBRequested);
   }
 
   FutureOr<void> _onLoadProfile(LoadProfile event, Emitter<ProfileState> emit) {
@@ -46,5 +50,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     _profileStreamSub?.cancel();
     user = UserEntity.empty;
     return super.close();
+  }
+
+  FutureOr<void> _onUploadDBRequested(
+      UploadDBRequested event, Emitter<ProfileState> emit) async {
+    final dbFolder = await getApplicationDocumentsDirectory();
+    final dbPath = p.join(dbFolder.path, 'db.sqlite');
+    print(dbPath);
+    if (dbPath != "") {
+      final file = File(dbPath);
+      _userRepository.uploadDB(db: file);
+    }
   }
 }

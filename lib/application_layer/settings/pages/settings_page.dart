@@ -80,8 +80,11 @@ class _SettingsPageState extends State<SettingsPage> {
       },
       LocaleKeys.settings_Always_backup_on_exit.tr(): {
         "type": SettingsActions.switchTile,
-        "initialValue": false,
-        "onToggle": (value) {}
+        "initialValue": StorageKeys.settingsAlwaysBackup.storedValue ?? false,
+        "onToggle": (bool? value) {
+          StorageKeys.settingsAlwaysBackup.setValue(value ?? false);
+          setState(() {});
+        },
       },
     },
     LocaleKeys.Language.tr(): {
