@@ -137,6 +137,29 @@ class _ProductCard extends StatelessWidget {
               children: [
                 Row(
                   children: [
+                    Expanded(
+                      child: RadioListTile<UnitType>(
+                        value: UnitType.sell,
+                        title: Text(LocaleKeys.unitSell.tr()),
+                        groupValue: unit.type,
+                        onChanged: (value) =>
+                            productCubit.onUnitTypeChanged(index, value),
+                      ),
+                    ),
+                    Expanded(
+                      child: RadioListTile<UnitType>(
+                        value: UnitType.buy,
+                        title: Text(LocaleKeys.unitBuy.tr()),
+                        groupValue: unit.type,
+                        onChanged: (value) =>
+                            productCubit.onUnitTypeChanged(index, value),
+                      ),
+                    ),
+                  ],
+                ),
+                5.heightBox,
+                Row(
+                  children: [
                     SvgPicture.asset(AppAssets.barcode),
                     10.w.widthBox,
                     Expanded(

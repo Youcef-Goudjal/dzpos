@@ -2,6 +2,8 @@
 
 abstract class  LocaleKeys {
   static const flutter = 'flutter';
+  static const unitSell = 'unitSell';
+  static const unitBuy = 'unitBuy';
   static const Phone = 'Phone';
   static const Creditor = 'Creditor';
   static const Notes = 'Notes';

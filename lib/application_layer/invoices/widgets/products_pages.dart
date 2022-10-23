@@ -47,7 +47,7 @@ class ProductsPage extends StatelessWidget {
                     final product = products[index];
                     bool isSelected =
                         newInvoiceCubit.checkIfExist(product) != -1;
-                    final style = context.textTheme.titleMedium!.copyWith(
+                    final style = context.textTheme.bodySmall!.copyWith(
                       color: isSelected
                           ? context.colorScheme.onPrimaryContainer
                           : context.colorScheme.primary,
@@ -65,22 +65,32 @@ class ProductsPage extends StatelessWidget {
                           child: Column(
                         children: [
                           const Spacer(),
-                          Text(
-                            product.productName,
-                            style: style,
+                          FittedBox(
+                            child: Text(
+                              product.productName,
+                              style: context.textTheme.titleMedium!.copyWith(
+                                color: isSelected
+                                    ? context.colorScheme.onPrimaryContainer
+                                    : context.colorScheme.primary,
+                              ),
+                            ),
                           ),
                           const Spacer(),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                LocaleKeys.rest
-                                    .tr(args: ["${product.unitInStock}"]),
-                                style: style,
-                              ), 
-                              const Spacer(),
-                              Text(
-                                "${product.getUnit?.price ?? "0.0"}DZ",
-                                style: style,
+                              FittedBox(
+                                child: Text(
+                                  LocaleKeys.rest
+                                      .tr(args: ["${product.unitInStock}"]),
+                                  style: style,
+                                ),
+                              ),
+                              FittedBox(
+                                child: Text(
+                                  "${product.getUnit?.price ?? "0.0"}DZ",
+                                  style: style,
+                                ),
                               )
                             ],
                           )

@@ -65,6 +65,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       id: -1,
       name: "",
       accountType: AccountType.none,
+      isFrozen: false,
     );
 
     return FullInvoice(
@@ -133,6 +134,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       for (final unit in entry.unitsList) {
         await into(productUnits).insert(
           ProductUnitsCompanion.insert(
+            type: unit.type,
             id: (unit.id == -1) ? const Value.absent() : Value(unit.id),
             code: unit.code,
             price: unit.price,
@@ -261,6 +263,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
               idToSales[id] ?? [],
               idToAccount[id] ??
                   const Account(
+                    isFrozen: false,
                     id: -1,
                     name: "",
                     accountType: AccountType.none,

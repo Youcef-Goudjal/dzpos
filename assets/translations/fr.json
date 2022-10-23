@@ -1,6 +1,8 @@
 {
     "flutter": "Flutter",
     "Phone": "Téléphone: {}",
+    "unitSell": "Sell",
+    "unitBuy": "Buy",
     "Creditor": "Créancier",
     "Notes": "Remarques",
     "invoices": "Invoices",

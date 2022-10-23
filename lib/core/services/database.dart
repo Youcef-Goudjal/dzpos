@@ -90,12 +90,14 @@ class FullProduct extends Equatable {
   bool get isNotEmpty => !isEmpty;
   static const empty = FullProduct(
     product: Product(
-        id: -1,
-        name: "",
-        categoryId: -1,
-        unitInStock: 0,
-        discountPercentage: 1,
-        reorderLevel: 1),
+      id: -1,
+      name: "",
+      categoryId: -1,
+      unitInStock: 0,
+      discountPercentage: 1,
+      reorderLevel: 1,
+      isFrozen: false,
+    ),
     category: ProductCategory(id: -1, name: ""),
     unitsList: [],
   );
@@ -179,6 +181,7 @@ class FullInvoice extends Equatable {
       id: -1,
       name: "",
       accountType: AccountType.none,
+      isFrozen: false,
     ),
   );
   bool get isEmpty => this == FullInvoice.empty;

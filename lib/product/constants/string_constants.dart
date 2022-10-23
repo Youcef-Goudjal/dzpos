@@ -74,19 +74,23 @@ enum StorageKeys {
     }
   }
 
-  Future<bool> setValue(dynamic value) {
-    final pref = Application.pref;
-    switch (type) {
-      case StoredType.list:
-        return pref.setStringList(name, value);
-      case StoredType.bool:
-        return pref.setBool(name, value);
-      case StoredType.string:
-        return pref.setString(name, value);
-      case StoredType.double:
-        return pref.setDouble(name, value);
-      case StoredType.int:
-        return pref.setInt(name, value);
+  Future<bool> setValue(dynamic value) async {
+    try {
+      final pref = Application.pref;
+      switch (type) {
+        case StoredType.list:
+          return pref.setStringList(name, value);
+        case StoredType.bool:
+          return pref.setBool(name, value);
+        case StoredType.string:
+          return pref.setString(name, value);
+        case StoredType.double:
+          return pref.setDouble(name, value);
+        case StoredType.int:
+          return pref.setInt(name, value);
+      }
+    } on Exception {
+      return false;
     }
   }
 }

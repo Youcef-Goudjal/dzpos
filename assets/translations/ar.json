@@ -1,5 +1,7 @@
 {
     "flutter": "Flutter",
+    "unitSell": "بيع",
+    "unitBuy": "شراء",
     "Phone": "رقم الهاتف : {}",
     "Creditor": "الدائن",
     "Notes": "ملحوظات",

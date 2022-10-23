@@ -130,6 +130,7 @@ class ProductCubit extends Cubit<ProductState> {
         box: 1,
         subTotal: 0,
         productId: fullProduct.productId,
+        type: UnitType.sell,
       ),
     ]);
 
@@ -248,5 +249,26 @@ class ProductCubit extends Cubit<ProductState> {
       }
     }
     return super.close();
+  }
+
+  onUnitTypeChanged(int index, UnitType? value) {
+    final fullProduct = state.product;
+
+    List<ProductUnit> unitsList = [];
+    unitsList.addAll(fullProduct.unitsList);
+    unitsList.removeAt(index);
+    unitsList.insert(
+        index,
+        fullProduct.unitsList[index].copyWith(
+          type: value,
+        ));
+
+    emit(
+      state.copyWith(
+        product: fullProduct.copyWith(
+          unitsList: unitsList,
+        ),
+      ),
+    );
   }
 }

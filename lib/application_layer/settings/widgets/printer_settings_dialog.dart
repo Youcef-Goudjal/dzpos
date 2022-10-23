@@ -28,9 +28,12 @@ class _SettingDialogState extends State<_SettingDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(LocaleKeys.printSetting.tr()),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(8),
           children: [
             Text(LocaleKeys.printPaperType.tr()),
             10.heightBox,
@@ -46,12 +49,14 @@ class _SettingDialogState extends State<_SettingDialog> {
                         StorageKeys.paperType.setValue(PaperType.p58.name);
                       });
                     },
+                    title: Text(PaperType.p58.name),
                   ),
                 ),
                 5.widthBox,
                 Expanded(
                   child: RadioListTile<PaperType>(
                     value: PaperType.p80,
+                    title: Text(PaperType.p58.name),
                     groupValue: PaperType.fromString(
                         StorageKeys.paperType.storedValue ?? ""),
                     onChanged: (value) {
@@ -98,7 +103,7 @@ class _SettingDialogState extends State<_SettingDialog> {
                     onChanged: (input) {
                       setState(() {
                         StorageKeys.spacingCut
-                            .setValue(int.tryParse(input) ?? 7);
+                            .setValue(int.tryParse(input) ?? 2);
                       });
                     },
                   ),
@@ -125,7 +130,7 @@ class _SettingDialogState extends State<_SettingDialog> {
             RadioListTile<bool>(
               value: true,
               title: Text(LocaleKeys.printFontType1.tr()),
-              groupValue: StorageKeys.fontSize.storedValue ?? false,
+              groupValue: StorageKeys.fontType.storedValue ?? true,
               onChanged: (value) {
                 setState(() {
                   StorageKeys.fontType.setValue(true);
@@ -136,7 +141,7 @@ class _SettingDialogState extends State<_SettingDialog> {
             RadioListTile<bool>(
               value: false,
               title: Text(LocaleKeys.printFontType2.tr()),
-              groupValue: StorageKeys.fontSize.storedValue ?? false,
+              groupValue: StorageKeys.fontType.storedValue ?? true,
               onChanged: (value) {
                 setState(() {
                   StorageKeys.fontType.setValue(false);

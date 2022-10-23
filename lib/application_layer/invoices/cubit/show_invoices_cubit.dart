@@ -18,8 +18,6 @@ class ShowInvoicesCubit extends Cubit<ShowInvoicesState> {
       (event) {
         emit(state.copyWith(
           invoices: event,
-          status: Status.success,
-          msg: "loaded ${event.length} invoice",
         ));
       },
       onError: (error) {
@@ -56,7 +54,7 @@ class ShowInvoicesCubit extends Cubit<ShowInvoicesState> {
     try {
       await invoicesRepository.deleteInvoice(state.invoices[index].invoiceId);
     } catch (e) {
-      // 
+      //
     }
   }
 

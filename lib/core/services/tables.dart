@@ -62,11 +62,15 @@ class Products extends Table {
 @DataClassName("ProductUnit")
 class ProductUnits extends Table {
   IntColumn get id => integer().autoIncrement()();
+  IntColumn get type => intEnum<UnitType>()();
   TextColumn get code => text()();
   RealColumn get price => real()();
   RealColumn get box => real().withDefault(const Constant(1))();
   RealColumn get subTotal => real().generatedAs(price * box)();
   IntColumn get productId => integer().references(Products, #id)();
+}
+enum UnitType {
+  sell,buy
 }
 
 ///productCategory (category_id, category_name)

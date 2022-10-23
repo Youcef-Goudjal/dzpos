@@ -396,14 +396,12 @@ class _BodyInvoice extends StatelessWidget {
                     key: UniqueKey(),
                     child: BlocBuilder<NewInvoiceCubit, NewInvoiceState>(
                       buildWhen: (p, c) {
-                        // print(
-                        //     "p:${p.invoice.sales[index].subTotal} c:${c.invoice.sales[index].subTotal}");
                         return p.invoice.sales[index].subTotal !=
                             c.invoice.sales[index].subTotal;
                       },
                       builder: (context, local) {
                         final sale = local.invoice.sales[index];
-                        // print("updated $sale");
+
                         return SizedBox(
                           height: 150,
                           child: Card(
@@ -487,10 +485,12 @@ class _BodyInvoice extends StatelessWidget {
                                               sale.product.unitsList.map((e) {
                                             return DropdownMenuItem<int>(
                                               value: e.id,
-                                              child: Text(
-                                                "u:${e.price}",
-                                                style: const TextStyle(
-                                                  overflow: TextOverflow.fade,
+                                              child: FittedBox(
+                                                child: Text(
+                                                  "u:${e.price}",
+                                                  style: const TextStyle(
+                                                    overflow: TextOverflow.fade,
+                                                  ),
                                                 ),
                                               ),
                                             );

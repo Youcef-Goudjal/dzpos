@@ -523,6 +523,7 @@ class Product extends DataClass implements Insertable<Product> {
   final double unitInStock;
   final double discountPercentage;
   final double reorderLevel;
+  final bool isFrozen;
   final int? userId;
   const Product(
       {required this.id,
@@ -532,6 +533,7 @@ class Product extends DataClass implements Insertable<Product> {
       required this.unitInStock,
       required this.discountPercentage,
       required this.reorderLevel,
+      required this.isFrozen,
       this.userId});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -545,6 +547,7 @@ class Product extends DataClass implements Insertable<Product> {
     map['unit_in_stock'] = Variable<double>(unitInStock);
     map['discount_percentage'] = Variable<double>(discountPercentage);
     map['reorder_level'] = Variable<double>(reorderLevel);
+    map['is_frozen'] = Variable<bool>(isFrozen);
     if (!nullToAbsent || userId != null) {
       map['user_id'] = Variable<int>(userId);
     }
@@ -560,6 +563,7 @@ class Product extends DataClass implements Insertable<Product> {
       unitInStock: Value(unitInStock),
       discountPercentage: Value(discountPercentage),
       reorderLevel: Value(reorderLevel),
+      isFrozen: Value(isFrozen),
       userId:
           userId == null && nullToAbsent ? const Value.absent() : Value(userId),
     );
@@ -577,6 +581,7 @@ class Product extends DataClass implements Insertable<Product> {
       discountPercentage:
           serializer.fromJson<double>(json['discountPercentage']),
       reorderLevel: serializer.fromJson<double>(json['reorderLevel']),
+      isFrozen: serializer.fromJson<bool>(json['isFrozen']),
       userId: serializer.fromJson<int?>(json['userId']),
     );
   }
@@ -591,6 +596,7 @@ class Product extends DataClass implements Insertable<Product> {
       'unitInStock': serializer.toJson<double>(unitInStock),
       'discountPercentage': serializer.toJson<double>(discountPercentage),
       'reorderLevel': serializer.toJson<double>(reorderLevel),
+      'isFrozen': serializer.toJson<bool>(isFrozen),
       'userId': serializer.toJson<int?>(userId),
     };
   }
@@ -603,6 +609,7 @@ class Product extends DataClass implements Insertable<Product> {
           double? unitInStock,
           double? discountPercentage,
           double? reorderLevel,
+          bool? isFrozen,
           Value<int?> userId = const Value.absent()}) =>
       Product(
         id: id ?? this.id,
@@ -612,6 +619,7 @@ class Product extends DataClass implements Insertable<Product> {
         unitInStock: unitInStock ?? this.unitInStock,
         discountPercentage: discountPercentage ?? this.discountPercentage,
         reorderLevel: reorderLevel ?? this.reorderLevel,
+        isFrozen: isFrozen ?? this.isFrozen,
         userId: userId.present ? userId.value : this.userId,
       );
   @override
@@ -624,6 +632,7 @@ class Product extends DataClass implements Insertable<Product> {
           ..write('unitInStock: $unitInStock, ')
           ..write('discountPercentage: $discountPercentage, ')
           ..write('reorderLevel: $reorderLevel, ')
+          ..write('isFrozen: $isFrozen, ')
           ..write('userId: $userId')
           ..write(')'))
         .toString();
@@ -631,7 +640,7 @@ class Product extends DataClass implements Insertable<Product> {
 
   @override
   int get hashCode => Object.hash(id, code, name, categoryId, unitInStock,
-      discountPercentage, reorderLevel, userId);
+      discountPercentage, reorderLevel, isFrozen, userId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -643,6 +652,7 @@ class Product extends DataClass implements Insertable<Product> {
           other.unitInStock == this.unitInStock &&
           other.discountPercentage == this.discountPercentage &&
           other.reorderLevel == this.reorderLevel &&
+          other.isFrozen == this.isFrozen &&
           other.userId == this.userId);
 }
 
@@ -654,6 +664,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   final Value<double> unitInStock;
   final Value<double> discountPercentage;
   final Value<double> reorderLevel;
+  final Value<bool> isFrozen;
   final Value<int?> userId;
   const ProductsCompanion({
     this.id = const Value.absent(),
@@ -663,6 +674,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     this.unitInStock = const Value.absent(),
     this.discountPercentage = const Value.absent(),
     this.reorderLevel = const Value.absent(),
+    this.isFrozen = const Value.absent(),
     this.userId = const Value.absent(),
   });
   ProductsCompanion.insert({
@@ -673,6 +685,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     this.unitInStock = const Value.absent(),
     required double discountPercentage,
     required double reorderLevel,
+    this.isFrozen = const Value.absent(),
     this.userId = const Value.absent(),
   })  : name = Value(name),
         categoryId = Value(categoryId),
@@ -686,6 +699,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     Expression<double>? unitInStock,
     Expression<double>? discountPercentage,
     Expression<double>? reorderLevel,
+    Expression<bool>? isFrozen,
     Expression<int>? userId,
   }) {
     return RawValuesInsertable({
@@ -696,6 +710,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
       if (unitInStock != null) 'unit_in_stock': unitInStock,
       if (discountPercentage != null) 'discount_percentage': discountPercentage,
       if (reorderLevel != null) 'reorder_level': reorderLevel,
+      if (isFrozen != null) 'is_frozen': isFrozen,
       if (userId != null) 'user_id': userId,
     });
   }
@@ -708,6 +723,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
       Value<double>? unitInStock,
       Value<double>? discountPercentage,
       Value<double>? reorderLevel,
+      Value<bool>? isFrozen,
       Value<int?>? userId}) {
     return ProductsCompanion(
       id: id ?? this.id,
@@ -717,6 +733,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
       unitInStock: unitInStock ?? this.unitInStock,
       discountPercentage: discountPercentage ?? this.discountPercentage,
       reorderLevel: reorderLevel ?? this.reorderLevel,
+      isFrozen: isFrozen ?? this.isFrozen,
       userId: userId ?? this.userId,
     );
   }
@@ -745,6 +762,9 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     if (reorderLevel.present) {
       map['reorder_level'] = Variable<double>(reorderLevel.value);
     }
+    if (isFrozen.present) {
+      map['is_frozen'] = Variable<bool>(isFrozen.value);
+    }
     if (userId.present) {
       map['user_id'] = Variable<int>(userId.value);
     }
@@ -761,6 +781,7 @@ class ProductsCompanion extends UpdateCompanion<Product> {
           ..write('unitInStock: $unitInStock, ')
           ..write('discountPercentage: $discountPercentage, ')
           ..write('reorderLevel: $reorderLevel, ')
+          ..write('isFrozen: $isFrozen, ')
           ..write('userId: $userId')
           ..write(')'))
         .toString();
@@ -818,6 +839,14 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   late final GeneratedColumn<double> reorderLevel = GeneratedColumn<double>(
       'reorder_level', aliasedName, false,
       type: DriftSqlType.double, requiredDuringInsert: true);
+  final VerificationMeta _isFrozenMeta = const VerificationMeta('isFrozen');
+  @override
+  late final GeneratedColumn<bool> isFrozen = GeneratedColumn<bool>(
+      'is_frozen', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK ("is_frozen" IN (0, 1))',
+      defaultValue: const Constant(false));
   final VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<int> userId = GeneratedColumn<int>(
@@ -834,6 +863,7 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
         unitInStock,
         discountPercentage,
         reorderLevel,
+        isFrozen,
         userId
       ];
   @override
@@ -888,6 +918,10 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     } else if (isInserting) {
       context.missing(_reorderLevelMeta);
     }
+    if (data.containsKey('is_frozen')) {
+      context.handle(_isFrozenMeta,
+          isFrozen.isAcceptableOrUnknown(data['is_frozen']!, _isFrozenMeta));
+    }
     if (data.containsKey('user_id')) {
       context.handle(_userIdMeta,
           userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
@@ -915,6 +949,8 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
           DriftSqlType.double, data['${effectivePrefix}discount_percentage'])!,
       reorderLevel: attachedDatabase.options.types
           .read(DriftSqlType.double, data['${effectivePrefix}reorder_level'])!,
+      isFrozen: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_frozen'])!,
       userId: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}user_id']),
     );
@@ -928,6 +964,7 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
 
 class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   final int id;
+  final UnitType type;
   final String code;
   final double price;
   final double box;
@@ -935,6 +972,7 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   final int productId;
   const ProductUnit(
       {required this.id,
+      required this.type,
       required this.code,
       required this.price,
       required this.box,
@@ -944,6 +982,10 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    {
+      final converter = $ProductUnitsTable.$converter0;
+      map['type'] = Variable<int>(converter.toSql(type));
+    }
     map['code'] = Variable<String>(code);
     map['price'] = Variable<double>(price);
     map['box'] = Variable<double>(box);
@@ -954,6 +996,7 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   ProductUnitsCompanion toCompanion(bool nullToAbsent) {
     return ProductUnitsCompanion(
       id: Value(id),
+      type: Value(type),
       code: Value(code),
       price: Value(price),
       box: Value(box),
@@ -966,6 +1009,7 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ProductUnit(
       id: serializer.fromJson<int>(json['id']),
+      type: serializer.fromJson<UnitType>(json['type']),
       code: serializer.fromJson<String>(json['code']),
       price: serializer.fromJson<double>(json['price']),
       box: serializer.fromJson<double>(json['box']),
@@ -978,6 +1022,7 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'type': serializer.toJson<UnitType>(type),
       'code': serializer.toJson<String>(code),
       'price': serializer.toJson<double>(price),
       'box': serializer.toJson<double>(box),
@@ -988,6 +1033,7 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
 
   ProductUnit copyWith(
           {int? id,
+          UnitType? type,
           String? code,
           double? price,
           double? box,
@@ -995,6 +1041,7 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
           int? productId}) =>
       ProductUnit(
         id: id ?? this.id,
+        type: type ?? this.type,
         code: code ?? this.code,
         price: price ?? this.price,
         box: box ?? this.box,
@@ -1005,6 +1052,7 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   String toString() {
     return (StringBuffer('ProductUnit(')
           ..write('id: $id, ')
+          ..write('type: $type, ')
           ..write('code: $code, ')
           ..write('price: $price, ')
           ..write('box: $box, ')
@@ -1015,12 +1063,14 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   }
 
   @override
-  int get hashCode => Object.hash(id, code, price, box, subTotal, productId);
+  int get hashCode =>
+      Object.hash(id, type, code, price, box, subTotal, productId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ProductUnit &&
           other.id == this.id &&
+          other.type == this.type &&
           other.code == this.code &&
           other.price == this.price &&
           other.box == this.box &&
@@ -1030,12 +1080,14 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
 
 class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
   final Value<int> id;
+  final Value<UnitType> type;
   final Value<String> code;
   final Value<double> price;
   final Value<double> box;
   final Value<int> productId;
   const ProductUnitsCompanion({
     this.id = const Value.absent(),
+    this.type = const Value.absent(),
     this.code = const Value.absent(),
     this.price = const Value.absent(),
     this.box = const Value.absent(),
@@ -1043,15 +1095,18 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
   });
   ProductUnitsCompanion.insert({
     this.id = const Value.absent(),
+    required UnitType type,
     required String code,
     required double price,
     this.box = const Value.absent(),
     required int productId,
-  })  : code = Value(code),
+  })  : type = Value(type),
+        code = Value(code),
         price = Value(price),
         productId = Value(productId);
   static Insertable<ProductUnit> custom({
     Expression<int>? id,
+    Expression<int>? type,
     Expression<String>? code,
     Expression<double>? price,
     Expression<double>? box,
@@ -1059,6 +1114,7 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (type != null) 'type': type,
       if (code != null) 'code': code,
       if (price != null) 'price': price,
       if (box != null) 'box': box,
@@ -1068,12 +1124,14 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
 
   ProductUnitsCompanion copyWith(
       {Value<int>? id,
+      Value<UnitType>? type,
       Value<String>? code,
       Value<double>? price,
       Value<double>? box,
       Value<int>? productId}) {
     return ProductUnitsCompanion(
       id: id ?? this.id,
+      type: type ?? this.type,
       code: code ?? this.code,
       price: price ?? this.price,
       box: box ?? this.box,
@@ -1086,6 +1144,10 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (type.present) {
+      final converter = $ProductUnitsTable.$converter0;
+      map['type'] = Variable<int>(converter.toSql(type.value));
     }
     if (code.present) {
       map['code'] = Variable<String>(code.value);
@@ -1106,6 +1168,7 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
   String toString() {
     return (StringBuffer('ProductUnitsCompanion(')
           ..write('id: $id, ')
+          ..write('type: $type, ')
           ..write('code: $code, ')
           ..write('price: $price, ')
           ..write('box: $box, ')
@@ -1128,6 +1191,12 @@ class $ProductUnitsTable extends ProductUnits
       type: DriftSqlType.int,
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<UnitType, int> type =
+      GeneratedColumn<int>('type', aliasedName, false,
+              type: DriftSqlType.int, requiredDuringInsert: true)
+          .withConverter<UnitType>($ProductUnitsTable.$converter0);
   final VerificationMeta _codeMeta = const VerificationMeta('code');
   @override
   late final GeneratedColumn<String> code = GeneratedColumn<String>(
@@ -1161,7 +1230,7 @@ class $ProductUnitsTable extends ProductUnits
       defaultConstraints: 'REFERENCES "products" ("id")');
   @override
   List<GeneratedColumn> get $columns =>
-      [id, code, price, box, subTotal, productId];
+      [id, type, code, price, box, subTotal, productId];
   @override
   String get aliasedName => _alias ?? 'product_units';
   @override
@@ -1174,6 +1243,7 @@ class $ProductUnitsTable extends ProductUnits
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
+    context.handle(_typeMeta, const VerificationResult.success());
     if (data.containsKey('code')) {
       context.handle(
           _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
@@ -1211,6 +1281,9 @@ class $ProductUnitsTable extends ProductUnits
     return ProductUnit(
       id: attachedDatabase.options.types
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      type: $ProductUnitsTable.$converter0.fromSql(attachedDatabase
+          .options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}type'])!),
       code: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
       price: attachedDatabase.options.types
@@ -1228,6 +1301,9 @@ class $ProductUnitsTable extends ProductUnits
   $ProductUnitsTable createAlias(String alias) {
     return $ProductUnitsTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<UnitType, int> $converter0 =
+      const EnumIndexConverter<UnitType>(UnitType.values);
 }
 
 class Account extends DataClass implements Insertable<Account> {
@@ -1238,6 +1314,7 @@ class Account extends DataClass implements Insertable<Account> {
   final String? address;
   final String? email;
   final AccountType accountType;
+  final bool isFrozen;
   const Account(
       {required this.id,
       this.code,
@@ -1245,7 +1322,8 @@ class Account extends DataClass implements Insertable<Account> {
       this.contact,
       this.address,
       this.email,
-      required this.accountType});
+      required this.accountType,
+      required this.isFrozen});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1267,6 +1345,7 @@ class Account extends DataClass implements Insertable<Account> {
       final converter = $AccountsTable.$converter0;
       map['account_type'] = Variable<int>(converter.toSql(accountType));
     }
+    map['is_frozen'] = Variable<bool>(isFrozen);
     return map;
   }
 
@@ -1284,6 +1363,7 @@ class Account extends DataClass implements Insertable<Account> {
       email:
           email == null && nullToAbsent ? const Value.absent() : Value(email),
       accountType: Value(accountType),
+      isFrozen: Value(isFrozen),
     );
   }
 
@@ -1298,6 +1378,7 @@ class Account extends DataClass implements Insertable<Account> {
       address: serializer.fromJson<String?>(json['address']),
       email: serializer.fromJson<String?>(json['email']),
       accountType: serializer.fromJson<AccountType>(json['accountType']),
+      isFrozen: serializer.fromJson<bool>(json['isFrozen']),
     );
   }
   @override
@@ -1311,6 +1392,7 @@ class Account extends DataClass implements Insertable<Account> {
       'address': serializer.toJson<String?>(address),
       'email': serializer.toJson<String?>(email),
       'accountType': serializer.toJson<AccountType>(accountType),
+      'isFrozen': serializer.toJson<bool>(isFrozen),
     };
   }
 
@@ -1321,7 +1403,8 @@ class Account extends DataClass implements Insertable<Account> {
           Value<String?> contact = const Value.absent(),
           Value<String?> address = const Value.absent(),
           Value<String?> email = const Value.absent(),
-          AccountType? accountType}) =>
+          AccountType? accountType,
+          bool? isFrozen}) =>
       Account(
         id: id ?? this.id,
         code: code.present ? code.value : this.code,
@@ -1330,6 +1413,7 @@ class Account extends DataClass implements Insertable<Account> {
         address: address.present ? address.value : this.address,
         email: email.present ? email.value : this.email,
         accountType: accountType ?? this.accountType,
+        isFrozen: isFrozen ?? this.isFrozen,
       );
   @override
   String toString() {
@@ -1340,14 +1424,15 @@ class Account extends DataClass implements Insertable<Account> {
           ..write('contact: $contact, ')
           ..write('address: $address, ')
           ..write('email: $email, ')
-          ..write('accountType: $accountType')
+          ..write('accountType: $accountType, ')
+          ..write('isFrozen: $isFrozen')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, code, name, contact, address, email, accountType);
+  int get hashCode => Object.hash(
+      id, code, name, contact, address, email, accountType, isFrozen);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1358,7 +1443,8 @@ class Account extends DataClass implements Insertable<Account> {
           other.contact == this.contact &&
           other.address == this.address &&
           other.email == this.email &&
-          other.accountType == this.accountType);
+          other.accountType == this.accountType &&
+          other.isFrozen == this.isFrozen);
 }
 
 class AccountsCompanion extends UpdateCompanion<Account> {
@@ -1369,6 +1455,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
   final Value<String?> address;
   final Value<String?> email;
   final Value<AccountType> accountType;
+  final Value<bool> isFrozen;
   const AccountsCompanion({
     this.id = const Value.absent(),
     this.code = const Value.absent(),
@@ -1377,6 +1464,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     this.address = const Value.absent(),
     this.email = const Value.absent(),
     this.accountType = const Value.absent(),
+    this.isFrozen = const Value.absent(),
   });
   AccountsCompanion.insert({
     this.id = const Value.absent(),
@@ -1386,6 +1474,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     this.address = const Value.absent(),
     this.email = const Value.absent(),
     required AccountType accountType,
+    this.isFrozen = const Value.absent(),
   })  : name = Value(name),
         accountType = Value(accountType);
   static Insertable<Account> custom({
@@ -1396,6 +1485,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     Expression<String>? address,
     Expression<String>? email,
     Expression<int>? accountType,
+    Expression<bool>? isFrozen,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -1405,6 +1495,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
       if (address != null) 'address': address,
       if (email != null) 'email': email,
       if (accountType != null) 'account_type': accountType,
+      if (isFrozen != null) 'is_frozen': isFrozen,
     });
   }
 
@@ -1415,7 +1506,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
       Value<String?>? contact,
       Value<String?>? address,
       Value<String?>? email,
-      Value<AccountType>? accountType}) {
+      Value<AccountType>? accountType,
+      Value<bool>? isFrozen}) {
     return AccountsCompanion(
       id: id ?? this.id,
       code: code ?? this.code,
@@ -1424,6 +1516,7 @@ class AccountsCompanion extends UpdateCompanion<Account> {
       address: address ?? this.address,
       email: email ?? this.email,
       accountType: accountType ?? this.accountType,
+      isFrozen: isFrozen ?? this.isFrozen,
     );
   }
 
@@ -1452,6 +1545,9 @@ class AccountsCompanion extends UpdateCompanion<Account> {
       final converter = $AccountsTable.$converter0;
       map['account_type'] = Variable<int>(converter.toSql(accountType.value));
     }
+    if (isFrozen.present) {
+      map['is_frozen'] = Variable<bool>(isFrozen.value);
+    }
     return map;
   }
 
@@ -1464,7 +1560,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
           ..write('contact: $contact, ')
           ..write('address: $address, ')
           ..write('email: $email, ')
-          ..write('accountType: $accountType')
+          ..write('accountType: $accountType, ')
+          ..write('isFrozen: $isFrozen')
           ..write(')'))
         .toString();
   }
@@ -1524,9 +1621,17 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       GeneratedColumn<int>('account_type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
           .withConverter<AccountType>($AccountsTable.$converter0);
+  final VerificationMeta _isFrozenMeta = const VerificationMeta('isFrozen');
+  @override
+  late final GeneratedColumn<bool> isFrozen = GeneratedColumn<bool>(
+      'is_frozen', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK ("is_frozen" IN (0, 1))',
+      defaultValue: const Constant(false));
   @override
   List<GeneratedColumn> get $columns =>
-      [id, code, name, contact, address, email, accountType];
+      [id, code, name, contact, address, email, accountType, isFrozen];
   @override
   String get aliasedName => _alias ?? 'accounts';
   @override
@@ -1562,6 +1667,10 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
           _emailMeta, email.isAcceptableOrUnknown(data['email']!, _emailMeta));
     }
     context.handle(_accountTypeMeta, const VerificationResult.success());
+    if (data.containsKey('is_frozen')) {
+      context.handle(_isFrozenMeta,
+          isFrozen.isAcceptableOrUnknown(data['is_frozen']!, _isFrozenMeta));
+    }
     return context;
   }
 
@@ -1586,6 +1695,8 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
       accountType: $AccountsTable.$converter0.fromSql(attachedDatabase
           .options.types
           .read(DriftSqlType.int, data['${effectivePrefix}account_type'])!),
+      isFrozen: attachedDatabase.options.types
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_frozen'])!,
     );
   }
 
