@@ -76,7 +76,7 @@ class ProductsPage extends StatelessWidget {
                                 LocaleKeys.rest
                                     .tr(args: ["${product.unitInStock}"]),
                                 style: style,
-                              ), //TODO: calucalte rest
+                              ), 
                               const Spacer(),
                               Text(
                                 "${product.getUnit?.price ?? "0.0"}DZ",

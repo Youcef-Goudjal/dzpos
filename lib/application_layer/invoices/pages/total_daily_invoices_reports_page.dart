@@ -1,7 +1,8 @@
+
 import 'package:flutter/material.dart';
 
-class PrinterModelsPage extends StatelessWidget {
-  const PrinterModelsPage({super.key});
+class TotalDailyInvoicesReports extends StatelessWidget {
+  const TotalDailyInvoicesReports({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -143,7 +143,9 @@ class _ActionsCard extends StatelessWidget {
         TextButton.icon(
           onPressed: () {
             CommonBloc.printerBloc.add(PrintRequested(invoice));
-            context.pushNamed(AppRoutes.printingPreview.name);
+            context.pushNamed(
+              AppRoutes.printingPreview.name,
+            );
           },
           icon: const Icon(Icons.print),
           label: Text(LocaleKeys.Print.tr()),

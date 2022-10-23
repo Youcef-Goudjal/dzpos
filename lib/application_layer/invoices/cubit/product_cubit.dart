@@ -18,14 +18,14 @@ class ProductCubit extends Cubit<ProductState> {
         (value) {
           emit(state.copyWith(
             product: value,
-            state: ProductStatus.New,
+            state: ProductStatus.newProduct,
           ));
         },
       );
     } else {
       emit(state.copyWith(
         product: product,
-        state: ProductStatus.Update,
+        state: ProductStatus.updateProduct,
       ));
     }
   }
@@ -70,7 +70,6 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   void onCategoryChanged(String category) {
-    print(category);
     emit(state.copyWith(
       categoryName: category,
     ));
@@ -105,14 +104,14 @@ class ProductCubit extends Cubit<ProductState> {
   }
 
   void removeUnit(int index) async {
-    final FullProduct = state.product;
+    final fullProduct = state.product;
     List<ProductUnit> unitsList = [];
-    unitsList.addAll(FullProduct.unitsList);
+    unitsList.addAll(fullProduct.unitsList);
     unitsList.removeAt(index);
-    await repository.removeUnit(FullProduct.unitsList[index].id);
+    await repository.removeUnit(fullProduct.unitsList[index].id);
     emit(
       state.copyWith(
-        product: FullProduct.copyWith(
+        product: fullProduct.copyWith(
           unitsList: unitsList,
         ),
       ),

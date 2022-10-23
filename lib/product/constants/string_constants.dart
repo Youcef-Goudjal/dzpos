@@ -11,6 +11,8 @@ enum StorageKeys {
   pdfPageFormat,
   showLogo,
   logo,
+  printerMac,
+  printerName,
   printLabels,
   showCompanyName,
   companyName,

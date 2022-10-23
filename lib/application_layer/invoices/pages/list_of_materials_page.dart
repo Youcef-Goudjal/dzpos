@@ -1,4 +1,3 @@
-import 'package:dzpos/application_layer/widgets/confirm_delete_dialog.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -189,7 +188,7 @@ class _MaterialsBody extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                   LocaleKeys.Number_of_results.tr(),
+                    LocaleKeys.Number_of_results.tr(),
                     style: TextStyle(
                       color: context.theme.colorScheme.onPrimaryContainer,
                     ),

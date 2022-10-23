@@ -62,41 +62,45 @@ enum PrinterLabels {
   amountTreated;
 
   String get value {
+    return storedValue ?? name;
+  }
+
+  String get name {
     switch (this) {
       case PrinterLabels.invoice:
-        return storedValue ?? "فاتورة";
-        case PrinterLabels.invoiceId:
-        return storedValue ?? " رقم الفاتورة";
+        return storedValue ?? "invoice";
+      case PrinterLabels.invoiceId:
+        return storedValue ?? "invoice ID";
       case PrinterLabels.product:
-        return storedValue ?? "اسم المادة";
+        return storedValue ?? "product";
       case PrinterLabels.quantity:
-        return storedValue ?? "الكمية";
+        return storedValue ?? "quantity";
       case PrinterLabels.unit:
-        return storedValue ?? "الوحدة";
+        return storedValue ?? "unit";
       case PrinterLabels.subTotal1:
-        return storedValue ?? "الإفرادي";
+        return storedValue ?? "subTotal";
       case PrinterLabels.subTotal2:
-        return storedValue ?? "الإجمالي";
+        return storedValue ?? "total";
       case PrinterLabels.notes:
-        return storedValue ?? "ملاحظات";
+        return storedValue ?? "notes";
       case PrinterLabels.totalQuantity:
-        return storedValue ?? "مجموع الكمية";
+        return storedValue ?? "Total Quantity";
       case PrinterLabels.net:
-        return storedValue ?? "الصافي";
+        return storedValue ?? "net";
       case PrinterLabels.discount:
-        return storedValue ?? "الخصم";
+        return storedValue ?? "discount";
       case PrinterLabels.add:
-        return storedValue ?? "اضافة";
+        return storedValue ?? "add";
       case PrinterLabels.total:
-        return storedValue ?? "مجموع الفاتورة";
+        return storedValue ?? "Total facture";
       case PrinterLabels.amountTreated:
-        return storedValue ?? "دفعة نقدية";
+        return storedValue ?? "Amount treated";
       case PrinterLabels.date:
-        return storedValue ?? "تاريخ الفاتورة";
+        return storedValue ?? "date Facture";
       case PrinterLabels.time:
-        return storedValue ?? "وقت الفاتورة";
+        return storedValue ?? "time:";
       case PrinterLabels.mr:
-        return storedValue ?? "السيد";
+        return storedValue ?? "Mr.";
       default:
         return "";
     }
@@ -112,7 +116,7 @@ enum PrinterLabels {
     List<String> list = [];
     list.addAll(
       Application.pref.getStringList(StorageKeys.printLabels.name) ??
-          PrinterLabels.values.map((e) => "").toList(),
+          PrinterLabels.values.map((e) => e.name).toList(),
     );
     list.insert(index, value);
     Application.pref.setStringList(StorageKeys.printLabels.name, list);

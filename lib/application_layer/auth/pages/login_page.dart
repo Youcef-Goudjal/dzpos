@@ -71,9 +71,8 @@ class _LoginForm extends StatelessWidget {
                           previous.email != current.email,
                       builder: (context, state) {
                         return AppTextField(
-                          errorText: state.email.invalid
-                              ? "invalid email"
-                              : null, //TODO: add tr()
+                          errorText:
+                              state.email.invalid ? "invalid email" : null,
                           onChanged: loginCubit.emailChanged,
                           keyboardType: TextInputType.emailAddress,
                           prefix: const Icon(Icons.alternate_email_rounded),

@@ -382,7 +382,6 @@ class _BodyInvoice extends StatelessWidget {
         return Expanded(
           child: ListView.separated(
             itemBuilder: (context, index) {
-              int unitIndex = -1;
               try {
                 return Dismissible(
                     background: Container(color: context.error),
@@ -397,14 +396,14 @@ class _BodyInvoice extends StatelessWidget {
                     key: UniqueKey(),
                     child: BlocBuilder<NewInvoiceCubit, NewInvoiceState>(
                       buildWhen: (p, c) {
-                        print(
-                            "p:${p.invoice.sales[index].subTotal} c:${c.invoice.sales[index].subTotal}");
+                        // print(
+                        //     "p:${p.invoice.sales[index].subTotal} c:${c.invoice.sales[index].subTotal}");
                         return p.invoice.sales[index].subTotal !=
                             c.invoice.sales[index].subTotal;
                       },
                       builder: (context, local) {
                         final sale = local.invoice.sales[index];
-                        print("updated $sale");
+                        // print("updated $sale");
                         return SizedBox(
                           height: 150,
                           child: Card(
@@ -486,7 +485,6 @@ class _BodyInvoice extends StatelessWidget {
                                           isExpanded: true,
                                           items:
                                               sale.product.unitsList.map((e) {
-                                            unitIndex++;
                                             return DropdownMenuItem<int>(
                                               value: e.id,
                                               child: Text(

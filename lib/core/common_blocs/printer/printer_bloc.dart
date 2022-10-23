@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:charset_converter/charset_converter.dart';
 import 'package:dzpos/core/common_blocs/printer/build_pdf.dart';
+import 'package:dzpos/product/application.dart';
+import 'package:dzpos/product/constants/constants.dart';
 import 'package:equatable/equatable.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +30,13 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
     printerManager.onStateChanged().listen((event) {
       add(PrinterStateChanged(event));
     });
+    final address = Application.pref.getString(StorageKeys.printerMac.name);
+    final name = Application.pref.getString(StorageKeys.printerName.name);
+    if (address != "" && address != null) {
+      emit(state.copyWith(
+        printer: BluetoothDevice(name, address),
+      ));
+    }
   }
 
   FutureOr<void> _onUnPaire(
@@ -60,7 +69,9 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
 
   FutureOr<void> _onPrinterSelected(
       PrinterSelected event, Emitter<PrinterState> emit) {
-    //TODO: save @ mac of the printer
+    Application.pref
+        .setString(StorageKeys.printerMac.name, event.printer.address ?? "");
+
     printerManager.connect(event.printer);
     emit(state.copyWith(
       status: Status.success,
@@ -78,12 +89,11 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
 
   FutureOr<void> _onPrintRequested(
       PrintRequested event, Emitter<PrinterState> emit) async {
-    try {
-      const PaperSize paper = PaperSize.mm80;
-      final profile = await CapabilityProfile.load(name: "default");
-    } on Exception catch (e) {
-      print(e);
-    }
+    emit(state.copyWith(
+      invoice: event.invoice,
+    ));
+    final profiles = await CapabilityProfile.getAvailableProfiles();
+    print(profiles);
   }
 
   Future<List<int>> demoReceipt(

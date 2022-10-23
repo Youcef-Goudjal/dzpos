@@ -1,18 +1,18 @@
 part of 'product_cubit.dart';
 
 enum ProductStatus {
-  New,
-  Update;
+  newProduct,
+  updateProduct;
 
-  bool get isUpdating => this == ProductStatus.Update;
-  bool get isNew => this == ProductStatus.New;
+  bool get isUpdating => this == ProductStatus.updateProduct;
+  bool get isNew => this == ProductStatus.newProduct;
 }
 
 class ProductState extends Equatable {
   const ProductState({
     this.product = FullProduct.empty,
     this.status = Status.initial,
-    this.productStatus = ProductStatus.New,
+    this.productStatus = ProductStatus.newProduct,
     this.msg,
     this.categoryName = "",
     this.save = false,
@@ -36,7 +36,6 @@ class ProductState extends Equatable {
     String? categoryName,
     bool? save,
   }) {
-    print("product status $state");
     return ProductState(
       product: product ?? this.product,
       status: status ?? this.status,

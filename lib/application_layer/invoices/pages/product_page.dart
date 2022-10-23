@@ -227,7 +227,7 @@ class _ProductInfo extends StatelessWidget {
         // AspectRatio(
         //   aspectRatio: 2,
         //   child: ElevatedButton(
-        //     //TODO: select image
+        //     TO DO select image
         //     onPressed: () {},
         //     child: SvgPicture.asset(
         //       AppAssets.unavailable,

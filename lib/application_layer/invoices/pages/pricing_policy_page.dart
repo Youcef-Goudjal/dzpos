@@ -36,51 +36,49 @@ class PricingPolicyPage extends StatelessWidget {
     const policy = PricingPolicy.fixed;
     return Column(
       children: [
-        Container(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: RadioListTile(
-                      value: PricingPolicy.last,
-                      title: Text(PricingPolicy.last.name),
-                      groupValue: policy,
-                      onChanged: (value) {},
-                    ),
+        Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: RadioListTile(
+                    value: PricingPolicy.last,
+                    title: Text(PricingPolicy.last.name),
+                    groupValue: policy,
+                    onChanged: (value) {},
                   ),
-                  Expanded(
-                    child: RadioListTile(
-                      value: PricingPolicy.fixed,
-                      title: Text(PricingPolicy.fixed.name),
-                      groupValue: policy,
-                      onChanged: (value) {},
-                    ),
+                ),
+                Expanded(
+                  child: RadioListTile(
+                    value: PricingPolicy.fixed,
+                    title: Text(PricingPolicy.fixed.name),
+                    groupValue: policy,
+                    onChanged: (value) {},
                   ),
-                  Expanded(
-                    child: RadioListTile(
-                      value: PricingPolicy.lastAccount,
-                      title: Text(PricingPolicy.lastAccount.name),
-                      groupValue: policy,
-                      onChanged: (value) {},
-                    ),
+                ),
+                Expanded(
+                  child: RadioListTile(
+                    value: PricingPolicy.lastAccount,
+                    title: Text(PricingPolicy.lastAccount.name),
+                    groupValue: policy,
+                    onChanged: (value) {},
                   ),
-                ],
-              ),
-              15.heightBox,
-              TypeAheadWidget<Product>(
-                suggestionCallback: (input) async {
-                  return invoicesRepository.getProducts;
-                },
-                itemBuilder: (context, product) {
-                  return ListTile(
-                    title: Text(product.name),
-                  );
-                },
-                onSuggestionSelected: (product) {},
-              )
-            ],
-          ),
+                ),
+              ],
+            ),
+            15.heightBox,
+            TypeAheadWidget<Product>(
+              suggestionCallback: (input) async {
+                return invoicesRepository.getProducts;
+              },
+              itemBuilder: (context, product) {
+                return ListTile(
+                  title: Text(product.name),
+                );
+              },
+              onSuggestionSelected: (product) {},
+            )
+          ],
         )
       ],
     );

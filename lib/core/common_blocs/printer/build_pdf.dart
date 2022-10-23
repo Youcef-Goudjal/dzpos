@@ -15,15 +15,15 @@ const baseColor = PdfColors.teal;
 const accentColor = PdfColors.blueGrey900;
 PdfColor get _baseTextColor => baseColor.isLight ? _lightColor : _darkColor;
 
-late final _logo;
+String? _logo;
 PdfColor get _accentTextColor => baseColor.isLight ? _lightColor : _darkColor;
-late final _bgShape;
+String? _bgShape;
 Future<Uint8List> buildPdf(
     PdfPageFormat pageFormat, FullInvoice invoice) async {
   // Create a PDF document
   final doc = pw.Document();
 
-  _logo = await rootBundle.loadString("");
+  // _logo = await rootBundle.loadString("");
   _bgShape = await rootBundle.loadString(AppAssets.bgInvoice);
   doc.addPage(
     pw.MultiPage(
@@ -311,7 +311,7 @@ pw.PageTheme _buildTheme(
     ),
     buildBackground: (context) => pw.FullPage(
       ignoreMargins: true,
-      child: pw.SvgImage(svg: _bgShape),
+      child: pw.SvgImage(svg: _bgShape!),
     ),
   );
 }

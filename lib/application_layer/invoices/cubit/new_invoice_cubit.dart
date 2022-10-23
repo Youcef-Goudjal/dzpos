@@ -65,9 +65,9 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
   void onStart(BuildContext context) {
     final invoice = state.invoice;
     if (invoice.isAccountEmpty) {
-      print("account not set");
+      // print("account not set");
     } else if (invoice.isInvoiceEmpty) {
-      print("invoice not created");
+      // print("invoice not created");
     } else {
       Navigator.pop(context, "Start");
     }
