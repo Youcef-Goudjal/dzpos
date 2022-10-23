@@ -1,6 +1,10 @@
-import 'package:dzpos/application_layer/widgets/app_text_field.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
+import 'package:dzpos/product/constants/constants.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/manager/language/locale_keys.g.dart';
+import '../../application_layer.dart';
 
 Future showPrinterSettings(BuildContext context) async {
   return await showDialog(
@@ -21,121 +25,135 @@ class _SettingDialog extends StatefulWidget {
 }
 
 class _SettingDialogState extends State<_SettingDialog> {
-  PaperType paperType = PaperType.p58;
-  double fontSize = 10;
-  double spacing = 7;
-  bool duplicate = false;
-  bool fontType = true;
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: Column(
-        children: [
-          const Text("Paper Scale"),
-          10.heightBox,
-          Row(
-            children: [
-              RadioListTile<PaperType>(
-                value: PaperType.p58,
-                groupValue: paperType,
-                onChanged: (value) {
-                  setState(() {
-                    paperType = value!;
-                  });
-                },
-              ),
-              5.widthBox,
-              RadioListTile<PaperType>(
-                value: PaperType.p80,
-                groupValue: paperType,
-                onChanged: (value) {
-                  setState(() {
-                    paperType = value!;
-                  });
-                },
-              ),
-            ],
-          ),
-          10.heightBox,
-          Row(
-            children: [
-              const Expanded(
-                child: Text("Font Size :"),
-              ),
-              Expanded(
-                child: AppTextField(
-                  initialValue: "$fontSize",
-                  textInputAction: TextInputAction.next,
-                  onChanged: (input) {
-                    setState(() {
-                      fontSize = double.tryParse(input) ?? 10;
-                    });
-                  },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(LocaleKeys.printPaperType.tr()),
+            10.heightBox,
+            Row(
+              children: [
+                Expanded(
+                  child: RadioListTile<PaperType>(
+                    value: PaperType.p58,
+                    groupValue: PaperType.fromString(
+                        StorageKeys.paperType.storedValue ?? ""),
+                    onChanged: (value) {
+                      setState(() {
+                        StorageKeys.paperType.setValue(PaperType.p58.name);
+                      });
+                    },
+                  ),
                 ),
-              )
-            ],
-          ),
-          10.heightBox,
-          Row(
-            children: [
-              const Expanded(
-                child: Text("Last Space lines :"),
-              ),
-              Expanded(
-                child: AppTextField(
-                  initialValue: "$spacing",
-                  textInputAction: TextInputAction.next,
-                  onChanged: (input) {
-                    setState(() {
-                      fontSize = double.tryParse(input) ?? 7;
-                    });
-                  },
+                5.widthBox,
+                Expanded(
+                  child: RadioListTile<PaperType>(
+                    value: PaperType.p80,
+                    groupValue: PaperType.fromString(
+                        StorageKeys.paperType.storedValue ?? ""),
+                    onChanged: (value) {
+                      setState(() {
+                        StorageKeys.paperType.setValue(PaperType.p80.name);
+                      });
+                    },
+                  ),
                 ),
-              )
-            ],
-          ),
-          10.heightBox,
-          Checkbox(
-            value: duplicate,
-            onChanged: (value) {
-              setState(() {
-                duplicate = value!;
-              });
-            },
-          ),
-          10.heightBox,
-          const Text("Font Type"),
-          RadioListTile<bool>(
-            value: true,
-            title: const Text("Font Type 2c"),
-            groupValue: fontType,
-            onChanged: (value) {
-              setState(() {
-                fontType = value!;
-              });
-            },
-          ),
-          5.heightBox,
-          RadioListTile<bool>(
-            value: false,
-            title: const Text("Font Type 2c"),
-            groupValue: fontType,
-            onChanged: (value) {
-              setState(() {
-                fontType = value!;
-              });
-            },
-          ),
-          15.heightBox,
-          ElevatedButton(
-            onPressed: () {
-              
-            },
-            child: const Center(
-              child: Text("Save Settings"),
+              ],
             ),
-          )
-        ],
+            10.heightBox,
+            Row(
+              children: [
+                Expanded(
+                  child: Text(LocaleKeys.settings_Font_Size.tr()),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: AppTextField(
+                    initialValue: "${StorageKeys.fontSize.storedValue}",
+                    textInputAction: TextInputAction.next,
+                    onChanged: (input) {
+                      setState(() {
+                        StorageKeys.fontSize
+                            .setValue(double.tryParse(input) ?? 10);
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+            10.heightBox,
+            Row(
+              children: [
+                Expanded(
+                  child: Text(LocaleKeys.printCut.tr()),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: AppTextField(
+                    initialValue: "${StorageKeys.spacingCut.storedValue}",
+                    textInputAction: TextInputAction.next,
+                    onChanged: (input) {
+                      setState(() {
+                        StorageKeys.spacingCut
+                            .setValue(int.tryParse(input) ?? 7);
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+            10.heightBox,
+            Row(
+              children: [
+                Checkbox(
+                  value: StorageKeys.printDuplicate.storedValue ?? false,
+                  onChanged: (value) {
+                    setState(() {
+                      StorageKeys.printDuplicate.setValue(value ?? false);
+                    });
+                  },
+                ),
+                10.widthBox,
+                Expanded(child: Text(LocaleKeys.printDuplicate.tr()))
+              ],
+            ),
+            10.heightBox,
+            Text(LocaleKeys.printFontType.tr()),
+            RadioListTile<bool>(
+              value: true,
+              title: Text(LocaleKeys.printFontType1.tr()),
+              groupValue: StorageKeys.fontSize.storedValue ?? false,
+              onChanged: (value) {
+                setState(() {
+                  StorageKeys.fontType.setValue(true);
+                });
+              },
+            ),
+            5.heightBox,
+            RadioListTile<bool>(
+              value: false,
+              title: Text(LocaleKeys.printFontType2.tr()),
+              groupValue: StorageKeys.fontSize.storedValue ?? false,
+              onChanged: (value) {
+                setState(() {
+                  StorageKeys.fontType.setValue(false);
+                });
+              },
+            ),
+            15.heightBox,
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Center(
+                child: Text(LocaleKeys.printSaveSettings.tr()),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -156,6 +174,23 @@ enum PaperType {
         return 80;
       default:
         return -1;
+    }
+  }
+
+  String get name {
+    return toString().split(".").last;
+  }
+
+  static PaperType fromString(String value) {
+    switch (value) {
+      case "A4":
+        return PaperType.A4;
+      case "p58":
+        return PaperType.p58;
+      case "p80":
+        return PaperType.p80;
+      default:
+        return PaperType.custom;
     }
   }
 }

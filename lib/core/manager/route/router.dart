@@ -60,7 +60,7 @@ abstract class AppRouter {
                 return MaterialPage(
                   key: state.pageKey,
                   child: NewAccountPage(
-                    account: state.extra as Account,
+                    account: state.extra as Account?,
                   ),
                 );
               }),

@@ -163,6 +163,14 @@ abstract class  LocaleKeys {
   static const No_Invoice = 'No_Invoice';
   static const Update = 'Update';
   static const Print = 'Print';
+  static const printSetting = 'printSetting';
+  static const printCut = 'printCut';
+  static const printFontType = 'printFontType';
+  static const printFontType1 = 'printFontType1';
+  static const printFontType2 = 'printFontType2';
+  static const printSaveSettings = 'printSaveSettings';
+  static const printDuplicate = 'printDuplicate';
+  static const printPaperType = 'printPaperType';
   static const Delete = 'Delete';
   static const Sale_in_type_n_id = 'Sale_in_type_n_id';
   static const Treated = 'Treated';

@@ -369,7 +369,7 @@ enum SettingsActions {
           ),
           onPressed: onPressed ??
               (context) {
-                if (routeName != null) {
+                if (routeName != null && routeName != "") {
                   context.pushNamed(routeName);
                 }
               },
