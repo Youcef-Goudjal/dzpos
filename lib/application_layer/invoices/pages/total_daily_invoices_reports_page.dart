@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class TotalDailyInvoicesReports extends StatelessWidget {
@@ -6,6 +5,6 @@ class TotalDailyInvoicesReports extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return const Scaffold();
   }
 }

@@ -81,13 +81,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _signOut(SignOutRequested event, Emitter emit) async {
     try {
       // first we remove the imei code from firestore
-      final currentUser = CommonBloc.profileBloc.user;
-      List<String> devices = [];
-      devices.addAll(currentUser.devices);
-      devices.remove(event.imei);
-      await userRepository.updateUserData(currentUser.copyWith(
-        devices: devices,
-      ));
+      try {
+        final currentUser = CommonBloc.profileBloc.user;
+        List<String> devices = [];
+        devices.addAll(currentUser.devices);
+        devices.remove(event.imei);
+        await userRepository.updateUserData(currentUser.copyWith(
+          devices: devices,
+        ));
+      } on Exception {
+        // TODO
+      }
       await authRepository.logOut();
 
       emit(const Unauthenticated());

@@ -41,8 +41,10 @@ abstract class AppRouter {
                   );
                 },
               ),
-              AppRoutes.listOfMaterials.goRoute(),
               AppRoutes.showInvoices.goRoute(),
+              AppRoutes.totalDailyInvoicesReports.goRoute(),
+              AppRoutes.pricingPolicy.goRoute(),
+              AppRoutes.listOfMaterials.goRoute(),
               AppRoutes.product.goRoute(
                 [],
                 (context, state) {
@@ -119,6 +121,11 @@ abstract class AppRouter {
                           }
                         }
                       }
+                    } else {
+                      CommonBloc.authBloc.add(
+                        SignOutRequested(
+                            CommonBloc.applicationBloc.application.imei),
+                      );
                     }
                   }
 

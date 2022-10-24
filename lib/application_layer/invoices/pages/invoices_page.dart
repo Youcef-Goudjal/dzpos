@@ -138,7 +138,7 @@ enum Invoices {
   showInvoices("Show Invoices", AppAssets.check),
   totalDailyInvoicesReports("Total Daily Invoices Reports", AppAssets.invoice),
   activityOfTheMaterial("Activity Of The Material", AppAssets.masterCard),
-  editPrices("Edit Prices", AppAssets.editFile),
+  // editPrices("Edit Prices", AppAssets.editFile),
   pricingPolicy("Pricing Policy", AppAssets.coins),
   inventoryInvoice("Inventory Invoice", AppAssets.trolley),
   storeReconciliationAndRepair(
@@ -163,8 +163,8 @@ enum Invoices {
         return LocaleKeys.invoices_Total_Daily_Invoices_Reports.tr();
       case Invoices.activityOfTheMaterial:
         return LocaleKeys.invoices_Activity_Of_The_Material.tr();
-      case Invoices.editPrices:
-        return LocaleKeys.invoices_Edit_Prices.tr();
+      // case Invoices.editPrices:
+      //   return LocaleKeys.invoices_Edit_Prices.tr();
       case Invoices.pricingPolicy:
         return LocaleKeys.invoices_Pricing_Policy.tr();
       case Invoices.inventoryInvoice:
@@ -196,13 +196,19 @@ enum Invoices {
           params: <String, String>{'type': InvoiceType.buy.name},
         );
         break;
+      case Invoices.showInvoices:
+        context.pushNamed(AppRoutes.showInvoices.name);
+        break;
+      case Invoices.totalDailyInvoicesReports:
+        context.pushNamed(AppRoutes.totalDailyInvoicesReports.name);
+        break;
+      case Invoices.pricingPolicy:
+        context.pushNamed(AppRoutes.pricingPolicy.name);
+        break;
       case Invoices.listOfMaterials:
         context.pushNamed(AppRoutes.listOfMaterials.name);
         break;
 
-      case Invoices.showInvoices:
-        context.pushNamed(AppRoutes.showInvoices.name);
-        break;
       case Invoices.storeInventory:
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
@@ -211,19 +217,11 @@ enum Invoices {
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 
-      case Invoices.totalDailyInvoicesReports:
-      // context.pushNamed(AppRoutes.newSaleInvoice.name);
-      // break;
-
       case Invoices.activityOfTheMaterial:
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 
-      case Invoices.editPrices:
-      // context.pushNamed(AppRoutes.newSaleInvoice.name);
-      // break;
-
-      case Invoices.pricingPolicy:
+      // case Invoices.editPrices:
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 

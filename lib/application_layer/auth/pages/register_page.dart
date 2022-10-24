@@ -178,7 +178,7 @@ class _RegisterBody extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: LocaleKeys
-                            .register_By_signing_up_youre_agree_to_our
+                            .register_By_signing_up_you_re_agree_to_our
                             .tr(),
                         style: Theme.of(context).textTheme.button,
                       ),

@@ -69,6 +69,17 @@ class FullProduct extends Equatable {
     }
   }
 
+  double? get purchasePrice {
+    try {
+      return unitsList
+          .where((element) => element.type == UnitType.buy)
+          .first
+          .price;
+    } on Exception {
+      return null;
+    }
+  }
+
   int get productId => product.id;
   String get productName => product.name;
   String? get productCode => product.code;

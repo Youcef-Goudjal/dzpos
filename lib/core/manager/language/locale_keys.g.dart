@@ -34,8 +34,10 @@ abstract class  LocaleKeys {
   static const login_phone_Send = 'login_phone_Send';
   static const register = 'register';
   static const Username = 'Username';
+  static const apply = 'apply';
+  static const modification_Value = 'modification_Value';
   static const Confirme_Password = 'Confirme_Password';
-  static const register_By_signing_up_youre_agree_to_our = 'register_By_signing_up_youre_agree_to_our';
+  static const register_By_signing_up_you_re_agree_to_our = 'register_By_signing_up_you_re_agree_to_our';
   static const register_TermsCondition = 'register_TermsCondition';
   static const register_and = 'register_and';
   static const register_privacy_Policy = 'register_privacy_Policy';
@@ -53,6 +55,14 @@ abstract class  LocaleKeys {
   static const Bluetooth = 'Bluetooth';
   static const Share = 'Share';
   static const Edit = 'Edit';
+  static const last_purchase = 'last_purchase';
+  static const profit = 'profit';
+  static const profitRatio = 'profitRatio';
+  static const increase_profit_margin_based_on_cost_price = 'increase_profit_margin_based_on_cost_price';
+  static const increase_current_selling_price = 'increase_current_selling_price';
+  static const Decrease_current_sales_price = 'Decrease_current_sales_price';
+  static const Increase_current_purchase_price = 'Increase_current_purchase_price';
+  static const Decrease_current_purchase_price = 'Decrease_current_purchase_price';
   static const Printer_Labels = 'Printer_Labels';
   static const bottom_invoice = 'bottom_invoice';
   static const bottom_header = 'bottom_header';
