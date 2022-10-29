@@ -1,21 +1,18 @@
-import 'package:flutter_device_identifier/flutter_device_identifier.dart';
+import 'package:platform_device_id/platform_device_id.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Application {
   static bool debug = true;
   static late SharedPreferences pref;
-  late String? imei;
+  late String? deviceId;
 
   Future<void> setPreferences() async {
-    pref = await SharedPreferences.getInstance();
-    bool permission = await FlutterDeviceIdentifier.checkPermission();
-    if (!permission) {
-      permission = await FlutterDeviceIdentifier.requestPermission();
-    }
-
-    if (permission) {
-      imei = await FlutterDeviceIdentifier.imeiCode;
-    }
+ 
+      pref = await SharedPreferences.getInstance();
+      
+    
+        deviceId = await PlatformDeviceId.getDeviceId;
+   
   }
 
   /// Singleton factory

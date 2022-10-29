@@ -56,7 +56,7 @@ class _SettingDialogState extends State<_SettingDialog> {
                 Expanded(
                   child: RadioListTile<PaperType>(
                     value: PaperType.p80,
-                    title: Text(PaperType.p58.name),
+                    title: Text(PaperType.p80.name),
                     groupValue: PaperType.fromString(
                         StorageKeys.paperType.storedValue ?? ""),
                     onChanged: (value) {
@@ -77,7 +77,7 @@ class _SettingDialogState extends State<_SettingDialog> {
                 Expanded(
                   flex: 2,
                   child: AppTextField(
-                    initialValue: "${StorageKeys.fontSize.storedValue}",
+                    initialValue: "${StorageKeys.fontSize.storedValue ?? ""}",
                     textInputAction: TextInputAction.next,
                     onChanged: (input) {
                       setState(() {
@@ -98,7 +98,7 @@ class _SettingDialogState extends State<_SettingDialog> {
                 Expanded(
                   flex: 2,
                   child: AppTextField(
-                    initialValue: "${StorageKeys.spacingCut.storedValue}",
+                    initialValue: "${StorageKeys.spacingCut.storedValue ?? ""}",
                     textInputAction: TextInputAction.next,
                     onChanged: (input) {
                       setState(() {

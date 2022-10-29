@@ -8,7 +8,7 @@ abstract class UserRepository {
   /// Stream of logged user
   /// [loggedUser] is user of firebase Auth
   ///
-  Stream<UserEntity> loggedUserStream(UserModel loggedUser);
+  Stream<UserEntity>? loggedUserStream(UserModel loggedUser);
 
   /// Get user by id
   /// [uid] is the user id from firebase auth

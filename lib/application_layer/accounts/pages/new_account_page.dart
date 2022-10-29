@@ -5,8 +5,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/manager/language/locale_keys.g.dart';
+import '../../../core/manager/route/routes.dart';
 import '../../../core/services/database.dart';
 
 class NewAccountPage extends StatelessWidget {
@@ -24,6 +26,9 @@ class NewAccountPage extends StatelessWidget {
         listenWhen: (previous, current) => previous.status != current.status,
         listener: (context, state) {
           statusHandler(context, state.status, msg: state.msg);
+          if (state.status.isSuccess) {
+            context.replaceNamed(AppRoutes.newAccount.name);
+          }
         },
         child: Builder(builder: (context) {
           return Scaffold(
@@ -84,12 +89,7 @@ class _NewAccountBody extends StatelessWidget {
                                     : null,
                               ),
                               child: Center(
-                                child: Text(
-                                  AccountType.values[index]
-                                      .toString()
-                                      .split(".")
-                                      .last,
-                                ),
+                                child: Text(AccountType.values[index].name),
                               ),
                             ),
                           ),

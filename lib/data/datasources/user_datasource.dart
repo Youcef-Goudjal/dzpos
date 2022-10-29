@@ -11,7 +11,7 @@ abstract class UserDataSource {
   /// Stream of logged user
   /// [loggedUser] is user of firebase Auth
   ///
-  Stream<UserModel> loggedUserStream(UserModel loggedUser);
+  Stream<UserModel>? loggedUserStream(UserModel loggedUser);
 
   /// Get user by id
   /// [uid] is the user id from firebase auth
@@ -49,7 +49,10 @@ class UserDataSourceImpl implements UserDataSource {
   }
 
   @override
-  Stream<UserModel> loggedUserStream(UserModel loggedUser) {
+  Stream<UserModel>? loggedUserStream(UserModel loggedUser) {
+    if (loggedUser.isEmpty) {
+      return null;
+    }
     return _userCollection
         .doc(loggedUser.uid)
         .snapshots()
@@ -75,6 +78,6 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Future<void> uploadDB({required File db}) async {
-     storage.child(FirebaseAuth.instance.currentUser!.uid).putFile(db);
+    storage.child(FirebaseAuth.instance.currentUser!.uid).putFile(db);
   }
 }

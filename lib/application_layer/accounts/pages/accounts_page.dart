@@ -35,16 +35,16 @@ class AccountsPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 5),
                   child: ElevatedButton(
-                    onPressed: () => Accounts.values[index].onPressed(context),
+                    onPressed: () => AccountsPages.values[index].onPressed(context),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SvgPicture.asset(
-                          Accounts.values[index].iconPath!,
+                          AccountsPages.values[index].iconPath!,
                         ),
                         5.h.heightBox,
                         Text(
-                          Accounts.values[index].name,
+                          AccountsPages.values[index].name,
                           maxLines: 2,
                           style: const TextStyle(
                             overflow: TextOverflow.ellipsis,
@@ -60,21 +60,21 @@ class AccountsPage extends StatelessWidget {
         ),
         20.h.heightBox,
         ...List.generate(
-          Accounts.values.length - 3,
+          AccountsPages.values.length - 3,
           (index) => Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   alignment: Alignment.centerLeft,
                 ),
-                onPressed: () => Accounts.values[index + 3].onPressed(context),
+                onPressed: () => AccountsPages.values[index + 3].onPressed(context),
                 child: Row(
                   children: [
                     SvgPicture.asset(
-                      Accounts.values[index + 3].iconPath!,
+                      AccountsPages.values[index + 3].iconPath!,
                     ),
                     5.widthBox,
-                    Expanded(child: Text(Accounts.values[index + 3].name)),
+                    Expanded(child: Text(AccountsPages.values[index + 3].name)),
                   ],
                 )),
           ),
@@ -84,7 +84,7 @@ class AccountsPage extends StatelessWidget {
   }
 }
 
-enum Accounts {
+enum AccountsPages {
   payment("Payment to Account", AppAssets.cashInHand), //
   catchFromAccount("Catch From Account", AppAssets.receiveCash), //
   registerNewDebt("Register New debt", AppAssets.newSvg), //
@@ -100,29 +100,29 @@ enum Accounts {
 
   String get name {
     switch (this) {
-      case Accounts.payment:
+      case AccountsPages.payment:
         return LocaleKeys.accounts_Payment_to_Account.tr();
-      case Accounts.catchFromAccount:
+      case AccountsPages.catchFromAccount:
         return LocaleKeys.accounts_Catch_From_Account.tr();
-      case Accounts.registerNewDebt:
+      case AccountsPages.registerNewDebt:
         return LocaleKeys.accounts_Register_New_debt.tr();
-      case Accounts.debtList:
+      case AccountsPages.debtList:
         return LocaleKeys.accounts_Debt_List.tr();
-      case Accounts.accountStatement:
+      case AccountsPages.accountStatement:
         return LocaleKeys.accounts_Account_Statement.tr();
-      case Accounts.boxMovement:
+      case AccountsPages.boxMovement:
         return LocaleKeys.accounts_Box_Movement.tr();
-      case Accounts.fundAndRepair:
+      case AccountsPages.fundAndRepair:
         return LocaleKeys.accounts_Fund_And_Repair.tr();
-      case Accounts.expenseRecording:
+      case AccountsPages.expenseRecording:
         return LocaleKeys.accounts_Expense_Recording.tr();
-      case Accounts.externalRevenueRecording:
+      case AccountsPages.externalRevenueRecording:
         return LocaleKeys.accounts_External_Revenue_Recording.tr();
-      case Accounts.oldDebts:
+      case AccountsPages.oldDebts:
         return LocaleKeys.accounts_Old_Debts.tr();
-      case Accounts.accountsList:
+      case AccountsPages.accountsList:
         return LocaleKeys.accounts_Accounts_List.tr();
-      case Accounts.openingAccount:
+      case AccountsPages.openingAccount:
         return LocaleKeys.accounts_Opening_Account.tr();
     }
   }
@@ -130,30 +130,30 @@ enum Accounts {
   final String n;
   final String? iconPath;
 
-  const Accounts(this.n, [this.iconPath]);
+  const AccountsPages(this.n, [this.iconPath]);
 
   void onPressed(BuildContext context) {
     switch (this) {
-      case Accounts.openingAccount:
+      case AccountsPages.openingAccount:
         context.pushNamed(AppRoutes.newAccount.name);
         break;
 
-      case Accounts.accountsList:
+      case AccountsPages.accountsList:
         context.pushNamed(AppRoutes.accountsList.name);
         break;
-      case Accounts.oldDebts:
+      case AccountsPages.oldDebts:
         showDebtDialog(context);
         break;
-      case Accounts.debtList:
+      case AccountsPages.debtList:
         context.pushNamed(AppRoutes.debtList.name);
         break;
-      case Accounts.payment:
+      case AccountsPages.payment:
         context.pushNamed(AppRoutes.debt.name, extra: DebtType.debtor);
         break;
-      case Accounts.catchFromAccount:
+      case AccountsPages.catchFromAccount:
         context.pushNamed(AppRoutes.debt.name, extra: DebtType.creditor);
         break;
-      case Accounts.registerNewDebt:
+      case AccountsPages.registerNewDebt:
         context.pushNamed(AppRoutes.debt.name, extra: DebtType.all);
         break;
 

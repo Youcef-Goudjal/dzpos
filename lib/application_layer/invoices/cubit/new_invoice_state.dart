@@ -16,18 +16,26 @@ class NewInvoiceState extends Equatable {
     this.status = Status.initial,
     this.state = InvoiceState.New,
     this.save = false,
+    this.products = const [],
+    InvoiceType? type,
     this.msg,
-  }) : invoice = invoice ?? FullInvoice.empty;
+  })  : invoice = invoice ?? FullInvoice.empty,
+        type = type ?? InvoiceType.sell;
   final FullInvoice invoice;
   final bool save;
   final Status status;
   final InvoiceState state;
+  final InvoiceType type;
   final String? msg;
+  final List<FullProduct> products;
 
   @override
   List<Object?> get props => [
         invoice,
         status,
+        save,
+        state,
+        products,
       ];
 
   NewInvoiceState copyWith({
@@ -36,15 +44,17 @@ class NewInvoiceState extends Equatable {
     Status? status,
     InvoiceState? state,
     String? msg,
+    List<FullProduct>? products,
+    InvoiceType? type,
   }) {
-    final s = this.status.isFailure ? Status.initial : this.status;
-
     return NewInvoiceState(
       invoice: invoice ?? this.invoice,
       save: save ?? this.save,
-      status: status ?? s,
-      msg: msg ?? this.msg,
+      status: status ?? Status.initial,
+      msg: msg,
+      products: products ?? this.products,
       state: state ?? this.state,
+      type: type ?? this.type,
     );
   }
 }

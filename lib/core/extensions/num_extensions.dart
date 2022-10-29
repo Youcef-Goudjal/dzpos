@@ -30,6 +30,14 @@ extension NumExtension on num {
   bool isEqual(num b) => this == b;
 }
 
+extension DoubleExt on double {
+  Radius get radius => Radius.circular(this);
+}
+
+extension IntExt on int {
+  Radius get radius => Radius.circular(toDouble());
+}
+
 extension SizeBoxNumExtension on num {
   Widget get widthBox => SizedBox(width: double.tryParse(toString()));
   Widget get heightBox => SizedBox(height: double.tryParse(toString()));

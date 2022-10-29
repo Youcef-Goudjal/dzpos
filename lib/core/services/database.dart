@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:dzpos/data/data.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import '../../product/product.dart';
 import '../enums.dart';
+import '../manager/language/locale_keys.g.dart';
 import '../utils/utils.dart';
 
 part 'database.g.dart';
@@ -89,7 +91,6 @@ class FullProduct extends Equatable {
   int? get unitId => getUnit?.id;
   double? get priceUnit => getUnit?.price;
   double? get boxUnit => getUnit?.box;
-  String? get codeUnit => getUnit?.code;
 
   const FullProduct({
     required this.product,
@@ -150,6 +151,7 @@ class FullInvoice extends Equatable {
 
   int get invoiceId => invoice.id;
   int get accountId => account.id;
+  InvoiceType get invoiceType => invoice.invoiceType;
   PaymentType get paymentType => invoice.paymentType;
   double? get totalAmount => invoice.totalAmount;
   double get amountTendered => invoice.amountTendered;
@@ -161,9 +163,17 @@ class FullInvoice extends Equatable {
   double get total {
     double t = 0;
     for (var element in sales) {
-      t += element.subTotal * element.quantity;
+      t += element.subTotal;
     }
     return t;
+  }
+
+  double get totalQuantity {
+    double q = 0;
+    for (var sale in sales) {
+      q += sale.quantity;
+    }
+    return q;
   }
 
   String get time {
@@ -261,7 +271,7 @@ class FullSale extends Equatable {
       case 3:
         return quantity.toString();
       case 4:
-        formatCurrency(subTotal);
+        return formatCurrency(subTotal);
     }
     return "";
   }

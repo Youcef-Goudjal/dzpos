@@ -47,9 +47,7 @@ class _MaterialsBody extends StatelessWidget {
                 BlocBuilder<ListOfProductsCubit, ListOfProductsState>(
                   builder: (context, state) {
                     if (state.status.isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const LoadingWidget();
                     }
                     return IconButton(
                       onPressed: () {
@@ -78,7 +76,7 @@ class _MaterialsBody extends StatelessWidget {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: context.theme.colorScheme.primary),
-                      onPressed: () {},
+                      onPressed: listOfProductsCubit.importFromExcel,
                       child: Center(
                         child: Text(
                           LocaleKeys.Import_from_an_Excel.tr(),
@@ -96,7 +94,7 @@ class _MaterialsBody extends StatelessWidget {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: context.theme.colorScheme.secondary),
-                      onPressed: () {},
+                      onPressed: listOfProductsCubit.exportFromExcel,
                       child: Center(
                         child: Text(
                           LocaleKeys.Export_to_Excel.tr(),
@@ -116,11 +114,7 @@ class _MaterialsBody extends StatelessWidget {
             BlocBuilder<ListOfProductsCubit, ListOfProductsState>(
               builder: (context, state) {
                 if (state.status.isLoading) {
-                  return const Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
+                  return const LoadingWidget();
                 }
                 return Expanded(
                   child: ListView.builder(

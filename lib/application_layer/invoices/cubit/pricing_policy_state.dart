@@ -7,7 +7,7 @@ class PricingPolicyState extends Equatable {
     this.method = PricingMethods.increaseCurrentSellingPrice,
     this.products = const [],
     this.modificationValue = 0,
-    this.usePercentage = true,
+    this.usePercentage = false,
     this.msg,
   });
 

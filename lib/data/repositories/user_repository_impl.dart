@@ -13,7 +13,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<UserEntity> getUserById(String uid) => dataSource.getUserById(uid);
 
   @override
-  Stream<UserEntity> loggedUserStream(UserModel loggedUser) =>
+  Stream<UserEntity>? loggedUserStream(UserModel loggedUser) =>
       dataSource.loggedUserStream(loggedUser);
 
   @override

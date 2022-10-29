@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:dzpos/core/enums.dart';
+import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:dzpos/data/repositories/repositories.dart';
 import 'package:dzpos/domain/domain.dart';
@@ -125,7 +126,6 @@ class ProductCubit extends Cubit<ProductState> {
       ...fullProduct.unitsList,
       ProductUnit(
         id: -1,
-        code: "",
         price: 0,
         box: 1,
         subTotal: 0,
@@ -148,11 +148,7 @@ class ProductCubit extends Cubit<ProductState> {
     List<ProductUnit> unitsList = [];
     unitsList.addAll(fullProduct.unitsList);
     unitsList.removeAt(index);
-    unitsList.insert(
-        index,
-        fullProduct.unitsList[index].copyWith(
-          code: input,
-        ));
+    unitsList.insert(index, fullProduct.unitsList[index].copyWith());
 
     emit(
       state.copyWith(
@@ -214,17 +210,24 @@ class ProductCubit extends Cubit<ProductState> {
     try {
       final product = state.product;
       if (product.isNotEmpty) {
-        if (product.unitsList.isNotEmpty) {
-          await repository.writeProduct(product);
-          emit(state.copyWith(
-            save: true,
-            status: Status.success,
-            msg: "product added successfully",
-          ));
+        if (product.category.isNotEmpty) {
+          if (product.unitsList.isNotEmpty) {
+            await repository.writeProduct(product);
+            emit(state.copyWith(
+              save: true,
+              status: Status.success,
+              msg: "product added successfully",
+            ));
+          } else {
+            emit(state.copyWith(
+              status: Status.failure,
+              msg: "please add at least on unit",
+            ));
+          }
         } else {
           emit(state.copyWith(
             status: Status.failure,
-            msg: "please add at least on unit",
+            msg: "please select a category",
           ));
         }
       } else {
@@ -236,7 +239,7 @@ class ProductCubit extends Cubit<ProductState> {
     } on Exception {
       emit(state.copyWith(
         status: Status.failure,
-        msg: "exception",
+        msg: "Oops",
       ));
     }
   }
@@ -267,6 +270,19 @@ class ProductCubit extends Cubit<ProductState> {
       state.copyWith(
         product: fullProduct.copyWith(
           unitsList: unitsList,
+        ),
+      ),
+    );
+  }
+
+  void onBarCodeChanged(String input) {
+    final fullProduct = state.product;
+    emit(
+      state.copyWith(
+        product: fullProduct.copyWith(
+          product: fullProduct.product.copyWith(
+            code: Value(input),
+          ),
         ),
       ),
     );

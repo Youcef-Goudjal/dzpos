@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import 'package:charset_converter/charset_converter.dart';
+import 'package:dzpos/application_layer/settings/widgets/printer_settings_dialog.dart';
 import 'package:dzpos/core/common_blocs/printer/build_pdf.dart';
+import 'package:dzpos/core/common_blocs/printer/build_thermal.dart';
 import 'package:dzpos/product/application.dart';
 import 'package:dzpos/product/constants/constants.dart';
 import 'package:equatable/equatable.dart';
@@ -27,6 +28,7 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
     on<DevicesScanned>(_onDeviceScanned);
     on<PrinterSelected>(_onPrinterSelected);
     on<PrinterStateChanged>(_onPrinterStateChanged);
+    on<BluetoothPrintRequested>(_onBluetoothPrint);
     printerManager.onStateChanged().listen((event) {
       add(PrinterStateChanged(event));
     });
@@ -92,28 +94,6 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
     emit(state.copyWith(
       invoice: event.invoice,
     ));
-    final profiles = await CapabilityProfile.getAvailableProfiles();
-    print(profiles);
-  }
-
-  Future<List<int>> demoReceipt(
-      PaperSize paper, CapabilityProfile profile) async {
-    final Generator ticket = Generator(paper, profile);
-    ticket.setGlobalCodeTable("CP1256");
-    final data = await CharsetConverter.encode("CP1256", "مرحبا");
-    List<int> bytes = [];
-    // bytes += ticket.text("مرحبا");
-    // bytes += data;
-    bytes += ticket.textEncoded(data,
-        styles: const PosStyles.defaults(
-          align: PosAlign.center,
-          codeTable: "CP1256",
-        ));
-
-    print(bytes);
-    // bytes += ticket.feed(2);
-    bytes += ticket.cut();
-    return bytes;
   }
 
   FutureOr<void> _onPrinterStateChanged(
@@ -155,5 +135,19 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
 
   Future<Uint8List> generatePdf(PdfPageFormat format) {
     return buildPdf(format, state.invoice!);
+  }
+
+  FutureOr<void> _onBluetoothPrint(
+      BluetoothPrintRequested event, Emitter<PrinterState> emit) async {
+    if (state.invoice != null) {
+      final profile = await CapabilityProfile.load();
+      final paper =
+          PaperType.fromString(StorageKeys.paperType.storedValue ?? "p80") ==
+                  PaperType.p80
+              ? PaperSize.mm80
+              : PaperSize.mm58;
+      final bytes = await buildThermal(profile, paper, state.invoice!);
+      printerManager.writeBytes(Uint8List.fromList(bytes));
+    }
   }
 }

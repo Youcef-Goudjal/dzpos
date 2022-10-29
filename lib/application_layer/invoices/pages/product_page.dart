@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/manager/language/locale_keys.g.dart';
+import '../../../core/manager/route/routes.dart';
 import '../../../core/services/database.dart';
 import '../../../product/product.dart';
 import '../../application_layer.dart';
@@ -37,6 +39,9 @@ class _ProductPageState extends State<ProductPage>
           listenWhen: (previous, current) => previous.status != current.status,
           listener: (context, state) {
             statusHandler(context, state.status, msg: state.msg);
+            if (state.status.isSuccess) {
+              context.replaceNamed(AppRoutes.product.name);
+            }
           },
           child: Scaffold(
             floatingActionButton: FloatingActionButton(
@@ -158,21 +163,6 @@ class _ProductCard extends StatelessWidget {
                   ],
                 ),
                 5.heightBox,
-                Row(
-                  children: [
-                    SvgPicture.asset(AppAssets.barcode),
-                    10.w.widthBox,
-                    Expanded(
-                      child: AppTextField(
-                        initialValue: unit.code,
-                        hint: "Barcode",
-                        onChanged: (input) {
-                          productCubit.onCodeUnitUpdated(index, input);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
                 10.h.heightBox,
                 Row(
                   children: [
@@ -270,6 +260,20 @@ class _ProductInfo extends StatelessWidget {
             );
           },
         ),
+        10.heightBox,
+        Row(
+          children: [
+            SvgPicture.asset(AppAssets.barcode),
+            10.w.widthBox,
+            Expanded(
+              child: AppTextField(
+                initialValue: productCubit.state.product.productCode ?? "",
+                hint: "Barcode",
+                onChanged: productCubit.onBarCodeChanged,
+              ),
+            ),
+          ],
+        ),
         15.h.heightBox,
         Row(
           children: [
@@ -280,14 +284,17 @@ class _ProductInfo extends StatelessWidget {
                 stream: invoicesRepository.watchCategories,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState.isLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const LoadingWidget();
                   }
                   final categories = snapshot.data!;
 
                   if (categories.isEmpty) {
-                    return Text(LocaleKeys.No_category_found.tr());
+                    return Column(
+                      children: [
+                        Text(LocaleKeys.No_category_found.tr()),
+                        const EmptyBoxWidget(),
+                      ],
+                    );
                   }
                   productCubit.onCategorySelected(categories.first);
                   return BlocBuilder<ProductCubit, ProductState>(

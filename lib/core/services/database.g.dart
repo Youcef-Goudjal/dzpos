@@ -519,7 +519,9 @@ class Product extends DataClass implements Insertable<Product> {
   final int id;
   final String? code;
   final String name;
-  final int categoryId;
+  final int? categoryId;
+  final int? fixedSellUnitId;
+  final int? fixedPurchaseUnitId;
   final double unitInStock;
   final double discountPercentage;
   final double reorderLevel;
@@ -529,7 +531,9 @@ class Product extends DataClass implements Insertable<Product> {
       {required this.id,
       this.code,
       required this.name,
-      required this.categoryId,
+      this.categoryId,
+      this.fixedSellUnitId,
+      this.fixedPurchaseUnitId,
       required this.unitInStock,
       required this.discountPercentage,
       required this.reorderLevel,
@@ -543,7 +547,15 @@ class Product extends DataClass implements Insertable<Product> {
       map['code'] = Variable<String>(code);
     }
     map['name'] = Variable<String>(name);
-    map['category_id'] = Variable<int>(categoryId);
+    if (!nullToAbsent || categoryId != null) {
+      map['category_id'] = Variable<int>(categoryId);
+    }
+    if (!nullToAbsent || fixedSellUnitId != null) {
+      map['fixed_sell_unit_id'] = Variable<int>(fixedSellUnitId);
+    }
+    if (!nullToAbsent || fixedPurchaseUnitId != null) {
+      map['fixed_purchase_unit_id'] = Variable<int>(fixedPurchaseUnitId);
+    }
     map['unit_in_stock'] = Variable<double>(unitInStock);
     map['discount_percentage'] = Variable<double>(discountPercentage);
     map['reorder_level'] = Variable<double>(reorderLevel);
@@ -559,7 +571,15 @@ class Product extends DataClass implements Insertable<Product> {
       id: Value(id),
       code: code == null && nullToAbsent ? const Value.absent() : Value(code),
       name: Value(name),
-      categoryId: Value(categoryId),
+      categoryId: categoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryId),
+      fixedSellUnitId: fixedSellUnitId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fixedSellUnitId),
+      fixedPurchaseUnitId: fixedPurchaseUnitId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fixedPurchaseUnitId),
       unitInStock: Value(unitInStock),
       discountPercentage: Value(discountPercentage),
       reorderLevel: Value(reorderLevel),
@@ -576,7 +596,10 @@ class Product extends DataClass implements Insertable<Product> {
       id: serializer.fromJson<int>(json['id']),
       code: serializer.fromJson<String?>(json['code']),
       name: serializer.fromJson<String>(json['name']),
-      categoryId: serializer.fromJson<int>(json['categoryId']),
+      categoryId: serializer.fromJson<int?>(json['categoryId']),
+      fixedSellUnitId: serializer.fromJson<int?>(json['fixedSellUnitId']),
+      fixedPurchaseUnitId:
+          serializer.fromJson<int?>(json['fixedPurchaseUnitId']),
       unitInStock: serializer.fromJson<double>(json['unitInStock']),
       discountPercentage:
           serializer.fromJson<double>(json['discountPercentage']),
@@ -592,7 +615,9 @@ class Product extends DataClass implements Insertable<Product> {
       'id': serializer.toJson<int>(id),
       'code': serializer.toJson<String?>(code),
       'name': serializer.toJson<String>(name),
-      'categoryId': serializer.toJson<int>(categoryId),
+      'categoryId': serializer.toJson<int?>(categoryId),
+      'fixedSellUnitId': serializer.toJson<int?>(fixedSellUnitId),
+      'fixedPurchaseUnitId': serializer.toJson<int?>(fixedPurchaseUnitId),
       'unitInStock': serializer.toJson<double>(unitInStock),
       'discountPercentage': serializer.toJson<double>(discountPercentage),
       'reorderLevel': serializer.toJson<double>(reorderLevel),
@@ -605,7 +630,9 @@ class Product extends DataClass implements Insertable<Product> {
           {int? id,
           Value<String?> code = const Value.absent(),
           String? name,
-          int? categoryId,
+          Value<int?> categoryId = const Value.absent(),
+          Value<int?> fixedSellUnitId = const Value.absent(),
+          Value<int?> fixedPurchaseUnitId = const Value.absent(),
           double? unitInStock,
           double? discountPercentage,
           double? reorderLevel,
@@ -615,7 +642,13 @@ class Product extends DataClass implements Insertable<Product> {
         id: id ?? this.id,
         code: code.present ? code.value : this.code,
         name: name ?? this.name,
-        categoryId: categoryId ?? this.categoryId,
+        categoryId: categoryId.present ? categoryId.value : this.categoryId,
+        fixedSellUnitId: fixedSellUnitId.present
+            ? fixedSellUnitId.value
+            : this.fixedSellUnitId,
+        fixedPurchaseUnitId: fixedPurchaseUnitId.present
+            ? fixedPurchaseUnitId.value
+            : this.fixedPurchaseUnitId,
         unitInStock: unitInStock ?? this.unitInStock,
         discountPercentage: discountPercentage ?? this.discountPercentage,
         reorderLevel: reorderLevel ?? this.reorderLevel,
@@ -629,6 +662,8 @@ class Product extends DataClass implements Insertable<Product> {
           ..write('code: $code, ')
           ..write('name: $name, ')
           ..write('categoryId: $categoryId, ')
+          ..write('fixedSellUnitId: $fixedSellUnitId, ')
+          ..write('fixedPurchaseUnitId: $fixedPurchaseUnitId, ')
           ..write('unitInStock: $unitInStock, ')
           ..write('discountPercentage: $discountPercentage, ')
           ..write('reorderLevel: $reorderLevel, ')
@@ -639,8 +674,18 @@ class Product extends DataClass implements Insertable<Product> {
   }
 
   @override
-  int get hashCode => Object.hash(id, code, name, categoryId, unitInStock,
-      discountPercentage, reorderLevel, isFrozen, userId);
+  int get hashCode => Object.hash(
+      id,
+      code,
+      name,
+      categoryId,
+      fixedSellUnitId,
+      fixedPurchaseUnitId,
+      unitInStock,
+      discountPercentage,
+      reorderLevel,
+      isFrozen,
+      userId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -649,6 +694,8 @@ class Product extends DataClass implements Insertable<Product> {
           other.code == this.code &&
           other.name == this.name &&
           other.categoryId == this.categoryId &&
+          other.fixedSellUnitId == this.fixedSellUnitId &&
+          other.fixedPurchaseUnitId == this.fixedPurchaseUnitId &&
           other.unitInStock == this.unitInStock &&
           other.discountPercentage == this.discountPercentage &&
           other.reorderLevel == this.reorderLevel &&
@@ -660,7 +707,9 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   final Value<int> id;
   final Value<String?> code;
   final Value<String> name;
-  final Value<int> categoryId;
+  final Value<int?> categoryId;
+  final Value<int?> fixedSellUnitId;
+  final Value<int?> fixedPurchaseUnitId;
   final Value<double> unitInStock;
   final Value<double> discountPercentage;
   final Value<double> reorderLevel;
@@ -671,6 +720,8 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     this.code = const Value.absent(),
     this.name = const Value.absent(),
     this.categoryId = const Value.absent(),
+    this.fixedSellUnitId = const Value.absent(),
+    this.fixedPurchaseUnitId = const Value.absent(),
     this.unitInStock = const Value.absent(),
     this.discountPercentage = const Value.absent(),
     this.reorderLevel = const Value.absent(),
@@ -681,14 +732,15 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     this.id = const Value.absent(),
     this.code = const Value.absent(),
     required String name,
-    required int categoryId,
+    this.categoryId = const Value.absent(),
+    this.fixedSellUnitId = const Value.absent(),
+    this.fixedPurchaseUnitId = const Value.absent(),
     this.unitInStock = const Value.absent(),
     required double discountPercentage,
     required double reorderLevel,
     this.isFrozen = const Value.absent(),
     this.userId = const Value.absent(),
   })  : name = Value(name),
-        categoryId = Value(categoryId),
         discountPercentage = Value(discountPercentage),
         reorderLevel = Value(reorderLevel);
   static Insertable<Product> custom({
@@ -696,6 +748,8 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     Expression<String>? code,
     Expression<String>? name,
     Expression<int>? categoryId,
+    Expression<int>? fixedSellUnitId,
+    Expression<int>? fixedPurchaseUnitId,
     Expression<double>? unitInStock,
     Expression<double>? discountPercentage,
     Expression<double>? reorderLevel,
@@ -707,6 +761,9 @@ class ProductsCompanion extends UpdateCompanion<Product> {
       if (code != null) 'code': code,
       if (name != null) 'name': name,
       if (categoryId != null) 'category_id': categoryId,
+      if (fixedSellUnitId != null) 'fixed_sell_unit_id': fixedSellUnitId,
+      if (fixedPurchaseUnitId != null)
+        'fixed_purchase_unit_id': fixedPurchaseUnitId,
       if (unitInStock != null) 'unit_in_stock': unitInStock,
       if (discountPercentage != null) 'discount_percentage': discountPercentage,
       if (reorderLevel != null) 'reorder_level': reorderLevel,
@@ -719,7 +776,9 @@ class ProductsCompanion extends UpdateCompanion<Product> {
       {Value<int>? id,
       Value<String?>? code,
       Value<String>? name,
-      Value<int>? categoryId,
+      Value<int?>? categoryId,
+      Value<int?>? fixedSellUnitId,
+      Value<int?>? fixedPurchaseUnitId,
       Value<double>? unitInStock,
       Value<double>? discountPercentage,
       Value<double>? reorderLevel,
@@ -730,6 +789,8 @@ class ProductsCompanion extends UpdateCompanion<Product> {
       code: code ?? this.code,
       name: name ?? this.name,
       categoryId: categoryId ?? this.categoryId,
+      fixedSellUnitId: fixedSellUnitId ?? this.fixedSellUnitId,
+      fixedPurchaseUnitId: fixedPurchaseUnitId ?? this.fixedPurchaseUnitId,
       unitInStock: unitInStock ?? this.unitInStock,
       discountPercentage: discountPercentage ?? this.discountPercentage,
       reorderLevel: reorderLevel ?? this.reorderLevel,
@@ -752,6 +813,12 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     }
     if (categoryId.present) {
       map['category_id'] = Variable<int>(categoryId.value);
+    }
+    if (fixedSellUnitId.present) {
+      map['fixed_sell_unit_id'] = Variable<int>(fixedSellUnitId.value);
+    }
+    if (fixedPurchaseUnitId.present) {
+      map['fixed_purchase_unit_id'] = Variable<int>(fixedPurchaseUnitId.value);
     }
     if (unitInStock.present) {
       map['unit_in_stock'] = Variable<double>(unitInStock.value);
@@ -778,6 +845,8 @@ class ProductsCompanion extends UpdateCompanion<Product> {
           ..write('code: $code, ')
           ..write('name: $name, ')
           ..write('categoryId: $categoryId, ')
+          ..write('fixedSellUnitId: $fixedSellUnitId, ')
+          ..write('fixedPurchaseUnitId: $fixedPurchaseUnitId, ')
           ..write('unitInStock: $unitInStock, ')
           ..write('discountPercentage: $discountPercentage, ')
           ..write('reorderLevel: $reorderLevel, ')
@@ -813,10 +882,22 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   final VerificationMeta _categoryIdMeta = const VerificationMeta('categoryId');
   @override
   late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
-      'category_id', aliasedName, false,
+      'category_id', aliasedName, true,
       type: DriftSqlType.int,
-      requiredDuringInsert: true,
+      requiredDuringInsert: false,
       defaultConstraints: 'REFERENCES "product_categories" ("id")');
+  final VerificationMeta _fixedSellUnitIdMeta =
+      const VerificationMeta('fixedSellUnitId');
+  @override
+  late final GeneratedColumn<int> fixedSellUnitId = GeneratedColumn<int>(
+      'fixed_sell_unit_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  final VerificationMeta _fixedPurchaseUnitIdMeta =
+      const VerificationMeta('fixedPurchaseUnitId');
+  @override
+  late final GeneratedColumn<int> fixedPurchaseUnitId = GeneratedColumn<int>(
+      'fixed_purchase_unit_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   final VerificationMeta _unitInStockMeta =
       const VerificationMeta('unitInStock');
   @override
@@ -860,6 +941,8 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
         code,
         name,
         categoryId,
+        fixedSellUnitId,
+        fixedPurchaseUnitId,
         unitInStock,
         discountPercentage,
         reorderLevel,
@@ -893,8 +976,18 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
           _categoryIdMeta,
           categoryId.isAcceptableOrUnknown(
               data['category_id']!, _categoryIdMeta));
-    } else if (isInserting) {
-      context.missing(_categoryIdMeta);
+    }
+    if (data.containsKey('fixed_sell_unit_id')) {
+      context.handle(
+          _fixedSellUnitIdMeta,
+          fixedSellUnitId.isAcceptableOrUnknown(
+              data['fixed_sell_unit_id']!, _fixedSellUnitIdMeta));
+    }
+    if (data.containsKey('fixed_purchase_unit_id')) {
+      context.handle(
+          _fixedPurchaseUnitIdMeta,
+          fixedPurchaseUnitId.isAcceptableOrUnknown(
+              data['fixed_purchase_unit_id']!, _fixedPurchaseUnitIdMeta));
     }
     if (data.containsKey('unit_in_stock')) {
       context.handle(
@@ -942,7 +1035,11 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
       name: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       categoryId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}category_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}category_id']),
+      fixedSellUnitId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}fixed_sell_unit_id']),
+      fixedPurchaseUnitId: attachedDatabase.options.types.read(
+          DriftSqlType.int, data['${effectivePrefix}fixed_purchase_unit_id']),
       unitInStock: attachedDatabase.options.types
           .read(DriftSqlType.double, data['${effectivePrefix}unit_in_stock'])!,
       discountPercentage: attachedDatabase.options.types.read(
@@ -965,7 +1062,6 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
 class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   final int id;
   final UnitType type;
-  final String code;
   final double price;
   final double box;
   final double subTotal;
@@ -973,7 +1069,6 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   const ProductUnit(
       {required this.id,
       required this.type,
-      required this.code,
       required this.price,
       required this.box,
       required this.subTotal,
@@ -986,7 +1081,6 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
       final converter = $ProductUnitsTable.$converter0;
       map['type'] = Variable<int>(converter.toSql(type));
     }
-    map['code'] = Variable<String>(code);
     map['price'] = Variable<double>(price);
     map['box'] = Variable<double>(box);
     map['product_id'] = Variable<int>(productId);
@@ -997,7 +1091,6 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
     return ProductUnitsCompanion(
       id: Value(id),
       type: Value(type),
-      code: Value(code),
       price: Value(price),
       box: Value(box),
       productId: Value(productId),
@@ -1010,7 +1103,6 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
     return ProductUnit(
       id: serializer.fromJson<int>(json['id']),
       type: serializer.fromJson<UnitType>(json['type']),
-      code: serializer.fromJson<String>(json['code']),
       price: serializer.fromJson<double>(json['price']),
       box: serializer.fromJson<double>(json['box']),
       subTotal: serializer.fromJson<double>(json['subTotal']),
@@ -1023,7 +1115,6 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'type': serializer.toJson<UnitType>(type),
-      'code': serializer.toJson<String>(code),
       'price': serializer.toJson<double>(price),
       'box': serializer.toJson<double>(box),
       'subTotal': serializer.toJson<double>(subTotal),
@@ -1034,7 +1125,6 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   ProductUnit copyWith(
           {int? id,
           UnitType? type,
-          String? code,
           double? price,
           double? box,
           double? subTotal,
@@ -1042,7 +1132,6 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
       ProductUnit(
         id: id ?? this.id,
         type: type ?? this.type,
-        code: code ?? this.code,
         price: price ?? this.price,
         box: box ?? this.box,
         subTotal: subTotal ?? this.subTotal,
@@ -1053,7 +1142,6 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
     return (StringBuffer('ProductUnit(')
           ..write('id: $id, ')
           ..write('type: $type, ')
-          ..write('code: $code, ')
           ..write('price: $price, ')
           ..write('box: $box, ')
           ..write('subTotal: $subTotal, ')
@@ -1063,15 +1151,13 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(id, type, code, price, box, subTotal, productId);
+  int get hashCode => Object.hash(id, type, price, box, subTotal, productId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is ProductUnit &&
           other.id == this.id &&
           other.type == this.type &&
-          other.code == this.code &&
           other.price == this.price &&
           other.box == this.box &&
           other.subTotal == this.subTotal &&
@@ -1081,14 +1167,12 @@ class ProductUnit extends DataClass implements Insertable<ProductUnit> {
 class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
   final Value<int> id;
   final Value<UnitType> type;
-  final Value<String> code;
   final Value<double> price;
   final Value<double> box;
   final Value<int> productId;
   const ProductUnitsCompanion({
     this.id = const Value.absent(),
     this.type = const Value.absent(),
-    this.code = const Value.absent(),
     this.price = const Value.absent(),
     this.box = const Value.absent(),
     this.productId = const Value.absent(),
@@ -1096,18 +1180,15 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
   ProductUnitsCompanion.insert({
     this.id = const Value.absent(),
     required UnitType type,
-    required String code,
     required double price,
     this.box = const Value.absent(),
     required int productId,
   })  : type = Value(type),
-        code = Value(code),
         price = Value(price),
         productId = Value(productId);
   static Insertable<ProductUnit> custom({
     Expression<int>? id,
     Expression<int>? type,
-    Expression<String>? code,
     Expression<double>? price,
     Expression<double>? box,
     Expression<int>? productId,
@@ -1115,7 +1196,6 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (type != null) 'type': type,
-      if (code != null) 'code': code,
       if (price != null) 'price': price,
       if (box != null) 'box': box,
       if (productId != null) 'product_id': productId,
@@ -1125,14 +1205,12 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
   ProductUnitsCompanion copyWith(
       {Value<int>? id,
       Value<UnitType>? type,
-      Value<String>? code,
       Value<double>? price,
       Value<double>? box,
       Value<int>? productId}) {
     return ProductUnitsCompanion(
       id: id ?? this.id,
       type: type ?? this.type,
-      code: code ?? this.code,
       price: price ?? this.price,
       box: box ?? this.box,
       productId: productId ?? this.productId,
@@ -1148,9 +1226,6 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
     if (type.present) {
       final converter = $ProductUnitsTable.$converter0;
       map['type'] = Variable<int>(converter.toSql(type.value));
-    }
-    if (code.present) {
-      map['code'] = Variable<String>(code.value);
     }
     if (price.present) {
       map['price'] = Variable<double>(price.value);
@@ -1169,7 +1244,6 @@ class ProductUnitsCompanion extends UpdateCompanion<ProductUnit> {
     return (StringBuffer('ProductUnitsCompanion(')
           ..write('id: $id, ')
           ..write('type: $type, ')
-          ..write('code: $code, ')
           ..write('price: $price, ')
           ..write('box: $box, ')
           ..write('productId: $productId')
@@ -1197,11 +1271,6 @@ class $ProductUnitsTable extends ProductUnits
       GeneratedColumn<int>('type', aliasedName, false,
               type: DriftSqlType.int, requiredDuringInsert: true)
           .withConverter<UnitType>($ProductUnitsTable.$converter0);
-  final VerificationMeta _codeMeta = const VerificationMeta('code');
-  @override
-  late final GeneratedColumn<String> code = GeneratedColumn<String>(
-      'code', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
   final VerificationMeta _priceMeta = const VerificationMeta('price');
   @override
   late final GeneratedColumn<double> price = GeneratedColumn<double>(
@@ -1230,7 +1299,7 @@ class $ProductUnitsTable extends ProductUnits
       defaultConstraints: 'REFERENCES "products" ("id")');
   @override
   List<GeneratedColumn> get $columns =>
-      [id, type, code, price, box, subTotal, productId];
+      [id, type, price, box, subTotal, productId];
   @override
   String get aliasedName => _alias ?? 'product_units';
   @override
@@ -1244,12 +1313,6 @@ class $ProductUnitsTable extends ProductUnits
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
     context.handle(_typeMeta, const VerificationResult.success());
-    if (data.containsKey('code')) {
-      context.handle(
-          _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
-    } else if (isInserting) {
-      context.missing(_codeMeta);
-    }
     if (data.containsKey('price')) {
       context.handle(
           _priceMeta, price.isAcceptableOrUnknown(data['price']!, _priceMeta));
@@ -1284,8 +1347,6 @@ class $ProductUnitsTable extends ProductUnits
       type: $ProductUnitsTable.$converter0.fromSql(attachedDatabase
           .options.types
           .read(DriftSqlType.int, data['${effectivePrefix}type'])!),
-      code: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
       price: attachedDatabase.options.types
           .read(DriftSqlType.double, data['${effectivePrefix}price'])!,
       box: attachedDatabase.options.types

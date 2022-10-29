@@ -292,8 +292,8 @@ class _SettingsPageState extends State<SettingsPage> {
             color: context.error,
           ),
           "onPressed": (BuildContext context) {
-            CommonBloc.authBloc.add(
-                SignOutRequested(CommonBloc.applicationBloc.application.imei));
+            CommonBloc.authBloc.add(SignOutRequested(
+                CommonBloc.applicationBloc.application.deviceId));
           },
         },
       }

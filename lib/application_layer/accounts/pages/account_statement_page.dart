@@ -1,6 +1,6 @@
 import 'package:dzpos/application_layer/accounts/cubit/account_statement_cubit.dart';
 import 'package:dzpos/application_layer/auth/utils.dart';
-import 'package:dzpos/application_layer/widgets/app_text_field.dart';
+import 'package:dzpos/application_layer/widgets/widgets.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -54,9 +54,7 @@ class _AccountStatementBodyState extends State<_AccountStatementBody> {
   @override
   Widget build(BuildContext context) {
     if (account == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const LoadingWidget();
     }
     return BlocProvider(
       create: (context) => AccountStatementCubit(accountsRepository, account!),
@@ -96,9 +94,7 @@ class _AccountStatementBodyState extends State<_AccountStatementBody> {
                       BlocBuilder<AccountStatementCubit, AccountStatementState>(
                     builder: (context, state) {
                       if (state.status.isLoading) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                        return const LoadingWidget();
                       }
                       return ListView.separated(
                         itemCount: state.debts.length,

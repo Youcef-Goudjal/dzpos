@@ -33,6 +33,7 @@ abstract class AppRouter {
                       create: (context) => NewInvoiceCubit(
                         invoicesRepository,
                         invoice: state.extra as FullInvoice?,
+                        type: type,
                       ),
                       child: NewInvoicePage(
                         type: type,
@@ -99,24 +100,26 @@ abstract class AppRouter {
                   if (state is ProfileLoaded) {
                     if (state.loggedUser.isNotEmpty) {
                       final user = state.loggedUser;
-                      final localImei =
-                          CommonBloc.applicationBloc.application.imei;
-                      if (localImei != null) {
+                      final deviceId =
+                          CommonBloc.applicationBloc.application.deviceId;
+                      if (deviceId != null) {
                         if (user.devices.isEmpty) {
-                          CommonBloc.authBloc.add(AddDeviceImei(localImei));
+                          CommonBloc.authBloc.add(AddDeviceImei(deviceId));
                         } else {
-                          if (user.devices.contains(localImei)) {
+                          if (user.devices.contains(deviceId)) {
                             if (user.isActive) {
                               return AppRoutes.home.view;
                             } else {
-                              return const UserNotActive();
+                              return UserNotActive(
+                                uid: user.uid,
+                              );
                             }
                           } else if (user.devices.length < user.maxDevices) {
-                            CommonBloc.authBloc.add(AddDeviceImei(localImei));
+                            CommonBloc.authBloc.add(AddDeviceImei(deviceId));
                           } else {
                             CommonBloc.authBloc.add(
-                              SignOutRequested(
-                                  CommonBloc.applicationBloc.application.imei),
+                              SignOutRequested(CommonBloc
+                                  .applicationBloc.application.deviceId),
                             );
                           }
                         }
@@ -124,7 +127,7 @@ abstract class AppRouter {
                     } else {
                       CommonBloc.authBloc.add(
                         SignOutRequested(
-                            CommonBloc.applicationBloc.application.imei),
+                            CommonBloc.applicationBloc.application.deviceId),
                       );
                     }
                   }

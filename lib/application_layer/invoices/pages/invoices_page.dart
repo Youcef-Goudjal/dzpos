@@ -51,15 +51,15 @@ class _InvoiceBody extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 12),
                     child: ElevatedButton(
                       onPressed: () =>
-                          Invoices.values[index].onPressed(context),
+                          InvoicesPages.values[index].onPressed(context),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SvgPicture.asset(
-                            Invoices.values[index].iconPath!,
+                            InvoicesPages.values[index].iconPath!,
                           ),
                           5.h.heightBox,
-                          Text(Invoices.values[index].name),
+                          Text(InvoicesPages.values[index].name),
                         ],
                       ),
                     ),
@@ -81,16 +81,16 @@ class _InvoiceBody extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 12),
                   child: ElevatedButton(
                     onPressed: () =>
-                        Invoices.values[index + 2].onPressed(context),
+                        InvoicesPages.values[index + 2].onPressed(context),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         SvgPicture.asset(
-                          Invoices.values[index + 2].iconPath!,
+                          InvoicesPages.values[index + 2].iconPath!,
                         ),
                         5.h.heightBox,
                         Text(
-                          Invoices.values[index + 2].name,
+                          InvoicesPages.values[index + 2].name,
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -103,22 +103,22 @@ class _InvoiceBody extends StatelessWidget {
         ),
         10.h.heightBox,
         ...List.generate(
-          Invoices.values.length - 4,
+          InvoicesPages.values.length - 4,
           (index) => Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: OutlinedButton(
               style: OutlinedButton.styleFrom(
                 alignment: Alignment.centerLeft,
               ),
-              onPressed: () => Invoices.values[index + 4].onPressed(context),
+              onPressed: () => InvoicesPages.values[index + 4].onPressed(context),
               child: Row(
                 children: [
                   SvgPicture.asset(
-                    Invoices.values[index + 4].iconPath!,
+                    InvoicesPages.values[index + 4].iconPath!,
                   ),
                   5.widthBox,
                   Expanded(
-                    child: Text(Invoices.values[index + 4].name),
+                    child: Text(InvoicesPages.values[index + 4].name),
                   ),
                 ],
               ),
@@ -130,7 +130,7 @@ class _InvoiceBody extends StatelessWidget {
   }
 }
 
-enum Invoices {
+enum InvoicesPages {
   newSaleInvoice("New Sale Invoice", AppAssets.addShoppingCart), //
   newPurchaseInvoice("New Purchase Invoice", AppAssets.buying), //
   storeInventory("Store Inventory", AppAssets.trolley),
@@ -148,30 +148,30 @@ enum Invoices {
 
   String get name {
     switch (this) {
-      case Invoices.newSaleInvoice:
+      case InvoicesPages.newSaleInvoice:
         return LocaleKeys.invoices_New_Sale_Invoice.tr();
 
-      case Invoices.newPurchaseInvoice:
+      case InvoicesPages.newPurchaseInvoice:
         return LocaleKeys.invoices_New_Purchase_Invoice.tr();
-      case Invoices.storeInventory:
+      case InvoicesPages.storeInventory:
         return LocaleKeys.invoices_Store_Inventory.tr();
-      case Invoices.returnedDamaged:
+      case InvoicesPages.returnedDamaged:
         return LocaleKeys.invoices_ReturnedDamaged.tr();
-      case Invoices.showInvoices:
+      case InvoicesPages.showInvoices:
         return LocaleKeys.invoices_Show_Invoices.tr();
-      case Invoices.totalDailyInvoicesReports:
+      case InvoicesPages.totalDailyInvoicesReports:
         return LocaleKeys.invoices_Total_Daily_Invoices_Reports.tr();
-      case Invoices.activityOfTheMaterial:
+      case InvoicesPages.activityOfTheMaterial:
         return LocaleKeys.invoices_Activity_Of_The_Material.tr();
       // case Invoices.editPrices:
       //   return LocaleKeys.invoices_Edit_Prices.tr();
-      case Invoices.pricingPolicy:
+      case InvoicesPages.pricingPolicy:
         return LocaleKeys.invoices_Pricing_Policy.tr();
-      case Invoices.inventoryInvoice:
+      case InvoicesPages.inventoryInvoice:
         return LocaleKeys.invoices_Inventory_Invoice.tr();
-      case Invoices.storeReconciliationAndRepair:
+      case InvoicesPages.storeReconciliationAndRepair:
         return LocaleKeys.invoices_Store_Reconciliation_And_Repair.tr();
-      case Invoices.listOfMaterials:
+      case InvoicesPages.listOfMaterials:
         return LocaleKeys.invoices_List_Of_Materials.tr();
     }
   }
@@ -179,45 +179,45 @@ enum Invoices {
   final String n;
   final String? iconPath;
 
-  const Invoices(this.n, [this.iconPath]);
+  const InvoicesPages(this.n, [this.iconPath]);
 
   void onPressed(BuildContext context) {
     switch (this) {
-      case Invoices.newSaleInvoice:
+      case InvoicesPages.newSaleInvoice:
         context.pushNamed(
           AppRoutes.newInvoice.name,
           params: <String, String>{'type': InvoiceType.sell.name},
         );
         break;
 
-      case Invoices.newPurchaseInvoice:
+      case InvoicesPages.newPurchaseInvoice:
         context.pushNamed(
           AppRoutes.newInvoice.name,
           params: <String, String>{'type': InvoiceType.buy.name},
         );
         break;
-      case Invoices.showInvoices:
+      case InvoicesPages.showInvoices:
         context.pushNamed(AppRoutes.showInvoices.name);
         break;
-      case Invoices.totalDailyInvoicesReports:
+      case InvoicesPages.totalDailyInvoicesReports:
         context.pushNamed(AppRoutes.totalDailyInvoicesReports.name);
         break;
-      case Invoices.pricingPolicy:
+      case InvoicesPages.pricingPolicy:
         context.pushNamed(AppRoutes.pricingPolicy.name);
         break;
-      case Invoices.listOfMaterials:
+      case InvoicesPages.listOfMaterials:
         context.pushNamed(AppRoutes.listOfMaterials.name);
         break;
 
-      case Invoices.storeInventory:
+      case InvoicesPages.storeInventory:
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 
-      case Invoices.returnedDamaged:
+      case InvoicesPages.returnedDamaged:
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 
-      case Invoices.activityOfTheMaterial:
+      case InvoicesPages.activityOfTheMaterial:
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 
@@ -225,10 +225,10 @@ enum Invoices {
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 
-      case Invoices.inventoryInvoice:
+      case InvoicesPages.inventoryInvoice:
       // context.pushNamed(AppRoutes..name);
       // break;
-      case Invoices.storeReconciliationAndRepair:
+      case InvoicesPages.storeReconciliationAndRepair:
       // context.pushNamed(AppRoutes.newSaleInvoice.name);
       // break;
 

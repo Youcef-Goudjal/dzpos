@@ -192,9 +192,7 @@ class StartDialog extends StatelessWidget {
                         future: accountsRepository.allAccounts,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState.isLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
+                            return const LoadingWidget();
                           }
                           final accounts = snapshot.data!;
                           if (accounts.isEmpty) {
@@ -372,11 +370,7 @@ class _BodyInvoice extends StatelessWidget {
       builder: (context, state) {
         final sales = state.invoice.sales;
         if (sales.isEmpty) {
-          return const Expanded(
-            child: Center(
-              child: Text("No Product selected"),
-            ),
-          );
+          return const EmptyBoxWidget();
         }
 
         return Expanded(
@@ -481,8 +475,16 @@ class _BodyInvoice extends StatelessWidget {
                                         child: DropdownButton<int>(
                                           value: sale.unitId,
                                           isExpanded: true,
-                                          items:
-                                              sale.product.unitsList.map((e) {
+                                          items: sale.product.unitsList
+                                              .where((element) {
+                                            if (element.type == UnitType.sell) {
+                                              return local.type ==
+                                                  InvoiceType.sell;
+                                            } else {
+                                              return local.type ==
+                                                  InvoiceType.buy;
+                                            }
+                                          }).map((e) {
                                             return DropdownMenuItem<int>(
                                               value: e.id,
                                               child: FittedBox(

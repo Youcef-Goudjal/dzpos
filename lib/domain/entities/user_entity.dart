@@ -28,7 +28,9 @@ class UserEntity extends Equatable {
   /// small version of [photo]
   final String? photoThumbail;
 
-  //devices [code IMEI]
+  //devices [device Id]
+  /// windows => BIOS UUID ; Linux => BIOS UUID ; Mac => IOPlatformUUID;
+  /// Android => AndroidId; Ios => IdentifierForVendor; Web=> UserAgent
   final List<String> devices;
   final int maxDevices;
 

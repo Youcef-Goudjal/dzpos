@@ -3,9 +3,7 @@ import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 
-import '../../core/manager/route/routes.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -14,9 +12,9 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<ApplicationBloc, ApplicationState>(
       listener: (context, state) {
-        if (state is ApplicationCompleted) {
-          context.pushNamed(AppRoutes.home.name);
-        }
+        // if (state is ApplicationCompleted) {
+        //   context.pushNamed(AppRoutes.home.name);
+        // }
       },
       child: Scaffold(
         backgroundColor: context.theme.splashColor,

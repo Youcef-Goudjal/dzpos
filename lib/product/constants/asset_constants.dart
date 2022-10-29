@@ -79,4 +79,13 @@ class AppAssets {
   static const String clouds = "$svg/clouds.svg";
   static const String maintenance = "$svg/maintenance.svg";
   static const String save = "$svg/save.svg";
+
+  /// lottie
+  static const lottie = "$assets/lottie";
+  static const eCommerceLottie = "$lottie/ecommerce.json";
+  static const posLottie = '$lottie/pos.json';
+  static const problemSolvedLottie = "$lottie/problem-solved.json";
+  static const usersLottie = "$lottie/users.json";
+  static const loadingLottie = "$lottie/loading.json";
+  static const emptyBoxLottie = "$lottie/empty-box.json";
 }

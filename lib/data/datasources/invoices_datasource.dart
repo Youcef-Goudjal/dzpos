@@ -17,8 +17,8 @@ abstract class InvoicesDataSource {
   Future<void> writeInvoice(FullInvoice fullInvoice);
   Future<void> deleteProduct(int productId);
   Future<void> removeSale(int saleId);
-
-  Future<void> deleteInvoice(int invoiceId);
+  Future<List<FullProduct>> loadProducts({int? accountId});
+  Future<void> deleteInvoice(FullInvoice invoiceId);
   Future<int> deleteMultipleInvoices(List<int> ids);
 }
 

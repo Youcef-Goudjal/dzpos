@@ -51,9 +51,7 @@ class _AccountCardState extends State<AccountCard> {
             children: [
               TypeAheadFormField<Account>(
                 loadingBuilder: (context) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const LoadingWidget();
                 },
                 initialValue: widget.initialValue,
                 onSuggestionSelected: widget.onSelected,

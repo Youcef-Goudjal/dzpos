@@ -26,12 +26,16 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   FutureOr<void> _onLoadProfile(LoadProfile event, Emitter<ProfileState> emit) {
     _profileStreamSub?.cancel();
     // add(ProfileUpdated(_authRepository.currentUser));
-    _profileStreamSub = _userRepository
-        .loggedUserStream(_authRepository.currentUser)
-        .listen((updatedUser) {
-      print("profile updated ");
-      add(ProfileUpdated(updatedUser));
-    });
+    try {
+      _profileStreamSub = _userRepository
+          .loggedUserStream(_authRepository.currentUser)!
+          .listen((updatedUser) {
+        print("profile updated ");
+        add(ProfileUpdated(updatedUser));
+      });
+    } on Exception {
+      // TODO
+    }
   }
 
   FutureOr<void> _onProfileUpdated(

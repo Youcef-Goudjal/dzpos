@@ -40,7 +40,10 @@ class Products extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get code => text().nullable()();
   TextColumn get name => text()();
-  IntColumn get categoryId => integer().references(ProductCategories, #id)();
+  IntColumn get categoryId =>
+      integer().nullable().references(ProductCategories, #id)();
+  IntColumn get fixedSellUnitId => integer().nullable()();
+  IntColumn get fixedPurchaseUnitId => integer().nullable()();
   RealColumn get unitInStock => real().withDefault(const Constant(0))();
   RealColumn get discountPercentage =>
       real().check(discountPercentage.isNotNull())();
@@ -63,15 +66,13 @@ class Products extends Table {
 class ProductUnits extends Table {
   IntColumn get id => integer().autoIncrement()();
   IntColumn get type => intEnum<UnitType>()();
-  TextColumn get code => text()();
   RealColumn get price => real()();
   RealColumn get box => real().withDefault(const Constant(1))();
   RealColumn get subTotal => real().generatedAs(price * box)();
   IntColumn get productId => integer().references(Products, #id)();
 }
-enum UnitType {
-  sell,buy
-}
+
+enum UnitType { sell, buy }
 
 ///productCategory (category_id, category_name)
 ///desc: products are grouped according to their type and the type of products will be encoded and stored in the tlb ProductCategory.
@@ -92,7 +93,22 @@ class ProductCategories extends Table {
 ///(3) customer_name is the full name of the customer,
 ///(4) contact is to the contact number or mobile number of the customer and,
 ///(5) address is to the complete address of the customer.
-enum AccountType { customer, supplier, none }
+enum AccountType {
+  customer,
+  supplier,
+  none;
+
+  String get name {
+    switch (this) {
+      case AccountType.customer:
+        return LocaleKeys.Customer.tr();
+      case AccountType.supplier:
+        return LocaleKeys.Supplier.tr();
+      default:
+        return "none";
+    }
+  }
+}
 
 @DataClassName("Account")
 class Accounts extends Table {

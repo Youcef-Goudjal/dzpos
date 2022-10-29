@@ -4,6 +4,7 @@ import 'package:dzpos/application_layer/invoices/pages/pricing_policy_page.dart'
 import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:dzpos/data/repositories/repositories.dart';
+import 'package:dzpos/product/product.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,8 +39,18 @@ enum PricingMethods {
 
 class PricingPolicyCubit extends Cubit<PricingPolicyState> {
   final _repository = InvoicesRepositoryImpl();
-  PricingPolicyCubit() : super(const PricingPolicyState()){
-    _repository.watchProducts.first.then((value) {
+  StreamSubscription? _subscription;
+  PricingPolicyCubit()
+      : super(const PricingPolicyState(status: Status.loading)) {
+    emit(
+      state.copyWith(
+        method:
+            PricingMethods.values[StorageKeys.pricingMethod.storedValue ?? 0],
+        policy:
+            PricingPolicy.values[StorageKeys.pricingPolicy.storedValue ?? 1],
+      ),
+    );
+    _subscription = _repository.watchProducts.listen((value) {
       emit(state.copyWith(
         products: value,
       ));
@@ -47,17 +58,23 @@ class PricingPolicyCubit extends Cubit<PricingPolicyState> {
   }
 
   void onPolicyChanged(PricingPolicy? value) {
-    emit(state.copyWith(
-      policy: value,
-    ));
+    if (value != null) {
+      StorageKeys.pricingPolicy.setValue(value.index);
+      emit(state.copyWith(
+        policy: value,
+      ));
+    }
   }
 
   void onProductSelected(FullProduct value) {}
 
   void onPricingMethodChanged(PricingMethods? value) {
-    emit(state.copyWith(
-      method: value,
-    ));
+    if (value != null) {
+      StorageKeys.pricingMethod.setValue(value.index);
+      emit(state.copyWith(
+        method: value,
+      ));
+    }
   }
 
   Future<Iterable<FullProduct>> suggestionCallback(String input) async {
@@ -91,5 +108,11 @@ class PricingPolicyCubit extends Cubit<PricingPolicyState> {
 
   void applyModification() {
     //TODO: apply modification
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
   }
 }

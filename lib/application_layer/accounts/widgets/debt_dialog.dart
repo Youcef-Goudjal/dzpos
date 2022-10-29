@@ -61,9 +61,7 @@ class _DebtBodyState extends State<_DebtBody> {
                 },
                 autoFlipDirection: true,
                 loadingBuilder: (context) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const LoadingWidget();
                 },
                 initialValue: account?.name ?? "",
                 itemBuilder: (context, dynamic suggestion) {

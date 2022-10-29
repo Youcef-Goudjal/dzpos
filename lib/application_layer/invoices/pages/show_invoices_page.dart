@@ -61,15 +61,11 @@ class _ShowInvoicesBody extends StatelessWidget {
         body: BlocBuilder<ShowInvoicesCubit, ShowInvoicesState>(
           builder: (context, state) {
             if (state.status.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const LoadingWidget();
             }
 
             if (state.invoices.isEmpty) {
-              return Center(
-                child: Text(LocaleKeys.No_Invoice.tr()),
-              );
+              return const EmptyBoxWidget();
             } else {
               return ListView.separated(
                 physics: const BouncingScrollPhysics(),

@@ -21,12 +21,77 @@ Future<List<int>> buildThermal(
   bytes.addAll(_contentHeader(generator, invoice));
   bytes.addAll(generator.hr());
   bytes.addAll(_contentTable(generator, invoice));
+  bytes.addAll(generator.hr());
+  bytes.addAll(_contentFooter(generator, invoice));
+  bytes.addAll(generator.cut());
+  return bytes;
+}
+
+/// displays the total price
+Iterable<int> _contentFooter(Generator generator, FullInvoice invoice) {
+  List<int> bytes = [];
+  bytes.addAll([
+    ...generator.text("total invoice: ${formatCurrency(invoice.total)}"),
+    ...generator.text(
+      "Amount Treated : ${formatCurrency(invoice.amountTendered)}",
+    ),
+    ...generator.text("Total",
+        styles: const PosStyles.defaults(
+          align: PosAlign.center,
+          bold: true,
+        )),
+    ...generator.text(formatCurrency(invoice.total),
+        styles: const PosStyles.defaults(
+          align: PosAlign.center,
+          bold: true,
+        )),
+    ...generator.hr(),
+    ...generator.text(formatDate(invoice.dateRecorded)),
+  ]);
 
   return bytes;
 }
 
+/// display the sales table + total Quantity
 Iterable<int> _contentTable(Generator generator, FullInvoice invoice) {
   List<int> bytes = [];
+  const tableWidths = [1, 4, 2, 2, 3];
+  const tableHeaders = [
+    "SKU#",
+    "Item",
+    "price",
+    "Quantity",
+    "Total",
+  ];
+  bytes.addAll(
+    generator.row(
+      List.generate(
+        tableHeaders.length,
+        (index) => PosColumn(
+          text: tableHeaders[index],
+          width: tableWidths[index],
+        ),
+      ),
+    ),
+  );
+  bytes.addAll(generator.hr());
+  for (FullSale sale in invoice.sales) {
+    bytes.addAll([
+      ...generator.row(
+        List.generate(
+          tableHeaders.length,
+          (index) => PosColumn(
+            text: sale.getIndex(index),
+            width: tableWidths[index],
+          ),
+        ),
+      ),
+      ...generator.hr(),
+    ]);
+  }
+  bytes.addAll(generator.text("Total Quantity: ${invoice.totalQuantity}"));
+  bytes.addAll(generator.emptyLines(1));
+
   return bytes;
 }
 

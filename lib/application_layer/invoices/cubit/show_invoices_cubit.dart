@@ -52,7 +52,7 @@ class ShowInvoicesCubit extends Cubit<ShowInvoicesState> {
 
   void deleteInvoice(int index) async {
     try {
-      await invoicesRepository.deleteInvoice(state.invoices[index].invoiceId);
+      await invoicesRepository.deleteInvoice(state.invoices[index]);
     } catch (e) {
       //
     }

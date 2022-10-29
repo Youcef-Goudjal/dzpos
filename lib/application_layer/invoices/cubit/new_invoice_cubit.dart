@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
@@ -17,8 +19,9 @@ part 'new_invoice_state.dart';
 class NewInvoiceCubit extends Cubit<NewInvoiceState> {
   final InvoicesRepository invoicesRepository;
 
-  NewInvoiceCubit(this.invoicesRepository, {FullInvoice? invoice})
-      : super(NewInvoiceState()) {
+  NewInvoiceCubit(this.invoicesRepository,
+      {FullInvoice? invoice, InvoiceType? type})
+      : super(NewInvoiceState(type: type)) {
     // if the invoice is empty we create new invoice
     if (invoice == null) {
       invoicesRepository.createEmptyInvoice().then((value) {
@@ -116,16 +119,14 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
     // we check if the product exist in the sales list
     final sales = state.invoice.sales;
     bool exist = false;
-    int i = -1;
-    if (sales.isNotEmpty) {
-      while (!exist || i >= sales.length) {
-        i++;
-        if (sales[i].product == product) {
-          exist = true;
-        }
+    int i = 0;
+    for (var element in sales) {
+      if (element.product == product) {
+        return i;
       }
+      i++;
     }
-    return exist ? i : -1;
+    return -1;
   }
 
   void onUnitChangedOnSale(int index, int unitId) {
@@ -320,7 +321,13 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
           },
         );
         if (result == "Yes") {
-          await invoicesRepository.writeInvoice(state.invoice);
+          await invoicesRepository.writeInvoice(
+            state.invoice.copyWith(
+              invoice: state.invoice.invoice.copyWith(
+                invoiceType: state.type,
+              ),
+            ),
+          );
           emit(state.copyWith(
             save: true,
             status: Status.success,
@@ -355,7 +362,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
   @override
   Future<void> close() {
     if (!state.save && state.state.isNew) {
-      invoicesRepository.deleteInvoice(state.invoice.invoiceId);
+      invoicesRepository.deleteInvoice(state.invoice);
     }
     return super.close();
   }
@@ -371,5 +378,14 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
     if (state.save || state.state.isUpdating) {
       context.pushNamed(AppRoutes.printingPreview.name);
     }
+  }
+
+  void loadProducts() async {
+    emit(state.copyWith(status: Status.loading));
+    final products = await invoicesRepository.loadProducts(
+        accountId: state.invoice.invoiceId);
+    emit(state.copyWith(
+      products: products,
+    ));
   }
 }

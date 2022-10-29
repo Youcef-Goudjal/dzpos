@@ -2,6 +2,8 @@ import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/services/database.dart';
 import "package:dzpos/domain/repositories/invoices_repository.dart";
 
+import '../../core/enums.dart';
+
 class InvoicesRepositoryImpl implements InvoicesRepository {
   final invoicesDao = CommonBloc.invoicesDao;
 
@@ -48,7 +50,8 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   Future<FullInvoice> get allInvoices => invoicesDao.allInvoices;
 
   @override
-  Future<void> writeInvoice(FullInvoice fullInvoice) {
+  Future<void> writeInvoice(FullInvoice fullInvoice,
+      {Actions? action = Actions.insert}) {
     return invoicesDao.writeInvoice(fullInvoice);
   }
 
@@ -62,7 +65,7 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   }
 
   @override
-  Future<void> deleteInvoice(int invoiceId) {
+  Future<void> deleteInvoice(FullInvoice invoiceId) {
     return invoicesDao.deleteInvoice(invoiceId);
   }
 
@@ -83,5 +86,10 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   @override
   Future<void> removeSale(int saleId) {
     return invoicesDao.removeSale(saleId);
+  }
+
+  @override
+  Future<List<FullProduct>> loadProducts({int? accountId}) {
+    return invoicesDao.loadProducts(accountId: accountId);
   }
 }

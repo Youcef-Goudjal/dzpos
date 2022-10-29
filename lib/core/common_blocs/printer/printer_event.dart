@@ -44,3 +44,5 @@ class PrinterStateChanged extends PrinterEvent {
   @override
   List<Object?> get props => [state];
 }
+
+class BluetoothPrintRequested extends PrinterEvent {}

@@ -2,7 +2,10 @@ import 'package:drift/drift.dart';
 import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:dzpos/data/data.dart';
+import 'package:dzpos/product/constants/constants.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../../application_layer/application_layer.dart';
 
 part 'invoices_daos.g.dart';
 
@@ -125,22 +128,22 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   Future<void> writeProduct(FullProduct entry) {
     return transaction(() async {
       final product = entry.product.copyWith(
-        categoryId: entry.category.id,
+        categoryId: Value(entry.category.id),
       );
       // first we write the product
       await into(products).insert(product, mode: InsertMode.replace);
 
       // now we add the units
       for (final unit in entry.unitsList) {
+        final unitCompanion = ProductUnitsCompanion.insert(
+          type: unit.type,
+          id: (unit.id == -1) ? const Value.absent() : Value(unit.id),
+          price: unit.price,
+          productId: product.id,
+          box: Value(unit.box),
+        );
         await into(productUnits).insert(
-          ProductUnitsCompanion.insert(
-            type: unit.type,
-            id: (unit.id == -1) ? const Value.absent() : Value(unit.id),
-            code: unit.code,
-            price: unit.price,
-            productId: product.id,
-            box: Value(unit.box),
-          ),
+          unitCompanion,
           mode: InsertMode.insertOrReplace,
         );
       }
@@ -151,7 +154,6 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   Future<FullProduct> createEmptyProduct() async {
     final id = await into(products).insert(ProductsCompanion.insert(
       name: "",
-      categoryId: -1,
       discountPercentage: 1,
       reorderLevel: 0,
     ));
@@ -173,7 +175,29 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       );
       // first we replace the invoice
       await into(invoices).insert(invoice, mode: InsertMode.replace);
-
+      if (StorageKeys.settingsAddQuantity.storedValue ?? false) {
+        if (invoice.invoiceType == InvoiceType.sell) {
+          for (var sale in entry.sales) {
+            await (update(products)
+                  ..where((tbl) => tbl.id.equals(sale.productId)))
+                .write(
+              ProductsCompanion(
+                unitInStock: Value(sale.product.unitInStock - sale.quantity),
+              ),
+            );
+          }
+        } else {
+          for (var sale in entry.sales) {
+            await (update(products)
+                  ..where((tbl) => tbl.id.equals(sale.productId)))
+                .write(
+              ProductsCompanion(
+                unitInStock: Value(sale.product.unitInStock + sale.quantity),
+              ),
+            );
+          }
+        }
+      }
       // now we add the sales
       for (var s in entry.sales) {
         await into(sales).insert(
@@ -208,11 +232,37 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Future<void> deleteInvoice(int invoiceId) {
+  Future<void> deleteInvoice(FullInvoice invoice) {
     return transaction(() async {
-      await (delete(sales)..where((tbl) => tbl.invoiceId.equals(invoiceId)))
+      if (StorageKeys.settingsAddQuantity.storedValue ?? false) {
+        if (invoice.invoiceType == InvoiceType.sell) {
+          for (var sale in invoice.sales) {
+            await (update(products)
+                  ..where((tbl) => tbl.id.equals(sale.productId)))
+                .write(
+              ProductsCompanion(
+                unitInStock: Value(sale.product.unitInStock + sale.quantity),
+              ),
+            );
+          }
+        } else {
+          for (var sale in invoice.sales) {
+            await (update(products)
+                  ..where((tbl) => tbl.id.equals(sale.productId)))
+                .write(
+              ProductsCompanion(
+                unitInStock: Value(sale.product.unitInStock - sale.quantity),
+              ),
+            );
+          }
+        }
+      }
+      await (delete(sales)
+            ..where((tbl) => tbl.invoiceId.equals(invoice.invoiceId)))
           .go();
-      await (delete(invoices)..where((tbl) => tbl.id.equals(invoiceId))).go();
+
+      await (delete(invoices)..where((tbl) => tbl.id.equals(invoice.invoiceId)))
+          .go();
     });
   }
 
@@ -238,7 +288,8 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       final query = select(invoices).join([
         innerJoin(accounts, accounts.id.equalsExp(invoices.accountId)),
         innerJoin(sales, sales.invoiceId.equalsExp(invoices.id)),
-      ]);
+      ])
+        ..orderBy([OrderingTerm.asc(invoices.id)]);
 
       return query.watch().map((rows) {
         final idToSales = <int, List<FullSale>>{};
@@ -317,5 +368,98 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   @override
   Future<void> removeSale(int saleId) async {
     await (delete(sales)..where((tbl) => tbl.salesId.equals(saleId))).go();
+  }
+
+  @override
+  Future<List<FullProduct>> loadProducts({int? accountId}) async {
+    final productFuture = select(products).get();
+    return productFuture.then((value) async {
+      /// mapping id to product
+      final idToProduct = {for (var p in value) p.id: p};
+      final ids = idToProduct.keys;
+      Map<int, int> idToSelectedUnit = {};
+      // print("ids :$ids");
+      // select all units and categories that are included in any product
+      final entryQuery = select(products).join(
+        [
+          innerJoin(productCategories,
+              productCategories.id.equalsExp(products.categoryId)),
+          innerJoin(
+              productUnits, productUnits.productId.equalsExp(products.id)),
+        ],
+      );
+
+      switch (
+          PricingPolicy.values[StorageKeys.pricingPolicy.storedValue ?? 1]) {
+        case PricingPolicy.last:
+          for (int id in ids) {
+            try {
+              final lastSale = (await (select(sales)
+                        ..where((tbl) => tbl.productId.equals(id))
+                        ..limit(10)
+                        ..orderBy([(tbl) => OrderingTerm.desc(tbl.salesId)]))
+                      .get())
+                  .first;
+              Map<int, int> temp = {id: lastSale.unitId};
+              idToSelectedUnit.addAll(temp);
+            } on Exception {
+              //
+            }
+          }
+          break;
+        case PricingPolicy.fixed:
+          break;
+        case PricingPolicy.lastAccount:
+          if (accountId != null) {
+            for (int id in ids) {
+              try {
+                // we select the last time the account buy the product
+                // and get that sale
+                final lastAccountOperation = (await (select(invoices).join([
+                  innerJoin(sales, sales.invoiceId.equalsExp(invoices.id))
+                ])
+                          ..where(sales.productId.equals(id))
+                          ..where(invoices.accountId.equals(accountId))
+                          ..limit(10)
+                          ..orderBy([OrderingTerm.desc(invoices.id)]))
+                        .get())
+                    .first;
+
+                final unitId = lastAccountOperation.read(sales.unitId) ?? 0;
+                Map<int, int> temp = {id: unitId};
+                idToSelectedUnit.addAll(temp);
+              } catch (e) {
+                //
+              }
+            }
+          }
+          break;
+      }
+
+      final rows = await entryQuery.get();
+      final idToUnits = <int, List<ProductUnit>>{};
+      final idToCategories = <int, ProductCategory>{};
+
+      for (final row in rows) {
+        final unit = row.readTable(productUnits);
+        final category = row.readTable(productCategories);
+        final id = row.readTable(products).id;
+        idToUnits.putIfAbsent(id, () => []).add(unit);
+        idToCategories.putIfAbsent(id, () => category);
+      }
+
+      return [
+        for (var id in ids)
+          FullProduct(
+            product: idToProduct[id]!,
+            category: idToCategories[id] ??
+                const ProductCategory(
+                  id: -1,
+                  name: "",
+                ),
+            unitsList: idToUnits[id] ?? [],
+          )
+      ];
+    });
   }
 }

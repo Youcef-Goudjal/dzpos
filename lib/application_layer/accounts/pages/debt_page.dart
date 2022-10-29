@@ -54,15 +54,11 @@ class DebtPage extends StatelessWidget {
                     previous.debts != current.debts,
                 builder: (context, state) {
                   if (state.status.isLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return const LoadingWidget();
                   }
 
                   if (state.debts.isEmpty) {
-                    return const Center(
-                      child: Text("No data"),
-                    );
+                    return const EmptyBoxWidget();
                   }
                   return ListView.separated(
                     itemCount: state.debts.length,

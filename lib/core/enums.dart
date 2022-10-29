@@ -38,3 +38,5 @@ enum InvoiceType {
     }
   }
 }
+
+enum Actions { update, insert }

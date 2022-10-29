@@ -15,6 +15,9 @@ abstract class  LocaleKeys {
   static const Select_accounts = 'Select_accounts';
   static const No_Product_Fount = 'No_Product_Fount';
   static const rest = 'rest';
+  static const print_directly_no_navigation_to_printing_preview = 'print_directly_no_navigation_to_printing_preview';
+  static const your_account_is_not_activated = 'your_account_is_not_activated';
+  static const user_not_active_desc = 'user_not_active_desc';
   static const Products_List = 'Products_List';
   static const auth_Pick_Login_Option = 'auth_Pick_Login_Option';
   static const auth_Login_with_email_And_Password = 'auth_Login_with_email_And_Password';
@@ -114,6 +117,8 @@ abstract class  LocaleKeys {
   static const settings_Fix_Permissions = 'settings_Fix_Permissions';
   static const settings_Modify_and_manage_Databases = 'settings_Modify_and_manage_Databases';
   static const SignOut = 'SignOut';
+  static const price_sell = 'price_sell';
+  static const price_purchase = 'price_purchase';
   static const invoices_New_Sale_Invoice = 'invoices_New_Sale_Invoice';
   static const invoices_New_Purchase_Invoice = 'invoices_New_Purchase_Invoice';
   static const invoices_Store_Inventory = 'invoices_Store_Inventory';

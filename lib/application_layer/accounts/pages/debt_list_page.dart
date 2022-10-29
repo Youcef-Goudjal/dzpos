@@ -1,4 +1,3 @@
-import 'package:dzpos/application_layer/accounts/accounts.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/utils/utils.dart';
 import 'package:dzpos/product/constants/constants.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../core/manager/language/locale_keys.g.dart';
+import '../../application_layer.dart';
 
 enum DebtType {
   all,
@@ -259,9 +259,7 @@ class _DebtListPageState extends State<DebtListPage> {
                 child: BlocBuilder<DeptListCubit, DeptListState>(
                   builder: (context, state) {
                     if (state.status.isLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
+                      return const LoadingWidget();
                     }
                     return ListView.separated(
                       itemCount: state.debts.length,

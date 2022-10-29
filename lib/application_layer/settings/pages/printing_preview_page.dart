@@ -109,7 +109,7 @@ class _PrintingActions extends StatelessWidget {
                   icon: Icons.bluetooth,
                   text: LocaleKeys.Bluetooth.tr(),
                   onPressed: () {
-                    // start print Bluetooth
+                    CommonBloc.printerBloc.add(BluetoothPrintRequested());
                   },
                 );
               } else {
