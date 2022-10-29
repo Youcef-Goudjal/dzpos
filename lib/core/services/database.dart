@@ -82,6 +82,23 @@ class FullProduct extends Equatable {
     }
   }
 
+  List<ProductUnit> get salesUnits {
+    final list =
+        unitsList.where((element) => element.type == UnitType.sell).toList();
+    if (list.isEmpty) {
+      return [unitsList.first];
+    } else {
+      return list;
+    }
+  }
+
+  List<ProductUnit> get purchaseUnits {
+    final list =
+        unitsList.where((element) => element.type == UnitType.buy).toList();
+
+    return list.isEmpty ? [unitsList.first] : list;
+  }
+
   int get productId => product.id;
   String get productName => product.name;
   String? get productCode => product.code;

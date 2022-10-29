@@ -169,6 +169,16 @@ class _SettingsPageState extends State<SettingsPage> {
             setState(() {});
           }
         },
+        LocaleKeys.settings_Update_all_unitsOnce.tr(): {
+          "type": SettingsActions.switchTile,
+          "initialValue":
+              StorageKeys.settingsUpdateAllUnitsInInvoice.storedValue ?? false,
+          "onToggle": (value) {
+            StorageKeys.settingsUpdateAllUnitsInInvoice
+                .setValue(value ?? false);
+            setState(() {});
+          }
+        },
         LocaleKeys.settings_Selling_at_less_than_cost.tr(): {
           "type": SettingsActions.switchTile,
           "initialValue":

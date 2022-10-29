@@ -21,5 +21,16 @@ void statusHandler(BuildContext context, Status status, {String? msg}) {
         ),
       ),
     );
+  } else if (status == Status.info) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: context.colorScheme.secondaryContainer,
+        duration: const Duration(milliseconds: 100),
+        // margin: const EdgeInsets.all(16),
+        content: Text(
+          "$msg",
+        ),
+      ),
+    );
   }
 }

@@ -37,11 +37,6 @@ dependencies:
   #routing
   go_router: ^5.0.5
   
-
-  #networking
-  dio: ^4.0.6
-  pretty_dio_logger: ^1.1.1
-
   # state managment
   flutter_bloc: ^8.1.1
   get_it: ^7.2.0
@@ -55,7 +50,6 @@ dependencies:
   
   
   shared_preferences: ^2.0.15
-  dartz: ^0.10.1
 
   cache:
     path: packages/cache
@@ -85,12 +79,8 @@ dependencies:
 
   # printing
   printing: ^5.9.3
-  esc_pos_utils: ^1.1.0
-  # esc_pos_printer: ^4.1.0
-  # esc_pos_bluetooth: ^0.4.1
   blue_thermal_printer: ^1.2.3
   esc_pos_utils_plus: ^2.0.1+6
-  flutter_device_identifier: ^0.0.1
   image: 
   firebase_storage: ^10.3.11
   file_picker: ^5.2.2
@@ -99,6 +89,19 @@ dependencies:
   platform_device_id: ^1.0.1
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.10.0"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/pos.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icons/pos.png"
+    background_color: "0xFF90CAF9"
+    theme_color: "0xFF1565C0"
+
   flutter_test:
     sdk: flutter
 

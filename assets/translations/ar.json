@@ -117,6 +117,7 @@
     "SignOut": "خروج",
     "price_sell":"سعر البيع",
     "price_purchase":"سعر الشراء",
+    "settings_Update_all_unitsOnce":"تحديث كل الوحدات مرة واحدة",
     "invoices_New_Sale_Invoice": "فاتورة بيع جديدة",
     "invoices_New_Purchase_Invoice": "فاتورة شراء جديدة",
     "invoices_Store_Inventory": "مخزون المتجر",

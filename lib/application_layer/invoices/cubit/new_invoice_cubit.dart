@@ -4,6 +4,7 @@ import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:dzpos/domain/domain.dart';
+import 'package:dzpos/product/product.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,12 +98,12 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
           product,
         ),
       );
+      emit(state.copyWith(
+        invoice: fullInvoice.copyWith(sales: sales),
+      ));
     } else {
-      sales.removeAt(indexIfExist);
+      onIncreaseQuantityOnSale(indexIfExist);
     }
-    emit(state.copyWith(
-      invoice: fullInvoice.copyWith(sales: sales),
-    ));
   }
 
   /// if the [product] in the sales will return the colored products
@@ -133,17 +134,54 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
     final fullInvoice = state.invoice;
     final currentSale = fullInvoice.sales[index].sale;
     List<FullSale> sales = [];
-    sales.addAll(fullInvoice.sales);
-    sales.removeAt(index);
-    sales.insert(
-      index,
-      fullInvoice.sales[index].copyWith(
-        sale: currentSale.copyWith(
-          unitId: unitId,
-          unitPrice: fullInvoice.sales[index].product.unitById(unitId)!.price,
+    if (StorageKeys.settingsUpdateAllUnitsInInvoice.storedValue ?? false) {
+      late final int unitIndex;
+
+      if (state.type == InvoiceType.sell) {
+        unitIndex = fullInvoice.sales[index].product.salesUnits.indexWhere(
+          (element) => element.id == unitId,
+        );
+      } else {
+        unitIndex = fullInvoice.sales[index].product.purchaseUnits.indexWhere(
+          (element) => element.id == unitId,
+        );
+      }
+
+      for (var sale in fullInvoice.sales) {
+        late final ProductUnit unit;
+        try {
+          if (state.type == InvoiceType.sell) {
+            unit = sale.product.salesUnits[unitIndex];
+          } else {
+            unit = sale.product.purchaseUnits[unitIndex];
+          }
+        } on Exception {
+          unit = sale.product.salesUnits.first;
+        }
+
+        sales.add(
+          sale.copyWith(
+            sale: sale.sale.copyWith(
+              unitId: unit.id,
+              unitPrice: unit.price,
+            ),
+          ),
+        );
+      }
+      emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
+    } else {
+      sales.addAll(fullInvoice.sales);
+      sales.removeAt(index);
+      sales.insert(
+        index,
+        fullInvoice.sales[index].copyWith(
+          sale: currentSale.copyWith(
+            unitId: unitId,
+            unitPrice: fullInvoice.sales[index].product.unitById(unitId)!.price,
+          ),
         ),
-      ),
-    );
+      );
+    }
     emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
   }
 
@@ -185,7 +223,11 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
         ),
       ),
     );
-    emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
+    emit(state.copyWith(
+      invoice: fullInvoice.copyWith(sales: sales),
+      status: Status.info,
+      msg: "quantity $quantity",
+    ));
   }
 
   void onDecreaseQuantityOnSale(int index) {
@@ -205,7 +247,11 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
           ),
         ),
       );
-      emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
+      emit(state.copyWith(
+        invoice: fullInvoice.copyWith(sales: sales),
+        status: Status.info,
+        msg: "quantity $quantity",
+      ));
     }
   }
 

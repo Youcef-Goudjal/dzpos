@@ -15,6 +15,7 @@
     "settings_useBox": "Wholesale",
     "price_sell": "Sell Price",
     "price_purchase": "Purchase Price",
+    "settings_Update_all_unitsOnce": "update all units Once",
     "printSetting": "Print Settings",
     "printCut": "lines before Cut",
     "printFontType": "Font Type",

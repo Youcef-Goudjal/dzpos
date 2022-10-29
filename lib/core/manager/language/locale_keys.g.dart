@@ -119,6 +119,7 @@ abstract class  LocaleKeys {
   static const SignOut = 'SignOut';
   static const price_sell = 'price_sell';
   static const price_purchase = 'price_purchase';
+  static const settings_Update_all_unitsOnce = 'settings_Update_all_unitsOnce';
   static const invoices_New_Sale_Invoice = 'invoices_New_Sale_Invoice';
   static const invoices_New_Purchase_Invoice = 'invoices_New_Purchase_Invoice';
   static const invoices_Store_Inventory = 'invoices_Store_Inventory';

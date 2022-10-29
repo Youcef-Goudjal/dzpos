@@ -43,10 +43,17 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
 
   FutureOr<void> _onUnPaire(
       UnPaireRequested event, Emitter<PrinterState> emit) async {
-    await printerManager.disconnect();
-    emit(state.copyWith(
-      printer: null,
-    ));
+    if (state.isConnected) {
+      try {
+        StorageKeys.printerName.setValue("");
+        StorageKeys.printerMac.setValue("");
+        emit(state.copyWith(
+          printer: null,
+        ));
+      } on Exception {
+        // TODO
+      }
+    }
   }
 
   FutureOr<void> _onStartScanDevices(
@@ -71,8 +78,8 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
 
   FutureOr<void> _onPrinterSelected(
       PrinterSelected event, Emitter<PrinterState> emit) {
-    Application.pref
-        .setString(StorageKeys.printerMac.name, event.printer.address ?? "");
+    StorageKeys.printerName.setValue(event.printer.name ?? "");
+    StorageKeys.printerMac.setValue(event.printer.address ?? "");
 
     printerManager.connect(event.printer);
     emit(state.copyWith(

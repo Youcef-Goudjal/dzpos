@@ -52,6 +52,7 @@ enum StorageKeys {
   settingsDefaultIsGeneralCustomer(StoredType.bool),
   settingsShowFrozenProducts(StoredType.bool),
   settingsShowFrozenAccounts(StoredType.bool),
+  settingsUpdateAllUnitsInInvoice(StoredType.bool),
   ;
 
   final StoredType type;

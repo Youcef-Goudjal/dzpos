@@ -475,21 +475,17 @@ class _BodyInvoice extends StatelessWidget {
                                         child: DropdownButton<int>(
                                           value: sale.unitId,
                                           isExpanded: true,
-                                          items: sale.product.unitsList
-                                              .where((element) {
-                                            if (element.type == UnitType.sell) {
-                                              return local.type ==
-                                                  InvoiceType.sell;
-                                            } else {
-                                              return local.type ==
-                                                  InvoiceType.buy;
-                                            }
-                                          }).map((e) {
+                                          items: (local.type == InvoiceType.sell
+                                                  ? sale.product.salesUnits
+                                                  : sale.product.purchaseUnits)
+                                              .map((e) {
                                             return DropdownMenuItem<int>(
                                               value: e.id,
                                               child: FittedBox(
                                                 child: Text(
-                                                  "u:${e.price}",
+                                                  formatCurrency(
+                                                    e.price,
+                                                  ),
                                                   style: const TextStyle(
                                                     overflow: TextOverflow.fade,
                                                   ),

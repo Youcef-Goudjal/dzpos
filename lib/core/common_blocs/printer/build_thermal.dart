@@ -11,7 +11,7 @@ Future<List<int>> buildThermal(
   final generator = Generator(paper, profile);
   generator.setStyles(
     const PosStyles.defaults(
-      codeTable: "CP1256",
+      // codeTable: "CP1256",
       align: PosAlign.center,
     ),
   );
@@ -86,7 +86,7 @@ Iterable<int> _contentTable(Generator generator, FullInvoice invoice) {
           ),
         ),
       ),
-      ...generator.hr(),
+      // ...generator.hr(),
     ]);
   }
   bytes.addAll(generator.text("Total Quantity: ${invoice.totalQuantity}"));
