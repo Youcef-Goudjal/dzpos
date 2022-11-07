@@ -35,7 +35,8 @@ class AccountsPage extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 5),
                   child: ElevatedButton(
-                    onPressed: () => AccountsPages.values[index].onPressed(context),
+                    onPressed: () =>
+                        AccountsPages.values[index].onPressed(context),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -67,7 +68,8 @@ class AccountsPage extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   alignment: Alignment.centerLeft,
                 ),
-                onPressed: () => AccountsPages.values[index + 3].onPressed(context),
+                onPressed: () =>
+                    AccountsPages.values[index + 3].onPressed(context),
                 child: Row(
                   children: [
                     SvgPicture.asset(
@@ -148,13 +150,13 @@ enum AccountsPages {
         context.pushNamed(AppRoutes.debtList.name);
         break;
       case AccountsPages.payment:
-        context.pushNamed(AppRoutes.debt.name, extra: DebtType.debtor);
+        context.pushNamed(AppRoutes.debt.name, extra: IsCreditor.debtor);
         break;
       case AccountsPages.catchFromAccount:
-        context.pushNamed(AppRoutes.debt.name, extra: DebtType.creditor);
+        context.pushNamed(AppRoutes.debt.name, extra: IsCreditor.creditor);
         break;
       case AccountsPages.registerNewDebt:
-        context.pushNamed(AppRoutes.debt.name, extra: DebtType.all);
+        context.pushNamed(AppRoutes.debt.name, extra: IsCreditor.all);
         break;
 
       default:

@@ -9,8 +9,8 @@ import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
 class DebtPage extends StatelessWidget {
-  final DebtType type;
-  const DebtPage({super.key, DebtType? type}) : type = type ?? DebtType.all;
+  final IsCreditor type;
+  const DebtPage({super.key, IsCreditor? type}) : type = type ?? IsCreditor.all;
 
   @override
   Widget build(BuildContext context) {

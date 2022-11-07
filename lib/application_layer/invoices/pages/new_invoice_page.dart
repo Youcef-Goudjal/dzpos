@@ -341,13 +341,21 @@ class _TotalInvoice extends StatelessWidget {
       ),
       child: BlocBuilder<NewInvoiceCubit, NewInvoiceState>(
         builder: (context, state) {
-          return Center(
-            child: Text(
-              "Total : ${state.invoice.total}DZ",
-              style: context.textTheme.titleLarge!.copyWith(
-                color: context.onPrimaryColor,
+          return Row(
+            children: [
+              Text(
+                "Total : ${formatCurrency(state.invoice.total)}DZ",
+                style: context.textTheme.titleLarge!.copyWith(
+                  color: context.onPrimaryColor,
+                ),
               ),
-            ),
+              Text(
+                "${LocaleKeys.Quantity.tr()} : ${state.invoice.totalQuantity}",
+                style: context.textTheme.titleLarge!.copyWith(
+                  color: context.onPrimaryColor,
+                ),
+              ),
+            ],
           );
         },
       ),

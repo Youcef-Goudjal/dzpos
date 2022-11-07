@@ -17,6 +17,7 @@ part 'invoices_daos.g.dart';
   ProductCategories,
   Invoices,
   Sales,
+  Debts,
 ])
 class InvoicesDao extends DatabaseAccessor<MyDatabase>
     with _$InvoicesDaoMixin
@@ -211,6 +212,16 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
           ),
           mode: InsertMode.insertOrReplace,
         );
+      }
+      if (entry.paymentType == PaymentType.credit) {
+        await into(debts).insert(DebtsCompanion.insert(
+          isCredit: true,
+          accountId: Value(entry.accountId),
+          invoiceId: Value(entry.invoiceId),
+          description: Value("total Quantity ${entry.totalQuantity}"),
+          amount: entry.total - entry.amountTendered,
+          deptType: DeptType.invoice,
+        ));
       }
     });
   }

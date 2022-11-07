@@ -10,23 +10,23 @@ import 'package:flutter_svg/svg.dart';
 import '../../../core/manager/language/locale_keys.g.dart';
 import '../../application_layer.dart';
 
-enum DebtType {
+enum IsCreditor {
   all,
   debtor,
   creditor;
 
   String get name {
     switch (this) {
-      case DebtType.debtor:
+      case IsCreditor.debtor:
         return LocaleKeys.Debtor.tr();
-      case DebtType.creditor:
+      case IsCreditor.creditor:
         return LocaleKeys.We_pay.tr();
       default:
         return LocaleKeys.All_debts.tr();
     }
   }
 
-  bool get isPaying => this == DebtType.creditor;
+  bool get isPaying => this == IsCreditor.creditor;
 }
 
 class DebtListPage extends StatefulWidget {
@@ -37,7 +37,7 @@ class DebtListPage extends StatefulWidget {
 }
 
 class _DebtListPageState extends State<DebtListPage> {
-  DebtType debtTypeSelected = DebtType.all;
+  IsCreditor debtTypeSelected = IsCreditor.all;
   Map<String, bool> checkList = {
     LocaleKeys.customers.tr(): false,
     LocaleKeys.suppliers.tr(): true,
@@ -155,12 +155,12 @@ class _DebtListPageState extends State<DebtListPage> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                debtTypeSelected = DebtType.creditor;
+                                debtTypeSelected = IsCreditor.creditor;
                               });
                             },
                             child: Ink(
                               decoration: BoxDecoration(
-                                color: debtTypeSelected == DebtType.creditor
+                                color: debtTypeSelected == IsCreditor.creditor
                                     ? context.primaryColor
                                     : null,
                                 borderRadius: BorderRadius.only(
@@ -174,7 +174,7 @@ class _DebtListPageState extends State<DebtListPage> {
                               ),
                               child: Center(
                                 child: Text(
-                                  DebtType.creditor.name,
+                                  IsCreditor.creditor.name,
                                   style: TextStyle(
                                     color: context.onSecondaryColor,
                                     fontWeight: FontWeight.bold,
@@ -191,18 +191,18 @@ class _DebtListPageState extends State<DebtListPage> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                debtTypeSelected = DebtType.debtor;
+                                debtTypeSelected = IsCreditor.debtor;
                               });
                             },
                             child: Ink(
                               decoration: BoxDecoration(
-                                color: debtTypeSelected == DebtType.debtor
+                                color: debtTypeSelected == IsCreditor.debtor
                                     ? context.primaryColor
                                     : null,
                               ),
                               child: Center(
                                 child: Text(
-                                  DebtType.debtor.name,
+                                  IsCreditor.debtor.name,
                                   style: TextStyle(
                                     color: context.onSecondaryColor,
                                     fontWeight: FontWeight.bold,
@@ -220,12 +220,12 @@ class _DebtListPageState extends State<DebtListPage> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                debtTypeSelected = DebtType.all;
+                                debtTypeSelected = IsCreditor.all;
                               });
                             },
                             child: Ink(
                               decoration: BoxDecoration(
-                                color: debtTypeSelected == DebtType.all
+                                color: debtTypeSelected == IsCreditor.all
                                     ? context.primaryColor
                                     : null,
                                 borderRadius: BorderRadius.only(
@@ -239,7 +239,7 @@ class _DebtListPageState extends State<DebtListPage> {
                               ),
                               child: Center(
                                 child: Text(
-                                  DebtType.all.name,
+                                  IsCreditor.all.name,
                                   style: TextStyle(
                                     color: context.onSecondaryColor,
                                     fontWeight: FontWeight.bold,

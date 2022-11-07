@@ -34,7 +34,7 @@ class PrinterState extends Equatable {
     BluetoothDevice? printer,
     List<BluetoothDevice>? devices,
     bool? scanning,
-    bool? isDisconnected,
+    bool isDisconnected = false,
     FullInvoice? invoice,
   }) {
     late final p;
@@ -42,7 +42,7 @@ class PrinterState extends Equatable {
     return PrinterState(
       scanning: scanning ?? this.scanning,
       status: status ?? Status.initial,
-      printer: printer ?? this.printer,
+      printer: isDisconnected ? null : (printer ?? this.printer),
       devices: devices ?? this.devices,
       invoice: invoice ?? this.invoice,
       msg: msg,

@@ -254,6 +254,13 @@ class Debts extends Table {
   DateTimeColumn get dateRecorded =>
       dateTime().withDefault(currentDateAndTime)();
   BoolColumn get isCredit => boolean()();
+  IntColumn get deptType => intEnum<DeptType>()();
+  IntColumn get invoiceId => integer().nullable().references(Invoices, #id)();
   TextColumn get description => text().nullable()();
   IntColumn get userId => integer().nullable().references(Users, #id)();
+}
+
+enum DeptType {
+  old,
+  invoice,
 }

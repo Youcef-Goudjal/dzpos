@@ -15,4 +15,5 @@ mixin _$InvoicesDaoMixin on DatabaseAccessor<MyDatabase> {
       attachedDatabase.productCategories;
   $InvoicesTable get invoices => attachedDatabase.invoices;
   $SalesTable get sales => attachedDatabase.sales;
+  $DebtsTable get debts => attachedDatabase.debts;
 }

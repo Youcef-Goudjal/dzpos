@@ -10,8 +10,10 @@ class DebtState extends Equatable {
     this.accountId,
     this.msg,
     this.account,
+    this.debtType = DeptType.old,
   });
   final bool type; // is payment??
+  final DeptType debtType;
   final List<Debt> debts;
   final Status status;
   final String desc;
@@ -20,7 +22,8 @@ class DebtState extends Equatable {
   final String? msg;
   final Account? account;
   @override
-  List<Object?> get props => [debts, status, type, desc, amount, accountId];
+  List<Object?> get props =>
+      [debts, status, type, desc, amount, accountId, debtType];
   DebtState copyWith({
     List<Debt>? debts,
     Status? status,
@@ -28,6 +31,7 @@ class DebtState extends Equatable {
     String? desc,
     String? amount,
     int? accountId,
+    DeptType? debtType,
     String? msg,
     Account? account,
   }) =>
@@ -40,5 +44,6 @@ class DebtState extends Equatable {
         accountId: accountId ?? this.accountId,
         msg: msg ?? this.msg,
         account: account ?? this.account,
+        debtType: debtType ?? this.debtType,
       );
 }

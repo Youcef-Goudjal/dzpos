@@ -7,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/services/database.dart';
+import '../../application_layer.dart';
 
 part 'debt_state.dart';
 
@@ -54,6 +55,7 @@ class DebtCubit extends Cubit<DebtState> {
     if (amount != null) {
       final id = await accountsRepository.registerDebt(DebtsCompanion.insert(
         isCredit: state.type,
+        deptType: state.debtType,
         amount: amount,
         accountId: Value(state.accountId),
         description: Value(state.desc),

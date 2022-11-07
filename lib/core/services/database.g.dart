@@ -3335,6 +3335,8 @@ class Debt extends DataClass implements Insertable<Debt> {
   final int? accountId;
   final DateTime dateRecorded;
   final bool isCredit;
+  final DeptType deptType;
+  final int? invoiceId;
   final String? description;
   final int? userId;
   const Debt(
@@ -3343,6 +3345,8 @@ class Debt extends DataClass implements Insertable<Debt> {
       this.accountId,
       required this.dateRecorded,
       required this.isCredit,
+      required this.deptType,
+      this.invoiceId,
       this.description,
       this.userId});
   @override
@@ -3355,6 +3359,13 @@ class Debt extends DataClass implements Insertable<Debt> {
     }
     map['date_recorded'] = Variable<DateTime>(dateRecorded);
     map['is_credit'] = Variable<bool>(isCredit);
+    {
+      final converter = $DebtsTable.$converter0;
+      map['dept_type'] = Variable<int>(converter.toSql(deptType));
+    }
+    if (!nullToAbsent || invoiceId != null) {
+      map['invoice_id'] = Variable<int>(invoiceId);
+    }
     if (!nullToAbsent || description != null) {
       map['description'] = Variable<String>(description);
     }
@@ -3373,6 +3384,10 @@ class Debt extends DataClass implements Insertable<Debt> {
           : Value(accountId),
       dateRecorded: Value(dateRecorded),
       isCredit: Value(isCredit),
+      deptType: Value(deptType),
+      invoiceId: invoiceId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(invoiceId),
       description: description == null && nullToAbsent
           ? const Value.absent()
           : Value(description),
@@ -3390,6 +3405,8 @@ class Debt extends DataClass implements Insertable<Debt> {
       accountId: serializer.fromJson<int?>(json['accountId']),
       dateRecorded: serializer.fromJson<DateTime>(json['dateRecorded']),
       isCredit: serializer.fromJson<bool>(json['isCredit']),
+      deptType: serializer.fromJson<DeptType>(json['deptType']),
+      invoiceId: serializer.fromJson<int?>(json['invoiceId']),
       description: serializer.fromJson<String?>(json['description']),
       userId: serializer.fromJson<int?>(json['userId']),
     );
@@ -3403,6 +3420,8 @@ class Debt extends DataClass implements Insertable<Debt> {
       'accountId': serializer.toJson<int?>(accountId),
       'dateRecorded': serializer.toJson<DateTime>(dateRecorded),
       'isCredit': serializer.toJson<bool>(isCredit),
+      'deptType': serializer.toJson<DeptType>(deptType),
+      'invoiceId': serializer.toJson<int?>(invoiceId),
       'description': serializer.toJson<String?>(description),
       'userId': serializer.toJson<int?>(userId),
     };
@@ -3414,6 +3433,8 @@ class Debt extends DataClass implements Insertable<Debt> {
           Value<int?> accountId = const Value.absent(),
           DateTime? dateRecorded,
           bool? isCredit,
+          DeptType? deptType,
+          Value<int?> invoiceId = const Value.absent(),
           Value<String?> description = const Value.absent(),
           Value<int?> userId = const Value.absent()}) =>
       Debt(
@@ -3422,6 +3443,8 @@ class Debt extends DataClass implements Insertable<Debt> {
         accountId: accountId.present ? accountId.value : this.accountId,
         dateRecorded: dateRecorded ?? this.dateRecorded,
         isCredit: isCredit ?? this.isCredit,
+        deptType: deptType ?? this.deptType,
+        invoiceId: invoiceId.present ? invoiceId.value : this.invoiceId,
         description: description.present ? description.value : this.description,
         userId: userId.present ? userId.value : this.userId,
       );
@@ -3433,6 +3456,8 @@ class Debt extends DataClass implements Insertable<Debt> {
           ..write('accountId: $accountId, ')
           ..write('dateRecorded: $dateRecorded, ')
           ..write('isCredit: $isCredit, ')
+          ..write('deptType: $deptType, ')
+          ..write('invoiceId: $invoiceId, ')
           ..write('description: $description, ')
           ..write('userId: $userId')
           ..write(')'))
@@ -3440,8 +3465,8 @@ class Debt extends DataClass implements Insertable<Debt> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, amount, accountId, dateRecorded, isCredit, description, userId);
+  int get hashCode => Object.hash(id, amount, accountId, dateRecorded, isCredit,
+      deptType, invoiceId, description, userId);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3451,6 +3476,8 @@ class Debt extends DataClass implements Insertable<Debt> {
           other.accountId == this.accountId &&
           other.dateRecorded == this.dateRecorded &&
           other.isCredit == this.isCredit &&
+          other.deptType == this.deptType &&
+          other.invoiceId == this.invoiceId &&
           other.description == this.description &&
           other.userId == this.userId);
 }
@@ -3461,6 +3488,8 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
   final Value<int?> accountId;
   final Value<DateTime> dateRecorded;
   final Value<bool> isCredit;
+  final Value<DeptType> deptType;
+  final Value<int?> invoiceId;
   final Value<String?> description;
   final Value<int?> userId;
   const DebtsCompanion({
@@ -3469,6 +3498,8 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
     this.accountId = const Value.absent(),
     this.dateRecorded = const Value.absent(),
     this.isCredit = const Value.absent(),
+    this.deptType = const Value.absent(),
+    this.invoiceId = const Value.absent(),
     this.description = const Value.absent(),
     this.userId = const Value.absent(),
   });
@@ -3478,16 +3509,21 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
     this.accountId = const Value.absent(),
     this.dateRecorded = const Value.absent(),
     required bool isCredit,
+    required DeptType deptType,
+    this.invoiceId = const Value.absent(),
     this.description = const Value.absent(),
     this.userId = const Value.absent(),
   })  : amount = Value(amount),
-        isCredit = Value(isCredit);
+        isCredit = Value(isCredit),
+        deptType = Value(deptType);
   static Insertable<Debt> custom({
     Expression<int>? id,
     Expression<double>? amount,
     Expression<int>? accountId,
     Expression<DateTime>? dateRecorded,
     Expression<bool>? isCredit,
+    Expression<int>? deptType,
+    Expression<int>? invoiceId,
     Expression<String>? description,
     Expression<int>? userId,
   }) {
@@ -3497,6 +3533,8 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
       if (accountId != null) 'account_id': accountId,
       if (dateRecorded != null) 'date_recorded': dateRecorded,
       if (isCredit != null) 'is_credit': isCredit,
+      if (deptType != null) 'dept_type': deptType,
+      if (invoiceId != null) 'invoice_id': invoiceId,
       if (description != null) 'description': description,
       if (userId != null) 'user_id': userId,
     });
@@ -3508,6 +3546,8 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
       Value<int?>? accountId,
       Value<DateTime>? dateRecorded,
       Value<bool>? isCredit,
+      Value<DeptType>? deptType,
+      Value<int?>? invoiceId,
       Value<String?>? description,
       Value<int?>? userId}) {
     return DebtsCompanion(
@@ -3516,6 +3556,8 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
       accountId: accountId ?? this.accountId,
       dateRecorded: dateRecorded ?? this.dateRecorded,
       isCredit: isCredit ?? this.isCredit,
+      deptType: deptType ?? this.deptType,
+      invoiceId: invoiceId ?? this.invoiceId,
       description: description ?? this.description,
       userId: userId ?? this.userId,
     );
@@ -3539,6 +3581,13 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
     if (isCredit.present) {
       map['is_credit'] = Variable<bool>(isCredit.value);
     }
+    if (deptType.present) {
+      final converter = $DebtsTable.$converter0;
+      map['dept_type'] = Variable<int>(converter.toSql(deptType.value));
+    }
+    if (invoiceId.present) {
+      map['invoice_id'] = Variable<int>(invoiceId.value);
+    }
     if (description.present) {
       map['description'] = Variable<String>(description.value);
     }
@@ -3556,6 +3605,8 @@ class DebtsCompanion extends UpdateCompanion<Debt> {
           ..write('accountId: $accountId, ')
           ..write('dateRecorded: $dateRecorded, ')
           ..write('isCredit: $isCredit, ')
+          ..write('deptType: $deptType, ')
+          ..write('invoiceId: $invoiceId, ')
           ..write('description: $description, ')
           ..write('userId: $userId')
           ..write(')'))
@@ -3602,6 +3653,19 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
       type: DriftSqlType.bool,
       requiredDuringInsert: true,
       defaultConstraints: 'CHECK ("is_credit" IN (0, 1))');
+  final VerificationMeta _deptTypeMeta = const VerificationMeta('deptType');
+  @override
+  late final GeneratedColumnWithTypeConverter<DeptType, int> deptType =
+      GeneratedColumn<int>('dept_type', aliasedName, false,
+              type: DriftSqlType.int, requiredDuringInsert: true)
+          .withConverter<DeptType>($DebtsTable.$converter0);
+  final VerificationMeta _invoiceIdMeta = const VerificationMeta('invoiceId');
+  @override
+  late final GeneratedColumn<int> invoiceId = GeneratedColumn<int>(
+      'invoice_id', aliasedName, true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints: 'REFERENCES "invoices" ("id")');
   final VerificationMeta _descriptionMeta =
       const VerificationMeta('description');
   @override
@@ -3616,8 +3680,17 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
       requiredDuringInsert: false,
       defaultConstraints: 'REFERENCES "users" ("id")');
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, amount, accountId, dateRecorded, isCredit, description, userId];
+  List<GeneratedColumn> get $columns => [
+        id,
+        amount,
+        accountId,
+        dateRecorded,
+        isCredit,
+        deptType,
+        invoiceId,
+        description,
+        userId
+      ];
   @override
   String get aliasedName => _alias ?? 'debts';
   @override
@@ -3652,6 +3725,11 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
     } else if (isInserting) {
       context.missing(_isCreditMeta);
     }
+    context.handle(_deptTypeMeta, const VerificationResult.success());
+    if (data.containsKey('invoice_id')) {
+      context.handle(_invoiceIdMeta,
+          invoiceId.isAcceptableOrUnknown(data['invoice_id']!, _invoiceIdMeta));
+    }
     if (data.containsKey('description')) {
       context.handle(
           _descriptionMeta,
@@ -3681,6 +3759,10 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
           DriftSqlType.dateTime, data['${effectivePrefix}date_recorded'])!,
       isCredit: attachedDatabase.options.types
           .read(DriftSqlType.bool, data['${effectivePrefix}is_credit'])!,
+      deptType: $DebtsTable.$converter0.fromSql(attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}dept_type'])!),
+      invoiceId: attachedDatabase.options.types
+          .read(DriftSqlType.int, data['${effectivePrefix}invoice_id']),
       description: attachedDatabase.options.types
           .read(DriftSqlType.string, data['${effectivePrefix}description']),
       userId: attachedDatabase.options.types
@@ -3692,6 +3774,9 @@ class $DebtsTable extends Debts with TableInfo<$DebtsTable, Debt> {
   $DebtsTable createAlias(String alias) {
     return $DebtsTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<DeptType, int> $converter0 =
+      const EnumIndexConverter<DeptType>(DeptType.values);
 }
 
 abstract class _$MyDatabase extends GeneratedDatabase {

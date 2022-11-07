@@ -76,7 +76,7 @@ abstract class AppRouter {
                   return MaterialPage(
                     key: state.pageKey,
                     child: DebtPage(
-                      type: state.extra as DebtType?,
+                      type: state.extra as IsCreditor?,
                     ),
                   );
                 },
