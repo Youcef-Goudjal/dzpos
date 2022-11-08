@@ -44,31 +44,50 @@ class _SearchForDevicesDialogState extends State<SearchForDevicesDialog> {
           appBar: AppBar(
             title: const Text("Printers"),
           ),
-          floatingActionButton: BlocBuilder<PrinterBloc, PrinterState>(
-            buildWhen: (previous, current) =>
-                previous.scanning != current.scanning,
-            builder: (context, state) {
-              if (state.scanning) {
+          // floatingActionButton: BlocBuilder<PrinterBloc, PrinterState>(
+          //   buildWhen: (previous, current) =>
+          //       previous.scanning != current.scanning,
+          //   builder: (context, state) {
+          //     if (state.scanning) {
+          //       return FloatingActionButton(
+          //         onPressed: () {
+          //           bloc.add(StopScanDevices());
+          //         },
+          //         backgroundColor: context.error,
+          //         child: Icon(
+          //           Icons.stop,
+          //           color: context.onError,
+          //         ),
+          //       );
+          //     } else {
+          //       return FloatingActionButton(
+          //         onPressed: () {
+          //           bloc.add(StartScanDevices());
+          //         },
+          //         child: const Icon(Icons.search),
+          //       );
+          //     }
+          //   },
+          // ),
+          floatingActionButton: StreamBuilder<bool>(
+            stream: bloc.printerManager.isScanningStream,
+            initialData: false,
+            builder: (context, snapshot) {
+              if (snapshot.data!) {
                 return FloatingActionButton(
-                  onPressed: () {
-                    bloc.add(StopScanDevices());
-                  },
-                  backgroundColor: context.error,
-                  child: Icon(
-                    Icons.stop,
-                    color: context.onError,
-                  ),
+                  child: Icon(Icons.stop),
+                  onPressed: () => bloc.add(StopScanDevices()),
+                  backgroundColor: Colors.red,
                 );
               } else {
                 return FloatingActionButton(
-                  onPressed: () {
-                    bloc.add(StartScanDevices());
-                  },
-                  child: const Icon(Icons.search),
+                  child: Icon(Icons.search),
+                  onPressed: () => bloc.add(StartScanDevices()),
                 );
               }
             },
           ),
+
           body: BlocBuilder<PrinterBloc, PrinterState>(
             builder: (context, state) {
               return ListView.separated(

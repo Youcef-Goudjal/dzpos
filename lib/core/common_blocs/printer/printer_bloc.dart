@@ -1,24 +1,27 @@
 import 'dart:async';
 
-import 'package:blue_thermal_printer/blue_thermal_printer.dart';
-import 'package:dzpos/application_layer/settings/widgets/printer_settings_dialog.dart';
+// import 'package:blue_thermal_printer/blue_thermal_printer.dart';
 import 'package:dzpos/core/common_blocs/printer/build_pdf.dart';
-import 'package:dzpos/core/common_blocs/printer/build_thermal.dart';
 import 'package:dzpos/product/constants/constants.dart';
 import 'package:equatable/equatable.dart';
+import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:pdf/pdf.dart';
 
+import '../../../application_layer/application_layer.dart';
 import '../../../core/enums.dart';
 import '../../../core/services/database.dart';
+import 'build_thermal.dart';
 
 part 'printer_event.dart';
 part 'printer_state.dart';
 
 class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
-  BlueThermalPrinter printerManager = BlueThermalPrinter.instance;
+  // BlueThermalPrinter printerManager = BlueThermalPrinter.instance;
+  PrinterBluetoothManager printerManager = PrinterBluetoothManager();
   PrinterBloc() : super(const PrinterState()) {
     on<UnPaireRequested>(_onUnPaire);
     on<PrintRequested>(_onPrintRequested);
@@ -26,15 +29,33 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
     on<StopScanDevices>(_onStopScanDevices);
     on<DevicesScanned>(_onDeviceScanned);
     on<PrinterSelected>(_onPrinterSelected);
-    on<PrinterStateChanged>(_onPrinterStateChanged);
     on<BluetoothPrintRequested>(_onBluetoothPrint);
+    _onSetupPrinter();
+  }
+  late final CapabilityProfile profile;
+  final paper =
+      PaperType.fromString(StorageKeys.paperType.storedValue ?? "p80") ==
+              PaperType.p80
+          ? PaperSize.mm80
+          : PaperSize.mm58;
+
+  _onSetupPrinter() async {
+    profile = await CapabilityProfile.load();
     final address = StorageKeys.printerMac.storedValue ?? "";
     final name = StorageKeys.printerName.storedValue ?? "";
     if (address != "" && address != "") {
-      emit(state.copyWith(
-        printer: BluetoothDevice(name, address),
-      ));
+      final device = BluetoothDevice.fromJson(
+        {
+          "name": name,
+          "address": address,
+        },
+      );
+      add(PrinterSelected(PrinterBluetooth(device)));
     }
+    // esc bluetooth manager
+    printerManager.scanResults.listen((printers) {
+      add(DevicesScanned(printers));
+    });
   }
 
   FutureOr<void> _onUnPaire(
@@ -59,16 +80,13 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
       printer: null,
       isDisconnected: true,
     ));
-    final devices = await printerManager.getBondedDevices();
-    emit(state.copyWith(
-      devices: devices,
-      scanning: false,
-    ));
+   
+    printerManager.startScan(Duration(seconds: 4));
   }
 
   FutureOr<void> _onStopScanDevices(
       StopScanDevices event, Emitter<PrinterState> emit) {
-    // printerManager.stopScan();
+  
   }
 
   FutureOr<void> _onPrinterSelected(
@@ -76,7 +94,8 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
     StorageKeys.printerName.setValue(event.printer.name ?? "");
     StorageKeys.printerMac.setValue(event.printer.address ?? "");
 
-    printerManager.connect(event.printer);
+    // printerManager.connect(event.printer);
+    printerManager.selectPrinter(event.printer);
     emit(state.copyWith(
       status: Status.success,
       printer: event.printer,
@@ -98,64 +117,15 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
     ));
   }
 
-  FutureOr<void> _onPrinterStateChanged(
-      PrinterStateChanged event, Emitter<PrinterState> emit) {
-    switch (event.state) {
-      case BlueThermalPrinter.CONNECTED:
-        emit(state.copyWith(
-          status: Status.success,
-          msg: "${state.printer?.name} connected",
-        ));
-        break;
-      case BlueThermalPrinter.DISCONNECTED:
-        emit(state.copyWith(
-          status: Status.success,
-          msg: "device disconnected",
-          isDisconnected: true,
-          printer: null,
-        ));
-        break;
-      case BlueThermalPrinter.STATE_BLE_TURNING_ON:
-        emit(state.copyWith(
-          status: Status.success,
-          msg: "Bluetooth ON",
-        ));
-        break;
-      case BlueThermalPrinter.STATE_BLE_TURNING_OFF:
-        emit(state.copyWith(
-          status: Status.failure,
-          msg: "Bluetooth OFF",
-        ));
-        break;
-      case BlueThermalPrinter.ERROR:
-        emit(state.copyWith(
-          status: Status.failure,
-          msg: "error",
-        ));
-        break;
-      default:
-    }
-  }
-
   Future<Uint8List> generatePdf(PdfPageFormat format) {
     return buildPdf(format, state.invoice!);
   }
 
   FutureOr<void> _onBluetoothPrint(
       BluetoothPrintRequested event, Emitter<PrinterState> emit) async {
-    if (await printerManager.isDeviceConnected(state.printer!) ?? false) {
-      if (state.invoice != null) {
-        final profile = await CapabilityProfile.load();
-        final paper =
-            PaperType.fromString(StorageKeys.paperType.storedValue ?? "p80") ==
-                    PaperType.p80
-                ? PaperSize.mm80
-                : PaperSize.mm58;
-        final bytes = await buildThermal(profile, paper, state.invoice!);
-        await printerManager.writeBytes(Uint8List.fromList(bytes));
-      }
-    } else {
-      add(UnPaireRequested());
+    if (state.invoice != null) {
+      final bytes = await buildThermal(profile, paper, state.invoice!);
+      await printerManager.printTicket(bytes);
     }
   }
 }

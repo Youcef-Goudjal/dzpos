@@ -1,6 +1,6 @@
 import 'package:dzpos/core/services/database.dart';
 
-import '../../core/enums.dart';
+import '../../application_layer/application_layer.dart';
 
 abstract class InvoicesRepository {
   Future<List<ProductCategory>> get categories;
@@ -18,7 +18,7 @@ abstract class InvoicesRepository {
   Future<FullInvoice> get allInvoices;
   Stream<List<FullInvoice>> get watchAllInvoices;
   Future<void> writeInvoice(FullInvoice fullInvoice,
-      {Actions? action = Actions.insert});
+      {InvoiceState action = InvoiceState.New});
   Future<void> deleteProduct(int productId);
   Future<void> deleteInvoice(FullInvoice invoiceId);
   Future<void> removeSale(int saleId);

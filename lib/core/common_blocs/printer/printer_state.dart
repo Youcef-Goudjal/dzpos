@@ -13,8 +13,10 @@ class PrinterState extends Equatable {
   final Status status;
   final bool scanning;
   final String? msg;
-  final BluetoothDevice? printer;
-  final List<BluetoothDevice> devices;
+  // final BluetoothDevice? printer;
+  // final List<BluetoothDevice> devices;
+  final PrinterBluetooth? printer;
+  final List<PrinterBluetooth> devices;
   final bool isConnected;
   final FullInvoice? invoice;
 
@@ -31,8 +33,10 @@ class PrinterState extends Equatable {
   PrinterState copyWith({
     Status? status,
     String? msg,
-    BluetoothDevice? printer,
-    List<BluetoothDevice>? devices,
+    // BluetoothDevice? printer,
+    // List<BluetoothDevice>? devices,
+    PrinterBluetooth? printer,
+    List<PrinterBluetooth>? devices,
     bool? scanning,
     bool isDisconnected = false,
     FullInvoice? invoice,

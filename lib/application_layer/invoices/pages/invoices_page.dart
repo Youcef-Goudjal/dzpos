@@ -110,7 +110,8 @@ class _InvoiceBody extends StatelessWidget {
               style: OutlinedButton.styleFrom(
                 alignment: Alignment.centerLeft,
               ),
-              onPressed: () => InvoicesPages.values[index + 4].onPressed(context),
+              onPressed: () =>
+                  InvoicesPages.values[index + 4].onPressed(context),
               child: Row(
                 children: [
                   SvgPicture.asset(
@@ -186,14 +187,20 @@ enum InvoicesPages {
       case InvoicesPages.newSaleInvoice:
         context.pushNamed(
           AppRoutes.newInvoice.name,
-          params: <String, String>{'type': InvoiceType.sell.name},
+          params: <String, String>{
+            'type': InvoiceType.sell.name,
+            'action': InvoiceActions.insert.index.toString(),
+          },
         );
         break;
 
       case InvoicesPages.newPurchaseInvoice:
         context.pushNamed(
           AppRoutes.newInvoice.name,
-          params: <String, String>{'type': InvoiceType.buy.name},
+          params: <String, String>{
+            'type': InvoiceType.buy.name,
+            'action': InvoiceActions.insert.index.toString(),
+          },
         );
         break;
       case InvoicesPages.showInvoices:

@@ -2,6 +2,7 @@ import 'package:dzpos/core/common_blocs/common_blocs.dart';
 import 'package:dzpos/core/services/database.dart';
 import "package:dzpos/domain/repositories/invoices_repository.dart";
 
+import '../../application_layer/application_layer.dart';
 import '../../core/enums.dart';
 
 class InvoicesRepositoryImpl implements InvoicesRepository {
@@ -51,8 +52,8 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
 
   @override
   Future<void> writeInvoice(FullInvoice fullInvoice,
-      {Actions? action = Actions.insert}) {
-    return invoicesDao.writeInvoice(fullInvoice);
+      {InvoiceState action = InvoiceState.New}) {
+    return invoicesDao.writeInvoice(fullInvoice, action: action);
   }
 
   @override

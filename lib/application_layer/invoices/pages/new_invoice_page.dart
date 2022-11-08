@@ -17,7 +17,10 @@ import '../../auth/utils.dart';
 
 class NewInvoicePage extends StatefulWidget {
   final InvoiceType type;
-  const NewInvoicePage({super.key, this.type = InvoiceType.sell});
+  const NewInvoicePage({
+    super.key,
+    this.type = InvoiceType.sell,
+  });
 
   @override
   State<NewInvoicePage> createState() => _NewInvoicePageState();
@@ -310,7 +313,10 @@ class _ActionsInvoice extends StatelessWidget {
               onPressed: () {
                 context.replaceNamed(
                   AppRoutes.newInvoice.name,
-                  params: <String, String>{'type': InvoiceType.buy.name},
+                  params: <String, String>{
+                    'type': InvoiceType.buy.name,
+                    'action': InvoiceActions.insert.index.toString(),
+                  },
                 );
               },
               icon: const Icon(Icons.new_label_outlined),

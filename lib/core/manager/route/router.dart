@@ -27,6 +27,8 @@ abstract class AppRouter {
                 (context, state) {
                   final type =
                       InvoiceType.stringToType(state.params["type"] ?? "");
+                  final action = InvoiceActions
+                      .values[int.tryParse(state.params["action"] ?? "0") ?? 0];
                   return MaterialPage(
                     key: state.pageKey,
                     child: BlocProvider(
@@ -34,6 +36,7 @@ abstract class AppRouter {
                         invoicesRepository,
                         invoice: state.extra as FullInvoice?,
                         type: type,
+                        action: action,
                       ),
                       child: NewInvoicePage(
                         type: type,

@@ -169,7 +169,8 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   Future<FullInvoice> get allInvoices => throw UnimplementedError();
 
   @override
-  Future<void> writeInvoice(FullInvoice entry) {
+  Future<void> writeInvoice(FullInvoice entry,
+      {InvoiceState action = InvoiceState.New}) {
     return transaction(() async {
       final invoice = entry.invoice.copyWith(
         accountId: entry.account.id,
@@ -214,14 +215,16 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
         );
       }
       if (entry.paymentType == PaymentType.credit) {
-        await into(debts).insert(DebtsCompanion.insert(
-          isCredit: true,
-          accountId: Value(entry.accountId),
-          invoiceId: Value(entry.invoiceId),
-          description: Value("total Quantity ${entry.totalQuantity}"),
-          amount: entry.total - entry.amountTendered,
-          deptType: DeptType.invoice,
-        ));
+        if (action == InvoiceState.New) {
+          await into(debts).insert(DebtsCompanion.insert(
+            isCredit: true,
+            accountId: Value(entry.accountId),
+            invoiceId: Value(entry.invoiceId),
+            description: Value("total Quantity ${entry.totalQuantity}"),
+            amount: entry.total - entry.amountTendered,
+            deptType: DeptType.invoice,
+          ));
+        }
       }
     });
   }

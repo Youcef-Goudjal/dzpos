@@ -9,7 +9,6 @@ enum Status {
   bool get isFailure => this == Status.failure;
   bool get isSuccess => this == Status.success;
   bool get isLoading => this == Status.loading;
-  
 }
 
 enum PaymentType { cache, credit }
@@ -41,4 +40,4 @@ enum InvoiceType {
   }
 }
 
-enum Actions { update, insert }
+enum InvoiceActions { update, insert }

@@ -19,10 +19,14 @@ part 'new_invoice_state.dart';
 
 class NewInvoiceCubit extends Cubit<NewInvoiceState> {
   final InvoicesRepository invoicesRepository;
+  final InvoiceActions action;
 
-  NewInvoiceCubit(this.invoicesRepository,
-      {FullInvoice? invoice, InvoiceType? type})
-      : super(NewInvoiceState(type: type)) {
+  NewInvoiceCubit(
+    this.invoicesRepository, {
+    FullInvoice? invoice,
+    InvoiceType? type,
+    this.action = InvoiceActions.insert,
+  }) : super(NewInvoiceState(type: type)) {
     // if the invoice is empty we create new invoice
     if (invoice == null) {
       invoicesRepository.createEmptyInvoice().then((value) {
@@ -329,7 +333,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
                               const Expanded(child: Text("Amount Treated :")),
                               Expanded(
                                 child: AppTextField(
-                                  enabled: true,
+                                  enabled: (action == InvoiceActions.insert),
                                   initialValue:
                                       "${state.invoice.amountTendered}",
                                   onChanged: onAmountTreatedChanged,
