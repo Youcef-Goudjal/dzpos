@@ -7,14 +7,14 @@ class DeptListState extends Equatable {
     this.status = Status.initial,
   });
 
-  final List<DebtWithAccount> debts, filteredList;
+  final List<FullDebt> debts, filteredList;
   final Status status;
   @override
   List<Object> get props => [debts, status];
 
   DeptListState copyWith({
-    List<DebtWithAccount>? debts,
-    List<DebtWithAccount>? filteredList,
+    List<FullDebt>? debts,
+    List<FullDebt>? filteredList,
     Status? status,
   }) =>
       DeptListState(

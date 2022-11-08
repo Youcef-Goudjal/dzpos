@@ -7,7 +7,7 @@ abstract class AccountsDataSource {
   Future<void> addMultipleAccounts(List<AccountsCompanion> customers);
   Future<List<Account>> get allAccounts;
   Stream<List<Account>> get watchAllAccounts;
-  Stream<List<DebtWithAccount>> get getDebts;
+  Stream<List<FullDebt>> get getDebts;
   Stream<List<Debt>> debtOfAccount(int accountId);
   Future<void> deleteDebt(int id);
   Future<int> registerDebt(DebtsCompanion newDebt);

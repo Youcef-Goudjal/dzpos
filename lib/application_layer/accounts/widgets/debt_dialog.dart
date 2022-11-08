@@ -132,6 +132,7 @@ class _DebtBodyState extends State<_DebtBody> {
                                 amount: Value(amountD),
                                 description: Value(desc),
                                 isCredit: Value(isCreditor),
+                                deptType: Value(DeptType.old),
                                 userId: const Value(0),
                               ),
                             );

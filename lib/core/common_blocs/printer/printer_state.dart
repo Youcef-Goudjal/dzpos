@@ -37,8 +37,6 @@ class PrinterState extends Equatable {
     bool isDisconnected = false,
     FullInvoice? invoice,
   }) {
-    late final p;
-
     return PrinterState(
       scanning: scanning ?? this.scanning,
       status: status ?? Status.initial,

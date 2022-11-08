@@ -87,6 +87,7 @@ dependencies:
   excel: 
   lottie: ^1.4.3
   platform_device_id: ^1.0.1
+  esc_pos_bluetooth: ^0.4.1
 
 dev_dependencies:
   build_runner: ^2.3.2

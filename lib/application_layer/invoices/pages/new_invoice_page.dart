@@ -378,7 +378,7 @@ class _BodyInvoice extends StatelessWidget {
       builder: (context, state) {
         final sales = state.invoice.sales;
         if (sales.isEmpty) {
-          return const EmptyBoxWidget();
+          return const Expanded(child: EmptyBoxWidget());
         }
 
         return Expanded(

@@ -10,7 +10,7 @@ abstract class AccountsRepository {
   Stream<List<Account>> get watchAllAccounts;
 
   // debts
-  Stream<List<DebtWithAccount>> get debts;
+  Stream<List<FullDebt>> get debts;
   Stream<List<Debt>> debtOfAccount(int accountId);
   Future<int> registerDebt(DebtsCompanion newDebt);
   Future<void> deleteDebt(int id);

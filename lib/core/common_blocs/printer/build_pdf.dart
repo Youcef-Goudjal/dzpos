@@ -5,7 +5,6 @@ import 'package:dzpos/product/constants/asset_constants.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 
 import '../../utils/utils.dart';
 
@@ -27,12 +26,12 @@ Future<Uint8List> buildPdf(
   _bgShape = await rootBundle.loadString(AppAssets.bgInvoice);
   doc.addPage(
     pw.MultiPage(
-      pageTheme: _buildTheme(
-        pageFormat,
-        await PdfGoogleFonts.cairoRegular(),
-        await PdfGoogleFonts.cairoBold(),
-        await PdfGoogleFonts.cairoLight(),
-      ),
+      // pageTheme: _buildTheme(
+      //   pageFormat,
+      //   await PdfGoogleFonts.cairoRegular(),
+      //   await PdfGoogleFonts.cairoBold(),
+      //   await PdfGoogleFonts.cairoLight(),
+      // ),
       header: (context) => _buildHeader(context, invoice),
       footer: (context) => _buildFooter(context, invoice),
       build: (context) => [
@@ -40,8 +39,8 @@ Future<Uint8List> buildPdf(
         _contentTable(context, invoice),
         pw.SizedBox(height: 20),
         _contentFooter(context, invoice),
-        pw.SizedBox(height: 20),
-        _termsAndConditions(context),
+        // pw.SizedBox(height: 20),
+        // _termsAndConditions(context),
       ],
     ),
   );
@@ -122,6 +121,7 @@ pw.Widget _contentTable(pw.Context context, FullInvoice invoice) {
   const tableHeaders = [
     "SKU#",
     "Item",
+    "box",
     "price",
     "Quantity",
     "Total",
@@ -139,9 +139,10 @@ pw.Widget _contentTable(pw.Context context, FullInvoice invoice) {
     cellAlignments: {
       0: pw.Alignment.centerLeft,
       1: pw.Alignment.centerLeft,
-      2: pw.Alignment.centerRight,
-      3: pw.Alignment.center,
-      4: pw.Alignment.centerRight,
+      2: pw.Alignment.center,
+      3: pw.Alignment.centerRight,
+      4: pw.Alignment.center,
+      5: pw.Alignment.centerRight,
     },
     headerStyle: pw.TextStyle(
       color: _baseTextColor,

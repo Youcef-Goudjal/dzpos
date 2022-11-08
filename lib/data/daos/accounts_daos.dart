@@ -37,14 +37,14 @@ class AccountsDao extends DatabaseAccessor<MyDatabase>
   Stream<List<Account>> get watchAllAccounts => select(accounts).watch();
 
   @override
-  Stream<List<DebtWithAccount>> get getDebts {
+  Stream<List<FullDebt>> get getDebts {
     final query = select(debts).join([
       leftOuterJoin(accounts, accounts.id.equalsExp(debts.id)),
     ]);
 
     return query
         .map(
-          (row) => DebtWithAccount(
+          (row) => FullDebt(
             debt: row.readTable(debts),
             account: row.readTableOrNull(accounts),
           ),

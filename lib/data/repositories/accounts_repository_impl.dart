@@ -29,7 +29,7 @@ class AccountsRepositoryImpl implements AccountsRepository {
   Stream<List<Account>> get watchAllAccounts => accountsDao.watchAllAccounts;
 
   @override
-  Stream<List<DebtWithAccount>> get debts => accountsDao.getDebts;
+  Stream<List<FullDebt>> get debts => accountsDao.getDebts;
 
   @override
   Future<int> registerDebt(DebtsCompanion newDebt) {

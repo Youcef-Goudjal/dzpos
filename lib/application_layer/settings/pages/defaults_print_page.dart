@@ -1,6 +1,5 @@
 import 'package:dzpos/application_layer/widgets/app_text_field.dart';
 import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/product/application.dart';
 import 'package:dzpos/product/constants/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -15,22 +14,6 @@ class DefaultPrintPage extends StatefulWidget {
 }
 
 class _DefaultPrintPageState extends State<DefaultPrintPage> {
-  Map<String, bool> checkBoxValues = {
-    "printLogo": false,
-    "displayAccountAddress": false,
-    "displayAccountContact": true,
-    "DisplayTax": false,
-    "ShowMaterialNotes": false,
-    "DisplayEmployeeName": true,
-    "ViewBalanceBeforeAndAfter": true,
-    "DisplayPrintDateAndTime": true,
-  };
-  String companyName = "";
-  String companyNumbers = "";
-  String companyActivity = "";
-  String companyAddress = "";
-  final pref = Application.pref;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,7 +48,15 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
             ],
           ),
           10.heightBox,
+          // Company name
           AppTextField(
+            prefix: Checkbox(
+              value: StorageKeys.showCompanyName.storedValue ?? false,
+              onChanged: (value) {
+                StorageKeys.showCompanyName.setValue(value ?? false);
+                setState(() {});
+              },
+            ),
             initialValue: StorageKeys.companyName.storedValue,
             hint: LocaleKeys.Company_Name.tr(),
             onChanged: (input) {
@@ -74,6 +65,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
             },
           ),
           10.heightBox,
+          // company contact
           AppTextField(
             prefix: Checkbox(
               value: StorageKeys.showCompanyNumbers.storedValue ?? false,
@@ -89,6 +81,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
             },
           ),
           10.heightBox,
+          // Company Address
           AppTextField(
             prefix: Checkbox(
               value: StorageKeys.showCompanyAddress.storedValue ?? false,
@@ -98,13 +91,14 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
               },
             ),
             initialValue: StorageKeys.companyAddress.storedValue,
-            hint: LocaleKeys.Company_Numbers.tr(),
+            hint: LocaleKeys.Company_Address.tr(),
             onChanged: (input) {
               StorageKeys.companyAddress.setValue(input);
               setState(() {});
             },
           ),
           10.heightBox,
+          // company activity
           AppTextField(
             prefix: Checkbox(
               value: StorageKeys.showCompanyActivity.storedValue ?? false,
@@ -114,7 +108,7 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
               },
             ),
             initialValue: StorageKeys.companyActivity.storedValue,
-            hint: LocaleKeys.Company_Numbers.tr(),
+            hint: LocaleKeys.Company_Activity.tr(),
             onChanged: (input) {
               StorageKeys.companyActivity.setValue(input);
               setState(() {});
@@ -207,22 +201,32 @@ class _DefaultPrintPageState extends State<DefaultPrintPage> {
                   },
                 ),
                 10.heightBox,
-                AppTextField(
-                  initialValue: StorageKeys.bottomHeader.storedValue,
-                  maxLine: 3,
-                  hint: LocaleKeys.bottom_header.tr(),
-                  onChanged: (input) {
-                    StorageKeys.bottomHeader.setValue(input);
-                  },
+                CheckboxListTile(
+                  value: StorageKeys.showBottomHeader.storedValue ?? false,
+                  onChanged: (value) =>
+                      StorageKeys.showBottomHeader.setValue(value),
+                  title: AppTextField(
+                    initialValue: StorageKeys.bottomHeader.storedValue,
+                    maxLine: 3,
+                    hint: LocaleKeys.bottom_header.tr(),
+                    onChanged: (input) {
+                      StorageKeys.bottomHeader.setValue(input);
+                    },
+                  ),
                 ),
                 10.heightBox,
-                AppTextField(
-                  maxLine: 3,
-                  initialValue: StorageKeys.bottomInvoice.storedValue,
-                  hint: LocaleKeys.bottom_invoice.tr(),
-                  onChanged: (input) {
-                    StorageKeys.bottomInvoice.setValue(input);
-                  },
+                CheckboxListTile(
+                  value: StorageKeys.showBottomInvoice.storedValue ?? false,
+                  onChanged: (value) =>
+                      StorageKeys.showBottomInvoice.setValue(value),
+                  title: AppTextField(
+                    maxLine: 3,
+                    initialValue: StorageKeys.bottomInvoice.storedValue,
+                    hint: LocaleKeys.bottom_invoice.tr(),
+                    onChanged: (input) {
+                      StorageKeys.bottomInvoice.setValue(input);
+                    },
+                  ),
                 ),
               ],
             ),

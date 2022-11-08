@@ -149,14 +149,19 @@ class FullProduct extends Equatable {
   }
 }
 
-class DebtWithAccount {
+class FullDebt extends Equatable {
   final Debt debt;
   final Account? account;
+  final FullInvoice? invoice;
 
-  DebtWithAccount({
+  FullDebt({
     required this.debt,
     this.account,
+    this.invoice,
   });
+
+  @override
+  List<Object?> get props => [debt, account, invoice];
 }
 
 class FullInvoice extends Equatable {
@@ -278,16 +283,20 @@ class FullSale extends Equatable {
       );
 
   String getIndex(int col) {
+    final useBox = StorageKeys.settingsUseBox.storedValue ?? false;
+    double box = useBox ? (product.unitById(unitId)?.box) ?? 1 : 1;
     switch (col) {
       case 0:
         return "$productId";
       case 1:
         return productName;
       case 2:
-        return formatCurrency(unitPrice);
+        return "$box";
       case 3:
-        return quantity.toString();
+        return formatCurrency(unitPrice);
       case 4:
+        return quantity.toString();
+      case 5:
         return formatCurrency(subTotal);
     }
     return "";

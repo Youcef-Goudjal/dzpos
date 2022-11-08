@@ -28,9 +28,6 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
     on<PrinterSelected>(_onPrinterSelected);
     on<PrinterStateChanged>(_onPrinterStateChanged);
     on<BluetoothPrintRequested>(_onBluetoothPrint);
-    // printerManager.onStateChanged().listen((event) {
-    //   add(PrinterStateChanged(event));
-    // });
     final address = StorageKeys.printerMac.storedValue ?? "";
     final name = StorageKeys.printerName.storedValue ?? "";
     if (address != "" && address != "") {
@@ -155,7 +152,7 @@ class PrinterBloc extends Bloc<PrinterEvent, PrinterState> {
                 ? PaperSize.mm80
                 : PaperSize.mm58;
         final bytes = await buildThermal(profile, paper, state.invoice!);
-        printerManager.writeBytes(Uint8List.fromList(bytes));
+        await printerManager.writeBytes(Uint8List.fromList(bytes));
       }
     } else {
       add(UnPaireRequested());

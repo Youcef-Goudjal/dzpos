@@ -1,4 +1,5 @@
 import 'package:dzpos/application_layer/settings/pages/labels_page.dart';
+import 'package:dzpos/core/enums.dart';
 import 'package:dzpos/core/services/database.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 import 'package:image/image.dart';
@@ -16,7 +17,7 @@ Future<List<int>> buildThermal(
     ),
   );
   List<int> bytes = [];
-  bytes.addAll(_buildHeader(generator));
+  bytes.addAll(_buildHeader(generator, invoice));
   bytes.addAll(generator.hr());
   bytes.addAll(_contentHeader(generator, invoice));
   bytes.addAll(generator.hr());
@@ -30,23 +31,26 @@ Future<List<int>> buildThermal(
 /// displays the total price
 Iterable<int> _contentFooter(Generator generator, FullInvoice invoice) {
   List<int> bytes = [];
+  bytes.addAll(generator.text("Total Quantity: ${invoice.totalQuantity}"));
   bytes.addAll([
-    ...generator.text("total invoice: ${formatCurrency(invoice.total)}"),
-    ...generator.text(
-      "Amount Treated : ${formatCurrency(invoice.amountTendered)}",
-    ),
-    ...generator.text("Total",
-        styles: const PosStyles.defaults(
-          align: PosAlign.center,
-          bold: true,
-        )),
-    ...generator.text(formatCurrency(invoice.total),
+    if (invoice.paymentType == PaymentType.credit)
+      ...generator.text(
+        "total invoice: ${formatCurrency(invoice.total)} \n" +
+            "Amount Treated : ${formatCurrency(invoice.amountTendered)}",
+      ),
+    // Total
+    ...generator.text("Total : ${formatCurrency(invoice.total)}",
         styles: const PosStyles.defaults(
           align: PosAlign.center,
           bold: true,
         )),
     ...generator.hr(),
-    ...generator.text(formatDate(invoice.dateRecorded)),
+    //Date and time
+    if (StorageKeys.showPrintDateAndTime.storedValue ?? true)
+      ...generator.text(formatDate(invoice.dateRecorded)),
+    // Bottom Invoice
+    if (StorageKeys.showBottomInvoice.storedValue ?? false)
+      ...generator.text(StorageKeys.bottomInvoice.storedValue ?? ""),
   ]);
 
   return bytes;
@@ -55,10 +59,11 @@ Iterable<int> _contentFooter(Generator generator, FullInvoice invoice) {
 /// display the sales table + total Quantity
 Iterable<int> _contentTable(Generator generator, FullInvoice invoice) {
   List<int> bytes = [];
-  const tableWidths = [1, 4, 2, 2, 3];
+  const tableWidths = [1, 3, 1, 2, 2, 3];
   const tableHeaders = [
     "SKU#",
     "Item",
+    "box",
     "price",
     "Quantity",
     "Total",
@@ -89,8 +94,6 @@ Iterable<int> _contentTable(Generator generator, FullInvoice invoice) {
       // ...generator.hr(),
     ]);
   }
-  bytes.addAll(generator.text("Total Quantity: ${invoice.totalQuantity}"));
-  bytes.addAll(generator.emptyLines(1));
 
   return bytes;
 }
@@ -100,20 +103,20 @@ Iterable<int> _contentTable(Generator generator, FullInvoice invoice) {
 Iterable<int> _contentHeader(Generator generator, FullInvoice invoice) {
   List<int> bytes = [];
   bytes += generator.text(
-    "${PrinterLabels.invoiceId.value}# : ${invoice.invoiceId}",
+    "${PrinterLabels.invoiceId.value}: ${invoice.invoiceId}",
   );
   bytes += generator.text(
-    "${PrinterLabels.date.value}# : ${dateToYMD(invoice.dateRecorded)}",
+    "${PrinterLabels.date.value} : ${dateToYMD(invoice.dateRecorded)}",
   );
   bytes += generator.text(
-    "${PrinterLabels.date.value}# : ${getTime(invoice.dateRecorded)}",
+    "${PrinterLabels.date.value} : ${getTime(invoice.dateRecorded)}",
   );
   return bytes;
 }
 
 /// display the header of the recipe
 /// header = {logo,companyName,CompanyAddress,CompanyContact,CompanyActivity}
-List<int> _buildHeader(Generator generator) {
+List<int> _buildHeader(Generator generator, FullInvoice invoice) {
   List<int> bytes = [];
   //logo
   if (Application.pref.getBool(StorageKeys.showLogo.name) ?? false) {
@@ -124,28 +127,55 @@ List<int> _buildHeader(Generator generator) {
         [])!);
   }
   //company name
-  if (Application.pref.getBool(StorageKeys.showCompanyName.name) ?? false) {
+  if (StorageKeys.showCompanyName.storedValue ?? false) {
     bytes += generator.text(
-      Application.pref.getString(StorageKeys.companyName.name) ?? "DZPos",
-    );
-  }
-  // company activity
-  if (Application.pref.getBool(StorageKeys.showCompanyActivity.name) ?? false) {
-    bytes += generator.text(
-      Application.pref.getString(StorageKeys.companyActivity.name) ?? "",
+      StorageKeys.companyName.storedValue ?? "DZPos",
     );
   }
   // company number
-  if (Application.pref.getBool(StorageKeys.showCompanyNumbers.name) ?? false) {
+  if (StorageKeys.showCompanyNumbers.storedValue ?? false) {
     bytes += generator.text(
-      Application.pref.getString(StorageKeys.companyNumbers.name) ?? "",
+      StorageKeys.companyNumbers.storedValue ?? "",
     );
   }
-  // company
-  if (Application.pref.getBool(StorageKeys.showAccountAddress.name) ?? false) {
+  // company activity
+  if (StorageKeys.showCompanyActivity.storedValue ?? false) {
     bytes += generator.text(
-      Application.pref.getString(StorageKeys.companyAddress.name) ?? "",
+      StorageKeys.companyActivity.storedValue ?? "",
     );
+  }
+  // company Address
+  if (StorageKeys.showCompanyAddress.storedValue ?? false) {
+    bytes += generator.text(
+      StorageKeys.companyAddress.storedValue ?? "@",
+    );
+  }
+// Account Name
+
+  bytes += generator.text(
+    "TO: ${invoice.account.name}",
+    styles: PosStyles(align: PosAlign.center),
+  );
+
+  // company
+  if (StorageKeys.showAccountAddress.storedValue ?? false) {
+    bytes += generator.text(
+      invoice.account.address ?? "@",
+      styles: PosStyles(align: PosAlign.center),
+    );
+  }
+
+  // Account Address
+  if (StorageKeys.showAccountContact.storedValue ?? false) {
+    bytes += generator.text(
+      invoice.account.contact ?? "",
+      styles: PosStyles(align: PosAlign.center),
+    );
+  }
+  // TODO account total debts
+  // Bottom Header
+  if (StorageKeys.showBottomHeader.storedValue ?? false) {
+    bytes += generator.text(StorageKeys.bottomHeader.storedValue ?? "");
   }
   return bytes;
 }
