@@ -1,14 +1,14 @@
-import 'package:dzpos/application_layer/settings/pages/labels_page.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/services/database.dart';
 import 'package:esc_pos_utils_plus/esc_pos_utils.dart';
 import 'package:image/image.dart';
 
+import '../../../application_layer/settings/pages/labels_page.dart';
+import '../../../data/data.dart';
 import '../../../product/product.dart';
+import '../../enums.dart';
 import '../../utils/utils.dart';
 
 Future<List<int>> buildThermal(
-    CapabilityProfile profile, PaperSize paper, FullInvoice invoice) async {
+    CapabilityProfile profile, PaperSize paper, InvoiceModel invoice) async {
   final generator = Generator(paper, profile);
   generator.setStyles(
     const PosStyles.defaults(
@@ -29,7 +29,7 @@ Future<List<int>> buildThermal(
 }
 
 /// displays the total price
-Iterable<int> _contentFooter(Generator generator, FullInvoice invoice) {
+Iterable<int> _contentFooter(Generator generator, InvoiceModel invoice) {
   List<int> bytes = [];
   bytes.addAll(generator.text("Total Quantity: ${invoice.totalQuantity}"));
   bytes.addAll([
@@ -57,37 +57,29 @@ Iterable<int> _contentFooter(Generator generator, FullInvoice invoice) {
 }
 
 /// display the sales table + total Quantity
-Iterable<int> _contentTable(Generator generator, FullInvoice invoice) {
+Iterable<int> _contentTable(Generator generator, InvoiceModel invoice) {
   List<int> bytes = [];
-  const tableWidths = [1, 3, 1, 2, 2, 3];
-  const tableHeaders = [
-    "SKU#",
-    "Item",
-    "box",
-    "price",
-    "Quantity",
-    "Total",
-  ];
+
   bytes.addAll(
     generator.row(
       List.generate(
-        tableHeaders.length,
+        PrintTableValues.values.length,
         (index) => PosColumn(
-          text: tableHeaders[index],
-          width: tableWidths[index],
+          text: PrintTableValues.values[index].name,
+          width: PrintTableValues.values[index].width,
         ),
       ),
     ),
   );
   bytes.addAll(generator.hr());
-  for (FullSale sale in invoice.sales) {
+  for (SaleModel sale in invoice.sales) {
     bytes.addAll([
       ...generator.row(
         List.generate(
-          tableHeaders.length,
+          PrintTableValues.values.length,
           (index) => PosColumn(
-            text: sale.getIndex(index),
-            width: tableWidths[index],
+            text: sale.getIndex(PrintTableValues.values[index]),
+            width: PrintTableValues.values[index].width,
           ),
         ),
       ),
@@ -100,7 +92,7 @@ Iterable<int> _contentTable(Generator generator, FullInvoice invoice) {
 
 /// displays the header of the content
 /// content {invoiceId,date and time}
-Iterable<int> _contentHeader(Generator generator, FullInvoice invoice) {
+Iterable<int> _contentHeader(Generator generator, InvoiceModel invoice) {
   List<int> bytes = [];
   bytes += generator.text(
     "${PrinterLabels.invoiceId.value}: ${invoice.invoiceId}",
@@ -116,7 +108,7 @@ Iterable<int> _contentHeader(Generator generator, FullInvoice invoice) {
 
 /// display the header of the recipe
 /// header = {logo,companyName,CompanyAddress,CompanyContact,CompanyActivity}
-List<int> _buildHeader(Generator generator, FullInvoice invoice) {
+List<int> _buildHeader(Generator generator, InvoiceModel invoice) {
   List<int> bytes = [];
   //logo
   if (Application.pref.getBool(StorageKeys.showLogo.name) ?? false) {

@@ -1,5 +1,5 @@
-import 'package:dzpos/core/common_blocs/application/application_bloc.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
+import '../../core/common_blocs/application/application_bloc.dart';
+import '../../core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

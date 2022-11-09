@@ -1,35 +1,13 @@
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/product/constants/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 
-import '../../../core/manager/language/locale_keys.g.dart';
+import '../../../core/core.dart';
+import '../../../data/data.dart';
+import '../../../product/product.dart';
 import '../../application_layer.dart';
-
-enum PricingPolicy {
-  last,
-  fixed,
-  lastAccount;
-
-  String get name {
-    switch (this) {
-      case PricingPolicy.fixed:
-        return LocaleKeys.Fixed_Price.tr();
-      case PricingPolicy.last:
-        return LocaleKeys.Last_sale_price.tr();
-      case PricingPolicy.lastAccount:
-        return LocaleKeys.last_account_operation.tr();
-    }
-  }
-
-  bool get isLast => this == PricingPolicy.last;
-  bool get isFixed => this == PricingPolicy.fixed;
-  bool get isLastAccount => this == PricingPolicy.lastAccount;
-}
 
 class PricingPolicyPage extends StatelessWidget {
   const PricingPolicyPage({super.key});
@@ -141,7 +119,7 @@ class _PricingPolicyBody extends StatelessWidget {
                                     child: Row(
                                       children: [
                                         Expanded(
-                                          child: TypeAheadWidget<FullProduct>(
+                                          child: TypeAheadWidget<ProductModel>(
                                             itemBuilder: (p0, value) {
                                               return ListTile(
                                                 title: Text(value.productName),
@@ -151,7 +129,7 @@ class _PricingPolicyBody extends StatelessWidget {
                                                           .spaceBetween,
                                                   children: [
                                                     Text(
-                                                        "${LocaleKeys.price.tr()} ${value.priceUnit}"),
+                                                        "${LocaleKeys.price.tr()} ${value.salePriceUnit}"),
                                                     Text(
                                                         "${LocaleKeys.Category.tr()} ${value.categoryName}"),
                                                   ],
@@ -247,7 +225,7 @@ class _PricingPolicyBody extends StatelessWidget {
                               children: [
                                 Center(
                                   child: Text(
-                                      "${LocaleKeys.price.tr()} ${product.priceUnit}"),
+                                      "${LocaleKeys.price.tr()} ${product.salePriceUnit}"),
                                 ),
                                 Center(
                                   child: Text(

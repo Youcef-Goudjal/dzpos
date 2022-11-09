@@ -1,8 +1,3 @@
-import 'package:dzpos/application_layer/auth/utils.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/manager/route/routes.dart';
-import 'package:dzpos/product/product.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pinput/pinput.dart';
 
-import '../../../core/manager/language/locale_keys.g.dart';
+import '../../../core/core.dart';
+import '../../../product/product.dart';
 import '../../application_layer.dart';
 
 class VerifyOTPPage extends StatelessWidget {

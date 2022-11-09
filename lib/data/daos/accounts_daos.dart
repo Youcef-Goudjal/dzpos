@@ -1,7 +1,8 @@
 import 'package:drift/drift.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/data/data.dart';
 import 'package:flutter/src/material/date.dart';
+
+import '../../core/services/database.dart';
+import '../data.dart';
 
 part "accounts_daos.g.dart";
 
@@ -37,14 +38,14 @@ class AccountsDao extends DatabaseAccessor<MyDatabase>
   Stream<List<Account>> get watchAllAccounts => select(accounts).watch();
 
   @override
-  Stream<List<FullDebt>> get getDebts {
+  Stream<List<DebtModel>> get getDebts {
     final query = select(debts).join([
       leftOuterJoin(accounts, accounts.id.equalsExp(debts.id)),
     ]);
 
     return query
         .map(
-          (row) => FullDebt(
+          (row) => DebtModel(
             debt: row.readTable(debts),
             account: row.readTableOrNull(accounts),
           ),

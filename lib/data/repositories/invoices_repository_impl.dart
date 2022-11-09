@@ -1,9 +1,8 @@
-import 'package:dzpos/core/common_blocs/common_blocs.dart';
-import 'package:dzpos/core/services/database.dart';
-import "package:dzpos/domain/repositories/invoices_repository.dart";
-
 import '../../application_layer/application_layer.dart';
-import '../../core/enums.dart';
+import '../../core/common_blocs/common_blocs.dart';
+import '../../core/services/database.dart';
+import "../../domain/repositories/invoices_repository.dart";
+import '../data.dart';
 
 class InvoicesRepositoryImpl implements InvoicesRepository {
   final invoicesDao = CommonBloc.invoicesDao;
@@ -30,28 +29,28 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   }
 
   @override
-  Stream<List<FullProduct>> get watchProducts => invoicesDao.watchProducts;
+  Stream<List<ProductModel>> get watchProducts => invoicesDao.watchProducts;
 
   @override
-  Future<FullInvoice> createEmptyInvoice() {
+  Future<InvoiceModel> createEmptyInvoice() {
     return invoicesDao.createEmptyInvoice();
   }
 
   @override
-  Future<FullProduct> createEmptyProduct() {
+  Future<ProductModel> createEmptyProduct() {
     return invoicesDao.createEmptyProduct();
   }
 
   @override
-  Future<void> writeProduct(FullProduct fullProduct) {
+  Future<void> writeProduct(ProductModel fullProduct) {
     return invoicesDao.writeProduct(fullProduct);
   }
 
   @override
-  Future<FullInvoice> get allInvoices => invoicesDao.allInvoices;
+  Future<InvoiceModel> get allInvoices => invoicesDao.allInvoices;
 
   @override
-  Future<void> writeInvoice(FullInvoice fullInvoice,
+  Future<void> writeInvoice(InvoiceModel fullInvoice,
       {InvoiceState action = InvoiceState.New}) {
     return invoicesDao.writeInvoice(fullInvoice, action: action);
   }
@@ -66,7 +65,7 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   }
 
   @override
-  Future<void> deleteInvoice(FullInvoice invoiceId) {
+  Future<void> deleteInvoice(InvoiceModel invoiceId) {
     return invoicesDao.deleteInvoice(invoiceId);
   }
 
@@ -76,7 +75,7 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   }
 
   @override
-  Stream<List<FullInvoice>> get watchAllInvoices =>
+  Stream<List<InvoiceModel>> get watchAllInvoices =>
       invoicesDao.watchAllInvoices;
 
   @override
@@ -90,7 +89,7 @@ class InvoicesRepositoryImpl implements InvoicesRepository {
   }
 
   @override
-  Future<List<FullProduct>> loadProducts({int? accountId}) {
+  Future<List<ProductModel>> loadProducts({int? accountId}) {
     return invoicesDao.loadProducts(accountId: accountId);
   }
 }

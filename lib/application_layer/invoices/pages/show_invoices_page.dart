@@ -1,16 +1,11 @@
-import 'package:dzpos/application_layer/auth/utils.dart';
-import 'package:dzpos/core/common_blocs/common_blocs.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/manager/route/routes.dart';
-import 'package:dzpos/core/services/database.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/common_blocs/printer/printer_bloc.dart';
-import '../../../core/manager/language/locale_keys.g.dart';
+import '../../../core/core.dart';
+import '../../../data/data.dart';
 import '../../application_layer.dart';
 
 class ShowInvoicesPage extends StatelessWidget {
@@ -118,7 +113,7 @@ class _ActionsCard extends StatelessWidget {
     required this.index,
   }) : super(key: key);
   final int index;
-  final FullInvoice invoice;
+  final InvoiceModel invoice;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +124,7 @@ class _ActionsCard extends StatelessWidget {
           onPressed: () {
             context.pushNamed(
               AppRoutes.newInvoice.name,
-              params: <String, String>{'type': InvoiceType.sell.name},
+              params: <String, String>{'type': InvoiceType.sales.name},
               extra: invoice,
             );
           },
@@ -172,7 +167,7 @@ class _BodyCard extends StatelessWidget {
     Key? key,
     required this.invoice,
   }) : super(key: key);
-  final FullInvoice invoice;
+  final InvoiceModel invoice;
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +182,7 @@ class _BodyCard extends StatelessWidget {
                 "Sale in ${invoice.paymentType.name} n°.${invoice.invoiceId}",
                 style: context.textTheme.titleMedium,
               ),
-              Text(invoice.date2)
+              Text(formatDate(invoice.dateRecorded))
             ],
           ),
           10.heightBox,
@@ -235,7 +230,7 @@ class _TopCard extends StatelessWidget {
     required this.cubit,
   }) : super(key: key);
 
-  final FullInvoice invoice;
+  final InvoiceModel invoice;
   final ShowInvoicesCubit cubit;
 
   @override
@@ -250,7 +245,7 @@ class _TopCard extends StatelessWidget {
             Expanded(
               child: Center(
                 child: Text(
-                  invoice.name,
+                  invoice.accountName,
                   style: context.textTheme.titleLarge,
                 ),
               ),

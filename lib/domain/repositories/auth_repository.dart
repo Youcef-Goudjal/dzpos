@@ -1,4 +1,4 @@
-import 'package:dzpos/data/data.dart';
+import '../../data/data.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../domain.dart';

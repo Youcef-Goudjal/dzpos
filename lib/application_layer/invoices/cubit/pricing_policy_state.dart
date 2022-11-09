@@ -14,7 +14,7 @@ class PricingPolicyState extends Equatable {
   final Status status;
   final PricingPolicy policy;
   final PricingMethods method;
-  final List<FullProduct> products;
+  final List<ProductModel> products;
   final double modificationValue;
   final bool usePercentage;
   final String? msg;
@@ -35,7 +35,7 @@ class PricingPolicyState extends Equatable {
     PricingMethods? method,
     double? modificationValue,
     bool? usePercentage,
-    List<FullProduct>? products,
+    List<ProductModel>? products,
     String? msg,
   }) =>
       PricingPolicyState(

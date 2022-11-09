@@ -18,7 +18,7 @@ class PrinterState extends Equatable {
   final PrinterBluetooth? printer;
   final List<PrinterBluetooth> devices;
   final bool isConnected;
-  final FullInvoice? invoice;
+  final InvoiceModel? invoice;
 
   @override
   List<Object?> get props => [
@@ -39,7 +39,7 @@ class PrinterState extends Equatable {
     List<PrinterBluetooth>? devices,
     bool? scanning,
     bool isDisconnected = false,
-    FullInvoice? invoice,
+    InvoiceModel? invoice,
   }) {
     return PrinterState(
       scanning: scanning ?? this.scanning,

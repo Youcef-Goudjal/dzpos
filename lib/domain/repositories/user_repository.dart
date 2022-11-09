@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:dzpos/domain/domain.dart';
+import '../domain.dart';
 
 import '../../data/data.dart';
 

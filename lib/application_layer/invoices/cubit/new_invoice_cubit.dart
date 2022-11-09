@@ -1,18 +1,14 @@
 import 'dart:async';
 
-import 'package:dzpos/core/common_blocs/common_blocs.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/domain/domain.dart';
-import 'package:dzpos/product/product.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/common_blocs/printer/printer_bloc.dart';
-import '../../../core/enums.dart';
-import '../../../core/manager/route/routes.dart';
+import '../../../core/core.dart';
+import '../../../data/data.dart';
+import '../../../domain/domain.dart';
 import '../../application_layer.dart';
 
 part 'new_invoice_state.dart';
@@ -23,7 +19,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
 
   NewInvoiceCubit(
     this.invoicesRepository, {
-    FullInvoice? invoice,
+    InvoiceModel? invoice,
     InvoiceType? type,
     this.action = InvoiceActions.insert,
   }) : super(NewInvoiceState(type: type)) {
@@ -81,22 +77,24 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
     }
   }
 
-  void toggleSaleWithProduct(FullProduct product) {
+  void toggleSaleWithProduct(ProductModel product) {
     final fullInvoice = state.invoice;
-    List<FullSale> sales = [];
+    List<SaleModel> sales = [];
 
     sales.addAll(fullInvoice.sales);
     int indexIfExist = checkIfExist(product);
     if (indexIfExist == -1) {
       sales.add(
-        FullSale(
+        SaleModel(
           Sale(
             salesId: -1,
             invoiceId: fullInvoice.invoiceId,
             productId: product.productId,
-            unitId: product.unitId ?? -1,
+            unitId: product.unit.id,
             quantity: 1,
-            unitPrice: product.priceUnit ?? 0,
+            unitPrice: state.type.isPurchaseOrPurchaseReturn
+                ? product.purchasePriceUnit
+                : product.salePriceUnit,
             subTotal: 0,
           ),
           product,
@@ -111,7 +109,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
   }
 
   /// if the [product] in the sales will return the colored products
-  Color? colorSelectedProducts(FullProduct product, Color primaryColor) {
+  Color? colorSelectedProducts(ProductModel product, Color primaryColor) {
     if (checkIfExist(product) == -1) {
       return primaryColor;
     }
@@ -120,7 +118,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
 
   /// if the [product] does exist in the sale return the index
   /// otherwise return -1
-  int checkIfExist(FullProduct product) {
+  int checkIfExist(ProductModel product) {
     // we check if the product exist in the sales list
     final sales = state.invoice.sales;
     bool exist = false;
@@ -135,58 +133,51 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
   }
 
   void onUnitChangedOnSale(int index, int unitId) {
-    final fullInvoice = state.invoice;
-    final currentSale = fullInvoice.sales[index].sale;
-    List<FullSale> sales = [];
-    if (StorageKeys.settingsUpdateAllUnitsInInvoice.storedValue ?? false) {
-      late final int unitIndex;
+    //TODO: bad implementation
 
-      if (state.type == InvoiceType.sell) {
-        unitIndex = fullInvoice.sales[index].product.salesUnits.indexWhere(
-          (element) => element.id == unitId,
-        );
-      } else {
-        unitIndex = fullInvoice.sales[index].product.purchaseUnits.indexWhere(
-          (element) => element.id == unitId,
-        );
-      }
+    // final fullInvoice = state.invoice;
+    // final currentSale = fullInvoice.sales[index].sale;
+    // List<FullSale> sales = [];
+    // if (StorageKeys.settingsUpdateAllUnitsInInvoice.storedValue ?? false) {
+    //   late final int unitIndex =
+    //       fullInvoice.sales[index].product.getUnitById(unitId).id;
 
-      for (var sale in fullInvoice.sales) {
-        late final ProductUnit unit;
-        try {
-          if (state.type == InvoiceType.sell) {
-            unit = sale.product.salesUnits[unitIndex];
-          } else {
-            unit = sale.product.purchaseUnits[unitIndex];
-          }
-        } on Exception {
-          unit = sale.product.salesUnits.first;
-        }
+    //   for (var sale in fullInvoice.sales) {
+    //     late final ProductUnit unit;
+    //     try {
+    //       if (state.type == InvoiceType.sales) {
+    //         unit = sale.product.salesUnits[unitIndex];
+    //       } else {
+    //         unit = sale.product.purchaseUnits[unitIndex];
+    //       }
+    //     } on Exception {
+    //       unit = sale.product.salesUnits.first;
+    //     }
 
-        sales.add(
-          sale.copyWith(
-            sale: sale.sale.copyWith(
-              unitId: unit.id,
-              unitPrice: unit.price,
-            ),
-          ),
-        );
-      }
-      emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
-    } else {
-      sales.addAll(fullInvoice.sales);
-      sales.removeAt(index);
-      sales.insert(
-        index,
-        fullInvoice.sales[index].copyWith(
-          sale: currentSale.copyWith(
-            unitId: unitId,
-            unitPrice: fullInvoice.sales[index].product.unitById(unitId)!.price,
-          ),
-        ),
-      );
-    }
-    emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
+    //     sales.add(
+    //       sale.copyWith(
+    //         sale: sale.sale.copyWith(
+    //           unitId: unit.id,
+    //           unitPrice: unit.price,
+    //         ),
+    //       ),
+    //     );
+    //   }
+    //   emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
+    // } else {
+    //   sales.addAll(fullInvoice.sales);
+    //   sales.removeAt(index);
+    //   sales.insert(
+    //     index,
+    //     fullInvoice.sales[index].copyWith(
+    //       sale: currentSale.copyWith(
+    //         unitId: unitId,
+    //         unitPrice: fullInvoice.sales[index].product.unitById(unitId)!.price,
+    //       ),
+    //     ),
+    //   );
+    // }
+    // emit(state.copyWith(invoice: fullInvoice.copyWith(sales: sales)));
   }
 
   void onQuantityChangedOnSale(int index, String? value) {
@@ -195,7 +186,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
     if (quantity != null) {
       if (quantity >= 0) {
         final currentSale = fullInvoice.sales[index].sale;
-        List<FullSale> sales = [];
+        List<SaleModel> sales = [];
         sales.addAll(fullInvoice.sales);
         sales.removeAt(index);
         sales.insert(
@@ -216,7 +207,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
 
     final currentSale = fullInvoice.sales[index].sale;
     final quantity = currentSale.quantity + 1;
-    List<FullSale> sales = [];
+    List<SaleModel> sales = [];
     sales.addAll(fullInvoice.sales);
     sales.removeAt(index);
     sales.insert(
@@ -240,7 +231,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
     final currentSale = fullInvoice.sales[index].sale;
     final quantity = currentSale.quantity - 1;
     if (quantity >= 0) {
-      List<FullSale> sales = [];
+      List<SaleModel> sales = [];
       sales.addAll(fullInvoice.sales);
       sales.removeAt(index);
       sales.insert(
@@ -264,7 +255,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
     final price = double.tryParse(value ?? "");
     if (price != null) {
       final currentSale = fullInvoice.sales[index].sale;
-      List<FullSale> sales = [];
+      List<SaleModel> sales = [];
       sales.addAll(fullInvoice.sales);
       sales.removeAt(index);
       sales.insert(
@@ -281,7 +272,7 @@ class NewInvoiceCubit extends Cubit<NewInvoiceState> {
 
   void removeSale(int index) async {
     final fullInvoice = state.invoice;
-    List<FullSale> sales = [];
+    List<SaleModel> sales = [];
     sales.addAll(fullInvoice.sales);
     sales.removeAt(index);
     if (state.state.isUpdating) {

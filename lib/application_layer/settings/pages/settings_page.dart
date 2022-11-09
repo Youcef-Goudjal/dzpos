@@ -1,9 +1,3 @@
-import 'package:dzpos/application_layer/application_layer.dart';
-import 'package:dzpos/application_layer/auth/utils.dart';
-import 'package:dzpos/core/common_blocs/common_blocs.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/product/product.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
@@ -12,9 +6,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:settings_ui/settings_ui.dart';
 
-import '../../../core/manager/language/locale_keys.g.dart';
-import '../../../core/manager/route/routes.dart';
-import '../../../core/manager/theme/theme_manager.dart';
+import '../../../core/core.dart';
+import '../../../product/product.dart';
+import '../../application_layer.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);

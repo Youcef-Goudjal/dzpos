@@ -1,6 +1,6 @@
-import 'package:dzpos/application_layer/accounts/accounts.dart';
-import 'package:dzpos/application_layer/widgets/widgets.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
+import '../accounts.dart';
+import '../../widgets/widgets.dart';
+import '../../../core/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';

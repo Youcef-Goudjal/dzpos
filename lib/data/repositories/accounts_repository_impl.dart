@@ -1,8 +1,9 @@
-import 'package:dzpos/core/common_blocs/common_blocs.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/data/data.dart';
-import "package:dzpos/domain/repositories/accounts_repository.dart";
 import 'package:flutter/src/material/date.dart';
+
+import '../../core/common_blocs/common_blocs.dart';
+import '../../core/services/database.dart';
+import "../../domain/repositories/accounts_repository.dart";
+import '../data.dart';
 
 class AccountsRepositoryImpl implements AccountsRepository {
   final AccountsDao accountsDao = CommonBloc.accountsDao;
@@ -29,7 +30,7 @@ class AccountsRepositoryImpl implements AccountsRepository {
   Stream<List<Account>> get watchAllAccounts => accountsDao.watchAllAccounts;
 
   @override
-  Stream<List<FullDebt>> get debts => accountsDao.getDebts;
+  Stream<List<DebtModel>> get debts => accountsDao.getDebts;
 
   @override
   Future<int> registerDebt(DebtsCompanion newDebt) {

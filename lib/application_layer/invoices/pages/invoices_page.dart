@@ -1,17 +1,13 @@
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/data/repositories/repositories.dart';
-import 'package:dzpos/domain/domain.dart';
-import 'package:dzpos/product/product.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/enums.dart';
-import '../../../core/manager/language/locale_keys.g.dart';
-import '../../../core/manager/route/routes.dart';
-import '../../auth/utils.dart';
+import '../../../core/core.dart';
+import '../../../data/data.dart';
+import '../../../domain/domain.dart';
+import '../../../product/product.dart';
 
 final InvoicesRepository invoicesRepository = InvoicesRepositoryImpl();
 
@@ -188,7 +184,7 @@ enum InvoicesPages {
         context.pushNamed(
           AppRoutes.newInvoice.name,
           params: <String, String>{
-            'type': InvoiceType.sell.name,
+            'type': InvoiceType.sales.name,
             'action': InvoiceActions.insert.index.toString(),
           },
         );
@@ -198,7 +194,7 @@ enum InvoicesPages {
         context.pushNamed(
           AppRoutes.newInvoice.name,
           params: <String, String>{
-            'type': InvoiceType.buy.name,
+            'type': InvoiceType.purchase.name,
             'action': InvoiceActions.insert.index.toString(),
           },
         );

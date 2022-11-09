@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:dzpos/application_layer/application_layer.dart';
-import 'package:dzpos/core/common_blocs/common_blocs.dart';
-import 'package:dzpos/product/firebase_options.dart';
+import 'application_layer/application_layer.dart';
+import 'core/common_blocs/common_blocs.dart';
+import 'product/firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

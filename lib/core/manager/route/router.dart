@@ -1,14 +1,15 @@
 import 'dart:async';
 
-import 'package:dzpos/core/common_blocs/profile/profile_bloc.dart';
-import 'package:dzpos/core/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../application_layer/application_layer.dart';
+import '../../../data/data.dart';
 import '../../common_blocs/common_blocs.dart';
+import '../../common_blocs/profile/profile_bloc.dart';
 import '../../enums.dart';
+import '../../services/database.dart';
 import 'routes.dart';
 
 abstract class AppRouter {
@@ -34,7 +35,7 @@ abstract class AppRouter {
                     child: BlocProvider(
                       create: (context) => NewInvoiceCubit(
                         invoicesRepository,
-                        invoice: state.extra as FullInvoice?,
+                        invoice: state.extra as InvoiceModel?,
                         type: type,
                         action: action,
                       ),
@@ -55,7 +56,7 @@ abstract class AppRouter {
                   return MaterialPage(
                     key: state.pageKey,
                     child: ProductPage(
-                      product: state.extra as FullProduct?,
+                      product: state.extra as ProductModel?,
                     ),
                   );
                 },

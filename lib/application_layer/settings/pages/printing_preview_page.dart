@@ -1,10 +1,5 @@
 import 'dart:io';
 
-import 'package:dzpos/application_layer/auth/utils.dart';
-import 'package:dzpos/application_layer/settings/widgets/search_printers_dialog.dart';
-import 'package:dzpos/core/common_blocs/common_blocs.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +8,10 @@ import 'package:pdf/src/pdf/page_format.dart';
 import 'package:printing/printing.dart';
 
 import '../../../core/common_blocs/printer/printer_bloc.dart';
-import '../../../core/manager/language/locale_keys.g.dart';
-import '../../../core/utils/utils.dart';
+import '../../../core/core.dart';
 import '../../application_layer.dart';
+
+
 
 class PrintingPreviewPage extends StatelessWidget {
   const PrintingPreviewPage({super.key});

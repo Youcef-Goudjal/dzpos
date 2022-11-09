@@ -1,18 +1,13 @@
-import 'package:dzpos/application_layer/accounts/cubit/account_statement_cubit.dart';
-import 'package:dzpos/application_layer/auth/utils.dart';
-import 'package:dzpos/application_layer/widgets/widgets.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/services/database.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
-import '../../../core/manager/language/locale_keys.g.dart';
-import '../../../core/utils/utils.dart';
+import '../../../core/core.dart';
 import '../../../data/data.dart';
 import '../../../domain/domain.dart';
+import '../../application_layer.dart';
 
 final AccountsRepository accountsRepository = AccountsRepositoryImpl();
 

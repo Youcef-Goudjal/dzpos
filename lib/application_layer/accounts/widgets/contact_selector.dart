@@ -1,5 +1,5 @@
 import 'package:contacts_service/contacts_service.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
+import '../../../core/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';

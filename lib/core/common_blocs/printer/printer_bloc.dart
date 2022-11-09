@@ -14,6 +14,7 @@ import 'package:pdf/pdf.dart';
 import '../../../application_layer/application_layer.dart';
 import '../../../core/enums.dart';
 import '../../../core/services/database.dart';
+import '../../../data/data.dart';
 import 'build_thermal.dart';
 
 part 'printer_event.dart';

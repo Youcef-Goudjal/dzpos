@@ -1,4 +1,4 @@
-import 'package:dzpos/application_layer/application_layer.dart';
+import '../../application_layer.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 

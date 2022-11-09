@@ -1,20 +1,15 @@
-import 'package:dzpos/application_layer/auth/utils.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/manager/language/locale_keys.g.dart';
-import '../../../core/manager/route/routes.dart';
-import '../../../core/services/database.dart';
-import '../../../product/product.dart';
+import '../../../core/core.dart';
+import '../../../data/data.dart';
 import '../../application_layer.dart';
 
 class ProductPage extends StatefulWidget {
-  final FullProduct? product;
+  final ProductModel? product;
   const ProductPage({super.key, this.product});
 
   @override
@@ -140,28 +135,28 @@ class _ProductCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             child: Column(
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: RadioListTile<UnitType>(
-                        value: UnitType.sell,
-                        title: Text(LocaleKeys.unitSell.tr()),
-                        groupValue: unit.type,
-                        onChanged: (value) =>
-                            productCubit.onUnitTypeChanged(index, value),
-                      ),
-                    ),
-                    Expanded(
-                      child: RadioListTile<UnitType>(
-                        value: UnitType.buy,
-                        title: Text(LocaleKeys.unitBuy.tr()),
-                        groupValue: unit.type,
-                        onChanged: (value) =>
-                            productCubit.onUnitTypeChanged(index, value),
-                      ),
-                    ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: RadioListTile<UnitType>(
+                //         value: UnitType.sell,
+                //         title: Text(LocaleKeys.unitSell.tr()),
+                //         groupValue: unit.type,
+                //         onChanged: (value) =>
+                //             productCubit.onUnitTypeChanged(index, value),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: RadioListTile<UnitType>(
+                //         value: UnitType.buy,
+                //         title: Text(LocaleKeys.unitBuy.tr()),
+                //         groupValue: unit.type,
+                //         onChanged: (value) =>
+                //             productCubit.onUnitTypeChanged(index, value),
+                //       ),
+                //     ),
+                //   ],
+                // ),
                 5.heightBox,
                 10.h.heightBox,
                 Row(
@@ -170,7 +165,7 @@ class _ProductCard extends StatelessWidget {
                     10.w.widthBox,
                     Expanded(
                       child: AppTextField(
-                        initialValue: "${unit.price}",
+                        initialValue: "${unit.salePrice}",
                         keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
@@ -182,6 +177,24 @@ class _ProductCard extends StatelessWidget {
                   ],
                 ),
                 10.h.heightBox,
+                Row(
+                  children: [
+                    Text(LocaleKeys.price.tr()),
+                    10.w.widthBox,
+                    Expanded(
+                      child: AppTextField(
+                        initialValue: "${unit.purchasePrice}",
+                        keyboardType: const TextInputType.numberWithOptions(
+                          decimal: true,
+                        ),
+                        onChanged: (input) {
+                          productCubit.onPriceUnitUpdated(index, input);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                10.heightBox,
                 Row(
                   children: [
                     Text(LocaleKeys.box.tr()),
@@ -261,20 +274,7 @@ class _ProductInfo extends StatelessWidget {
           },
         ),
         10.heightBox,
-        Row(
-          children: [
-            SvgPicture.asset(AppAssets.barcode),
-            10.w.widthBox,
-            Expanded(
-              child: AppTextField(
-                initialValue: productCubit.state.product.productCode ?? "",
-                hint: "Barcode",
-                onChanged: productCubit.onBarCodeChanged,
-              ),
-            ),
-          ],
-        ),
-        15.h.heightBox,
+
         Row(
           children: [
             Text(LocaleKeys.Category.tr()),
@@ -366,6 +366,7 @@ class _ProductInfo extends StatelessWidget {
             20.widthBox,
             Expanded(
               child: AppTextField(
+                enabled: false,
                 initialValue: "${productCubit.state.product.unitInStock}",
                 onChanged: productCubit.onUnitInStockChanged,
                 keyboardType: const TextInputType.numberWithOptions(

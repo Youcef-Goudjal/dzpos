@@ -10,7 +10,7 @@ abstract class PrinterEvent extends Equatable {
 class UnPaireRequested extends PrinterEvent {}
 
 class PrintRequested extends PrinterEvent {
-  final FullInvoice invoice;
+  final InvoiceModel invoice;
 
   const PrintRequested(this.invoice);
   @override
@@ -38,7 +38,5 @@ class PrinterSelected extends PrinterEvent {
   @override
   List<Object> get props => [printer];
 }
-
-
 
 class BluetoothPrintRequested extends PrinterEvent {}

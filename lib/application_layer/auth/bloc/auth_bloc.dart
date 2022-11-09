@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:dzpos/core/common_blocs/common_blocs.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/data/models/models.dart';
-import 'package:dzpos/domain/domain.dart';
+import '../../../core/common_blocs/common_blocs.dart';
+import '../../../core/extensions/extensions.dart';
+import '../../../data/models/models.dart';
+import '../../../domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

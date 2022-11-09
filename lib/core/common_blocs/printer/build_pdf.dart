@@ -1,11 +1,12 @@
 import 'dart:typed_data';
 
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/product/constants/asset_constants.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
+import '../../../data/data.dart';
+import '../../../product/constants/asset_constants.dart';
+import '../../enums.dart';
 import '../../utils/utils.dart';
 
 const _darkColor = PdfColors.blueGrey800;
@@ -18,7 +19,7 @@ String? _logo;
 PdfColor get _accentTextColor => baseColor.isLight ? _lightColor : _darkColor;
 String? _bgShape;
 Future<Uint8List> buildPdf(
-    PdfPageFormat pageFormat, FullInvoice invoice) async {
+    PdfPageFormat pageFormat, InvoiceModel invoice) async {
   // Create a PDF document
   final doc = pw.Document();
 
@@ -48,7 +49,7 @@ Future<Uint8List> buildPdf(
   return doc.save();
 }
 
-pw.Widget _contentHeader(pw.Context context, FullInvoice invoice) {
+pw.Widget _contentHeader(pw.Context context, InvoiceModel invoice) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -117,15 +118,7 @@ pw.Widget _contentHeader(pw.Context context, FullInvoice invoice) {
   );
 }
 
-pw.Widget _contentTable(pw.Context context, FullInvoice invoice) {
-  const tableHeaders = [
-    "SKU#",
-    "Item",
-    "box",
-    "price",
-    "Quantity",
-    "Total",
-  ];
+pw.Widget _contentTable(pw.Context context, InvoiceModel invoice) {
   final products = invoice.sales;
   return pw.Table.fromTextArray(
     border: null,
@@ -162,20 +155,20 @@ pw.Widget _contentTable(pw.Context context, FullInvoice invoice) {
       ),
     ),
     headers: List<String>.generate(
-      tableHeaders.length,
-      (col) => tableHeaders[col],
+      PrintTableValues.values.length,
+      (col) => PrintTableValues.values[col].name,
     ),
     data: List<List<String>>.generate(
       products.length,
       (row) => List<String>.generate(
-        tableHeaders.length,
-        (col) => products[row].getIndex(col),
+        PrintTableValues.values.length,
+        (col) => products[row].getIndex(PrintTableValues.values[col]),
       ),
     ),
   );
 }
 
-pw.Widget _contentFooter(pw.Context context, FullInvoice invoice) {
+pw.Widget _contentFooter(pw.Context context, InvoiceModel invoice) {
   return pw.Row(
     crossAxisAlignment: pw.CrossAxisAlignment.start,
     children: [
@@ -317,7 +310,7 @@ pw.PageTheme _buildTheme(
   );
 }
 
-pw.Widget _buildHeader(pw.Context context, FullInvoice invoice) {
+pw.Widget _buildHeader(pw.Context context, InvoiceModel invoice) {
   return pw.Column(
     children: [
       pw.Row(
@@ -388,7 +381,7 @@ pw.Widget _buildHeader(pw.Context context, FullInvoice invoice) {
   );
 }
 
-pw.Widget _buildFooter(pw.Context context, FullInvoice invoice) {
+pw.Widget _buildFooter(pw.Context context, InvoiceModel invoice) {
   return pw.Row(
     mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
     crossAxisAlignment: pw.CrossAxisAlignment.end,

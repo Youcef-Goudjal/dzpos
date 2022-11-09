@@ -8,7 +8,7 @@ class ShowInvoicesState extends Equatable {
     this.msg,
   });
   final Status status;
-  final List<FullInvoice> invoices;
+  final List<InvoiceModel> invoices;
   final Map<int, bool> checkedInvoices;
   final String? msg;
   @override
@@ -16,7 +16,7 @@ class ShowInvoicesState extends Equatable {
 
   ShowInvoicesState copyWith({
     Status? status,
-    List<FullInvoice>? invoices,
+    List<InvoiceModel>? invoices,
     Map<int, bool>? checkedInvoices,
     String? msg,
   }) {

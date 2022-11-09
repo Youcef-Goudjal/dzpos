@@ -1,18 +1,17 @@
 import 'package:drift/drift.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/data/repositories/repositories.dart';
-import 'package:dzpos/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/core.dart';
+import '../../../data/data.dart';
+import '../../../domain/domain.dart';
 
 part 'product_state.dart';
 
 class ProductCubit extends Cubit<ProductState> {
   final InvoicesRepository repository = InvoicesRepositoryImpl();
 
-  ProductCubit({FullProduct? product}) : super(const ProductState()) {
+  ProductCubit({ProductModel? product}) : super(const ProductState()) {
     if (product == null) {
       // if the product is null we create empty product
       repository.createEmptyProduct().then(
@@ -49,8 +48,8 @@ class ProductCubit extends Cubit<ProductState> {
       state.copyWith(
         product: fullProduct.copyWith(
             product: fullProduct.product.copyWith(
-          code: Value(value),
-        )),
+                // code: Value(value),
+                )),
       ),
     );
   }
@@ -63,7 +62,7 @@ class ProductCubit extends Cubit<ProductState> {
         state.copyWith(
           product: fullProduct.copyWith(
               product: fullProduct.product.copyWith(
-            unitInStock: unitInStock,
+            minimumToOrderInStock: unitInStock,
           )),
         ),
       );
@@ -124,14 +123,7 @@ class ProductCubit extends Cubit<ProductState> {
     List<ProductUnit> unitsList = [];
     unitsList.addAll([
       ...fullProduct.unitsList,
-      ProductUnit(
-        id: -1,
-        price: 0,
-        box: 1,
-        subTotal: 0,
-        productId: fullProduct.productId,
-        type: UnitType.sell,
-      ),
+      emptyProductUnit,
     ]);
 
     emit(
@@ -170,8 +162,8 @@ class ProductCubit extends Cubit<ProductState> {
       unitsList.insert(
           index,
           fullProduct.unitsList[index].copyWith(
-            price: price,
-          ));
+              // price: price,
+              ));
 
       emit(
         state.copyWith(
@@ -210,24 +202,17 @@ class ProductCubit extends Cubit<ProductState> {
     try {
       final product = state.product;
       if (product.isNotEmpty) {
-        if (product.category.isNotEmpty) {
-          if (product.unitsList.isNotEmpty) {
-            await repository.writeProduct(product);
-            emit(state.copyWith(
-              save: true,
-              status: Status.success,
-              msg: "product added successfully",
-            ));
-          } else {
-            emit(state.copyWith(
-              status: Status.failure,
-              msg: "please add at least on unit",
-            ));
-          }
+        if (product.unitsList.isNotEmpty) {
+          await repository.writeProduct(product);
+          emit(state.copyWith(
+            save: true,
+            status: Status.success,
+            msg: "product added successfully",
+          ));
         } else {
           emit(state.copyWith(
             status: Status.failure,
-            msg: "please select a category",
+            msg: "please add at least on unit",
           ));
         }
       } else {
@@ -263,8 +248,8 @@ class ProductCubit extends Cubit<ProductState> {
     unitsList.insert(
         index,
         fullProduct.unitsList[index].copyWith(
-          type: value,
-        ));
+            // type: value,
+            ));
 
     emit(
       state.copyWith(
@@ -281,8 +266,8 @@ class ProductCubit extends Cubit<ProductState> {
       state.copyWith(
         product: fullProduct.copyWith(
           product: fullProduct.product.copyWith(
-            code: Value(input),
-          ),
+              // code: Value(input),
+              ),
         ),
       ),
     );

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:dzpos/application_layer/application_layer.dart';
-import 'package:dzpos/core/common_blocs/common_blocs.dart';
+import '../../../application_layer/application_layer.dart';
+import '../common_blocs.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,4 @@
-import 'package:dzpos/application_layer/application_layer.dart';
+import '../../application_layer.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';

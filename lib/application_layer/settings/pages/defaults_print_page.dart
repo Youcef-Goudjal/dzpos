@@ -1,6 +1,6 @@
-import 'package:dzpos/application_layer/widgets/app_text_field.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/product/constants/constants.dart';
+import '../../widgets/app_text_field.dart';
+import '../../../core/extensions/extensions.dart';
+import '../../../product/constants/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 

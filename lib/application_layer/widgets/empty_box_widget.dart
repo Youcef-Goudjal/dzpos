@@ -1,4 +1,4 @@
-import 'package:dzpos/product/constants/constants.dart';
+import '../../product/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

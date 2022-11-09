@@ -37,20 +37,40 @@ class Users extends Table {
 /// user_id:  refers to the user who encoded the item information.
 @DataClassName("Product")
 class Products extends Table {
+  // id
   IntColumn get id => integer().autoIncrement()();
-  TextColumn get code => text().nullable()();
+  // name
   TextColumn get name => text()();
+  TextColumn get secondName => text().nullable()();
+  IntColumn get type =>
+      intEnum().withDefault(Constant(ProductType.material.index))();
   IntColumn get categoryId =>
       integer().nullable().references(ProductCategories, #id)();
-  IntColumn get fixedSellUnitId => integer().nullable()();
-  IntColumn get fixedPurchaseUnitId => integer().nullable()();
-  RealColumn get unitInStock => real().withDefault(const Constant(0))();
-  RealColumn get discountPercentage =>
-      real().check(discountPercentage.isNotNull())();
-  RealColumn get reorderLevel => real()();
+  RealColumn get minimumToOrderInStock =>
+      real().withDefault(const Constant(0))();
+  RealColumn get unitInStock => real().withDefault(Constant(0))();
+  TextColumn get notes => text().nullable()();
+
+  // taxes
+  BoolColumn get useTaxes => boolean().withDefault(Constant(false))();
+  RealColumn get taxesValue => real().withDefault(Constant(0))();
+  // is frozen not showing the product in new invoice
   BoolColumn get isFrozen => boolean().withDefault(const Constant(false))();
+  // image of the product
+  BlobColumn get image => blob().nullable()();
+
+  /// Units And prices
+  IntColumn get fixedUnitId => integer().withDefault(Constant(0))();
+
+  // units
+  IntColumn get unit1 => integer().references(ProductUnits, #id)();
+  IntColumn get unit2 => integer().nullable().references(ProductUnits, #id)();
+  IntColumn get unit3 => integer().nullable().references(ProductUnits, #id)();
+
   IntColumn get userId => integer().nullable().references(Users, #id)();
 }
+
+enum ProductType { material, service }
 
 /// productUnit (unit_id, unit_name)
 /// desc: unit refers to the unit of measurement that is used as a standard for measurement of the same kind of quantity
@@ -64,15 +84,17 @@ class Products extends Table {
 /// product Id : ref to the product
 @DataClassName("ProductUnit")
 class ProductUnits extends Table {
+  BoolColumn get isActive => boolean().withDefault(Constant(true))();
   IntColumn get id => integer().autoIncrement()();
-  IntColumn get type => intEnum<UnitType>()();
-  RealColumn get price => real()();
+  TextColumn get barCode => text().nullable()();
+  IntColumn get generalUnit =>
+      intEnum().withDefault(Constant(GeneralUnits.Piece.index))();
+  RealColumn get purchasePrice => real()();
+  RealColumn get salePrice => real()();
   RealColumn get box => real().withDefault(const Constant(1))();
-  RealColumn get subTotal => real().generatedAs(price * box)();
+  RealColumn get subTotal => real().generatedAs(salePrice * box)();
   IntColumn get productId => integer().references(Products, #id)();
 }
-
-enum UnitType { sell, buy }
 
 ///productCategory (category_id, category_name)
 ///desc: products are grouped according to their type and the type of products will be encoded and stored in the tlb ProductCategory.
@@ -93,22 +115,6 @@ class ProductCategories extends Table {
 ///(3) customer_name is the full name of the customer,
 ///(4) contact is to the contact number or mobile number of the customer and,
 ///(5) address is to the complete address of the customer.
-enum AccountType {
-  customer,
-  supplier,
-  none;
-
-  String get name {
-    switch (this) {
-      case AccountType.customer:
-        return LocaleKeys.Customer.tr();
-      case AccountType.supplier:
-        return LocaleKeys.Supplier.tr();
-      default:
-        return "none";
-    }
-  }
-}
 
 @DataClassName("Account")
 class Accounts extends Table {
@@ -119,8 +125,14 @@ class Accounts extends Table {
   TextColumn get address => text().nullable().withLength(max: 100)();
   TextColumn get email => text().nullable().withLength(max: 50)();
   IntColumn get accountType => intEnum<AccountType>()();
+  TextColumn get taxNumber => text().nullable()();
+  RealColumn get maxDebtAccount => real().nullable()();
+  DateTimeColumn get lastDateDebt => dateTime().nullable()();
+  IntColumn get defaultCurrency => intEnum<Currency>().nullable()();
   BoolColumn get isFrozen => boolean().withDefault(const Constant(false))();
 }
+
+enum Currency { Dzd, euro, dollar }
 
 /// sales (sales_id, invoice_id, product_id, quantity, unit_price, sub_total)
 /// desc: sales is the table where the list of items or products bought by the customers will be stored.
@@ -179,8 +191,11 @@ class Invoices extends Table {
   IntColumn get accountId => integer().references(Accounts, #id)();
   IntColumn get paymentType => intEnum<PaymentType>()();
   IntColumn get invoiceType => intEnum<InvoiceType>()();
-  RealColumn get totalAmount => real().nullable()();
-  RealColumn get amountTendered => real()();
+  RealColumn get totalAmount => real()();
+  RealColumn get amountTendered => real().withDefault(Constant(0))();
+  RealColumn get discountAmount => real().withDefault(Constant(0))();
+  RealColumn get net => real().withDefault(Constant(0))();
+  TextColumn get notes => text().nullable()();
   DateTimeColumn get dateRecorded =>
       dateTime().withDefault(currentDateAndTime)();
   IntColumn get userId => integer().nullable().references(Users, #id)();
@@ -258,9 +273,4 @@ class Debts extends Table {
   IntColumn get invoiceId => integer().nullable().references(Invoices, #id)();
   TextColumn get description => text().nullable()();
   IntColumn get userId => integer().nullable().references(Users, #id)();
-}
-
-enum DeptType {
-  old,
-  invoice,
 }

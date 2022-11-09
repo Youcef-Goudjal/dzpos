@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:drift/drift.dart';
-import 'package:dzpos/application_layer/application_layer.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/data/data.dart';
-import 'package:dzpos/domain/domain.dart';
+import '../../application_layer.dart';
+import '../../../core/enums.dart';
+import '../../../core/services/database.dart';
+import '../../../data/data.dart';
+import '../../../domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

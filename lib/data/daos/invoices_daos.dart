@@ -1,11 +1,11 @@
 import 'package:drift/drift.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/data/data.dart';
-import 'package:dzpos/product/constants/constants.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../application_layer/application_layer.dart';
+import '../../core/enums.dart';
+import '../../core/services/database.dart';
+import '../../product/constants/constants.dart';
+import '../data.dart';
 
 part 'invoices_daos.g.dart';
 
@@ -50,29 +50,19 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Future<FullInvoice> createEmptyInvoice() async {
+  Future<InvoiceModel> createEmptyInvoice() async {
     final id = await into(invoices).insert(InvoicesCompanion.insert(
       accountId: -1,
       paymentType: PaymentType.cache,
-      invoiceType: InvoiceType.sell,
-      amountTendered: 0,
+      invoiceType: InvoiceType.sales,
+      totalAmount: 0,
     ));
-    final invoice = Invoice(
+    final invoice = emptyInvoice.copyWith(
       id: id,
-      accountId: -1,
-      invoiceType: InvoiceType.sell,
-      paymentType: PaymentType.cache,
-      amountTendered: 0,
-      dateRecorded: DateTime.now(),
     );
-    const account = Account(
-      id: -1,
-      name: "",
-      accountType: AccountType.none,
-      isFrozen: false,
-    );
+    const account = emptyAccount;
 
-    return FullInvoice(
+    return InvoiceModel(
       invoice,
       const [],
       account,
@@ -80,7 +70,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Stream<List<FullProduct>> get watchProducts {
+  Stream<List<ProductModel>> get watchProducts {
     final productStream = select(products).watch();
     return productStream.switchMap((value) {
       /// mapping id to product
@@ -113,7 +103,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
 
           return [
             for (var id in ids)
-              FullProduct(
+              ProductModel(
                 product: idToProduct[id]!,
                 category: idToCategories[id] ??
                     const ProductCategory(id: -1, name: ""),
@@ -126,7 +116,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Future<void> writeProduct(FullProduct entry) {
+  Future<void> writeProduct(ProductModel entry) {
     return transaction(() async {
       final product = entry.product.copyWith(
         categoryId: Value(entry.category.id),
@@ -137,9 +127,9 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       // now we add the units
       for (final unit in entry.unitsList) {
         final unitCompanion = ProductUnitsCompanion.insert(
-          type: unit.type,
           id: (unit.id == -1) ? const Value.absent() : Value(unit.id),
-          price: unit.price,
+          purchasePrice: unit.purchasePrice,
+          salePrice: unit.salePrice,
           productId: product.id,
           box: Value(unit.box),
         );
@@ -152,13 +142,12 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Future<FullProduct> createEmptyProduct() async {
+  Future<ProductModel> createEmptyProduct() async {
     final id = await into(products).insert(ProductsCompanion.insert(
+      unit1: -1,
       name: "",
-      discountPercentage: 1,
-      reorderLevel: 0,
     ));
-    const product = FullProduct.empty;
+    const product = ProductModel.empty;
 
     return product.copyWith(
       product: product.product.copyWith(id: id),
@@ -166,10 +155,10 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Future<FullInvoice> get allInvoices => throw UnimplementedError();
+  Future<InvoiceModel> get allInvoices => throw UnimplementedError();
 
   @override
-  Future<void> writeInvoice(FullInvoice entry,
+  Future<void> writeInvoice(InvoiceModel entry,
       {InvoiceState action = InvoiceState.New}) {
     return transaction(() async {
       final invoice = entry.invoice.copyWith(
@@ -178,13 +167,14 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
       // first we replace the invoice
       await into(invoices).insert(invoice, mode: InsertMode.replace);
       if (StorageKeys.settingsAddQuantity.storedValue ?? false) {
-        if (invoice.invoiceType == InvoiceType.sell) {
+        if (invoice.invoiceType.isSales) {
           for (var sale in entry.sales) {
             await (update(products)
                   ..where((tbl) => tbl.id.equals(sale.productId)))
                 .write(
               ProductsCompanion(
-                unitInStock: Value(sale.product.unitInStock - sale.quantity),
+                minimumToOrderInStock:
+                    Value(sale.product.unitInStock - sale.quantity),
               ),
             );
           }
@@ -194,7 +184,8 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
                   ..where((tbl) => tbl.id.equals(sale.productId)))
                 .write(
               ProductsCompanion(
-                unitInStock: Value(sale.product.unitInStock + sale.quantity),
+                minimumToOrderInStock:
+                    Value(sale.product.unitInStock + sale.quantity),
               ),
             );
           }
@@ -207,9 +198,11 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
             salesId: (s.saleId == -1) ? const Value.absent() : Value(s.saleId),
             invoiceId: invoice.id,
             productId: s.productId,
-            unitId: s.unitId,
+            unitId: s.unit.id,
             quantity: s.quantity,
-            unitPrice: s.unitPrice,
+            unitPrice: entry.invoiceType.isPurchaseOrPurchaseReturn
+                ? s.purchasePrice
+                : s.salePrice,
           ),
           mode: InsertMode.insertOrReplace,
         );
@@ -246,16 +239,17 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Future<void> deleteInvoice(FullInvoice invoice) {
+  Future<void> deleteInvoice(InvoiceModel invoice) {
     return transaction(() async {
       if (StorageKeys.settingsAddQuantity.storedValue ?? false) {
-        if (invoice.invoiceType == InvoiceType.sell) {
+        if (invoice.invoiceType.isSales) {
           for (var sale in invoice.sales) {
             await (update(products)
                   ..where((tbl) => tbl.id.equals(sale.productId)))
                 .write(
               ProductsCompanion(
-                unitInStock: Value(sale.product.unitInStock + sale.quantity),
+                minimumToOrderInStock:
+                    Value(sale.product.unitInStock + sale.quantity),
               ),
             );
           }
@@ -265,7 +259,8 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
                   ..where((tbl) => tbl.id.equals(sale.productId)))
                 .write(
               ProductsCompanion(
-                unitInStock: Value(sale.product.unitInStock - sale.quantity),
+                minimumToOrderInStock:
+                    Value(sale.product.unitInStock - sale.quantity),
               ),
             );
           }
@@ -288,7 +283,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Stream<List<FullInvoice>> get watchAllInvoices async* {
+  Stream<List<InvoiceModel>> get watchAllInvoices async* {
     final invoiceStream = select(invoices).watch();
 
     final idToProduct = {for (var p in await allProducts) p.productId: p};
@@ -306,7 +301,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
         ..orderBy([OrderingTerm.asc(invoices.id)]);
 
       return query.watch().map((rows) {
-        final idToSales = <int, List<FullSale>>{};
+        final idToSales = <int, List<SaleModel>>{};
         final idToAccount = <int, Account>{};
 
         for (var row in rows) {
@@ -315,7 +310,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
           final id = row.readTable(invoices).id;
           idToAccount.putIfAbsent(id, () => account);
           idToSales.putIfAbsent(id, () => []).add(
-                FullSale(
+                SaleModel(
                   sale,
                   idToProduct[sale.productId]!,
                 ),
@@ -323,7 +318,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
         }
         return [
           for (var id in ids)
-            FullInvoice(
+            InvoiceModel(
               idToInvoice[id]!,
               idToSales[id] ?? [],
               idToAccount[id] ??
@@ -339,7 +334,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
     });
   }
 
-  Future<List<FullProduct>> get allProducts async {
+  Future<List<ProductModel>> get allProducts async {
     final productList = await select(products).get();
 
     /// mapping id to product
@@ -364,7 +359,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
     }
     return [
       for (var id in ids)
-        FullProduct(
+        ProductModel(
           product: idToProduct[id]!,
           category:
               idToCategories[id] ?? const ProductCategory(id: -1, name: ""),
@@ -385,7 +380,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
   }
 
   @override
-  Future<List<FullProduct>> loadProducts({int? accountId}) async {
+  Future<List<ProductModel>> loadProducts({int? accountId}) async {
     final productFuture = select(products).get();
     return productFuture.then((value) async {
       /// mapping id to product
@@ -464,7 +459,7 @@ class InvoicesDao extends DatabaseAccessor<MyDatabase>
 
       return [
         for (var id in ids)
-          FullProduct(
+          ProductModel(
             product: idToProduct[id]!,
             category: idToCategories[id] ??
                 const ProductCategory(

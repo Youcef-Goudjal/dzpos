@@ -10,7 +10,7 @@ enum ProductStatus {
 
 class ProductState extends Equatable {
   const ProductState({
-    this.product = FullProduct.empty,
+    this.product = ProductModel.empty,
     this.status = Status.initial,
     this.productStatus = ProductStatus.newProduct,
     this.msg,
@@ -18,7 +18,7 @@ class ProductState extends Equatable {
     this.save = false,
   });
   final bool save;
-  final FullProduct product;
+  final ProductModel product;
   final Status status;
   final ProductStatus productStatus;
   final String? msg;
@@ -29,7 +29,7 @@ class ProductState extends Equatable {
       [product, status, categoryName, productStatus, save];
 
   ProductState copyWith({
-    FullProduct? product,
+    ProductModel? product,
     Status? status,
     ProductStatus? state,
     String? msg,

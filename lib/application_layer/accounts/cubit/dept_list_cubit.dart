@@ -1,11 +1,12 @@
 import 'dart:async';
 
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/domain/domain.dart';
+import '../../../core/services/database.dart';
+import '../../../domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/enums.dart';
+import '../../../data/data.dart';
 
 part 'dept_list_state.dart';
 

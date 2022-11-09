@@ -1,4 +1,4 @@
-import 'package:dzpos/core/enums.dart';
+import '../../../core/enums.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:form_inputs/form_inputs.dart';

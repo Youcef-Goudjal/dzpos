@@ -1,9 +1,3 @@
-import 'package:dzpos/application_layer/application_layer.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/core/utils/utils.dart';
-import 'package:dzpos/product/constants/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,15 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/manager/language/locale_keys.g.dart';
-import '../../../core/manager/route/routes.dart';
-import '../../auth/utils.dart';
+import '../../../core/core.dart';
+import '../../../product/product.dart';
+import '../../application_layer.dart';
 
 class NewInvoicePage extends StatefulWidget {
   final InvoiceType type;
   const NewInvoicePage({
     super.key,
-    this.type = InvoiceType.sell,
+    this.type = InvoiceType.sales,
   });
 
   @override
@@ -142,7 +136,8 @@ class StartDialog extends StatelessWidget {
                     Expanded(
                       child: AppTextField(
                         initialValue: newInvoiceCubit.state.state.isUpdating
-                            ? newInvoiceCubit.state.invoice.time
+                            ? formatDate(
+                                newInvoiceCubit.state.invoice.dateRecorded)
                             : getTime(),
                       ),
                     ),
@@ -150,7 +145,8 @@ class StartDialog extends StatelessWidget {
                     Expanded(
                         child: AppTextField(
                       initialValue: newInvoiceCubit.state.state.isUpdating
-                          ? newInvoiceCubit.state.invoice.time
+                          ? formatDate(
+                              newInvoiceCubit.state.invoice.dateRecorded)
                           : getTime(),
                     )),
                     5.w.widthBox,
@@ -314,7 +310,7 @@ class _ActionsInvoice extends StatelessWidget {
                 context.replaceNamed(
                   AppRoutes.newInvoice.name,
                   params: <String, String>{
-                    'type': InvoiceType.buy.name,
+                    'type': InvoiceType.purchase.name,
                     'action': InvoiceActions.insert.index.toString(),
                   },
                 );
@@ -404,8 +400,13 @@ class _BodyInvoice extends StatelessWidget {
                     key: UniqueKey(),
                     child: BlocBuilder<NewInvoiceCubit, NewInvoiceState>(
                       buildWhen: (p, c) {
-                        return p.invoice.sales[index].subTotal !=
-                            c.invoice.sales[index].subTotal;
+                        if (p.type.isPurchaseOrPurchaseReturn) {
+                          return p.invoice.sales[index].purchaseSubTotal !=
+                              c.invoice.sales[index].purchaseSubTotal;
+                        } else {
+                          return p.invoice.sales[index].saleSubTotal !=
+                              c.invoice.sales[index].saleSubTotal;
+                        }
                       },
                       builder: (context, local) {
                         final sale = local.invoice.sales[index];
@@ -469,7 +470,8 @@ class _BodyInvoice extends StatelessWidget {
                                       Expanded(
                                         child: AppTextField(
                                           isDense: true,
-                                          initialValue: "${sale.subTotal}",
+                                          initialValue:
+                                              "${local.type.isPurchaseOrPurchaseReturn ? sale.purchaseSubTotal : sale.saleSubTotal}",
                                           enabled: false,
                                           hint: "SubTotal",
                                           // onChanged: (input,
@@ -479,7 +481,8 @@ class _BodyInvoice extends StatelessWidget {
                                       Expanded(
                                           child: AppTextField(
                                         isDense: true,
-                                        initialValue: "${sale.unitPrice}",
+                                        initialValue:
+                                            "${local.type.isPurchaseOrPurchaseReturn ? sale.purchasePrice : sale.salePrice}",
                                         hint: "Price",
                                         onChanged: (value) => cubit
                                             .onPriceChangedOnSale(index, value),
@@ -487,18 +490,19 @@ class _BodyInvoice extends StatelessWidget {
                                       5.widthBox,
                                       Expanded(
                                         child: DropdownButton<int>(
-                                          value: sale.unitId,
+                                          value: sale.unit.id,
                                           isExpanded: true,
-                                          items: (local.type == InvoiceType.sell
-                                                  ? sale.product.salesUnits
-                                                  : sale.product.purchaseUnits)
-                                              .map((e) {
+                                          items:
+                                              sale.product.unitsList.map((e) {
                                             return DropdownMenuItem<int>(
                                               value: e.id,
                                               child: FittedBox(
                                                 child: Text(
                                                   formatCurrency(
-                                                    e.price,
+                                                    local.type
+                                                            .isPurchaseOrPurchaseReturn
+                                                        ? e.purchasePrice
+                                                        : e.salePrice,
                                                   ),
                                                   style: const TextStyle(
                                                     overflow: TextOverflow.fade,

@@ -1,15 +1,13 @@
 import 'dart:async';
 
-import 'package:dzpos/application_layer/invoices/pages/pricing_policy_page.dart';
-import 'package:dzpos/core/enums.dart';
-import 'package:dzpos/core/services/database.dart';
-import 'package:dzpos/data/repositories/repositories.dart';
-import 'package:dzpos/product/product.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/enums.dart';
 import '../../../core/manager/language/locale_keys.g.dart';
+import '../../../data/data.dart';
+import '../../../product/product.dart';
 
 part 'pricing_policy_state.dart';
 
@@ -66,7 +64,7 @@ class PricingPolicyCubit extends Cubit<PricingPolicyState> {
     }
   }
 
-  void onProductSelected(FullProduct value) {}
+  void onProductSelected(ProductModel value) {}
 
   void onPricingMethodChanged(PricingMethods? value) {
     if (value != null) {
@@ -77,13 +75,12 @@ class PricingPolicyCubit extends Cubit<PricingPolicyState> {
     }
   }
 
-  Future<Iterable<FullProduct>> suggestionCallback(String input) async {
-    List<FullProduct> products = [];
+  Future<Iterable<ProductModel>> suggestionCallback(String input) async {
+    List<ProductModel> products = [];
     products.addAll(
       (await _repository.watchProducts.first).where(
         (element) => (element.productName.contains(input) ||
-            element.categoryName.contains(input) ||
-            (element.productCode?.contains(input) ?? false)),
+            element.categoryName.contains(input)),
       ),
     );
     emit(state.copyWith(

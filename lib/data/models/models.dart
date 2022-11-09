@@ -1,6 +1,6 @@
-export 'accounts_model.dart';
-export 'invoices_model.dart';
+export 'account_model.dart';
+export 'debt_model.dart';
+export 'invoice_model.dart';
 export 'product_model.dart';
-export 'reports_model.dart';
-export 'settings_model.dart';
+export 'sale_model.dart';
 export 'user_model.dart';

@@ -1,6 +1,6 @@
-import 'package:dzpos/core/extensions/extensions.dart';
-import 'package:dzpos/core/utils/utils.dart';
-import 'package:dzpos/product/constants/constants.dart';
+import '../../../core/extensions/extensions.dart';
+import '../../../core/utils/utils.dart';
+import '../../../product/constants/constants.dart';
 import 'package:easy_localization/easy_localization.dart' hide TextDirection;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

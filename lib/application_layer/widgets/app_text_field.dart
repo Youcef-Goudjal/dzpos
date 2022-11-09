@@ -1,4 +1,4 @@
-import 'package:dzpos/core/extensions/extensions.dart';
+import '../../core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatefulWidget {
@@ -6,6 +6,7 @@ class AppTextField extends StatefulWidget {
     super.key,
     this.controller,
     this.hint,
+    this.label,
     this.keyboardType,
     this.obscureText = false,
     this.maxLine = 1,
@@ -27,9 +28,10 @@ class AppTextField extends StatefulWidget {
   final Widget? suffix;
   final int? maxLine;
   final String? hint;
+  final String? label;
   final bool? enabled;
   final bool? isDense;
-  String? errorText;
+  final String? errorText;
   final void Function(String input)? onChanged;
 
   @override
@@ -62,6 +64,7 @@ class _AppTextFieldState extends State<AppTextField> {
             style: context.textTheme.bodyMedium,
             textAlign: TextAlign.center,
             decoration: InputDecoration(
+              label: widget.label != null ? Text(widget.label!) : null,
               isDense: widget.isDense,
               errorText: widget.errorText,
               suffixIcon: widget.obscureText

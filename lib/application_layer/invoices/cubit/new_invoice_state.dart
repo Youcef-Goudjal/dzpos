@@ -12,22 +12,22 @@ enum InvoiceState {
 
 class NewInvoiceState extends Equatable {
   NewInvoiceState({
-    FullInvoice? invoice,
+    InvoiceModel? invoice,
     this.status = Status.initial,
     this.state = InvoiceState.New,
     this.save = false,
     this.products = const [],
     InvoiceType? type,
     this.msg,
-  })  : invoice = invoice ?? FullInvoice.empty,
-        type = type ?? InvoiceType.sell;
-  final FullInvoice invoice;
+  })  : invoice = invoice ?? InvoiceModel.empty,
+        type = type ?? InvoiceType.sales;
+  final InvoiceModel invoice;
   final bool save;
   final Status status;
   final InvoiceState state;
   final InvoiceType type;
   final String? msg;
-  final List<FullProduct> products;
+  final List<ProductModel> products;
 
   @override
   List<Object?> get props => [
@@ -39,12 +39,12 @@ class NewInvoiceState extends Equatable {
       ];
 
   NewInvoiceState copyWith({
-    FullInvoice? invoice,
+    InvoiceModel? invoice,
     bool? save,
     Status? status,
     InvoiceState? state,
     String? msg,
-    List<FullProduct>? products,
+    List<ProductModel>? products,
     InvoiceType? type,
   }) {
     return NewInvoiceState(

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:dzpos/core/manager/theme/theme_manager.dart';
-import 'package:dzpos/product/product.dart';
+import '../../manager/theme/theme_manager.dart';
+import '../../../product/product.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';

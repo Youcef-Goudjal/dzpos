@@ -1,13 +1,11 @@
-import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/manager/language/locale_keys.g.dart';
-import '../../../core/manager/route/routes.dart';
-import '../../../core/services/database.dart';
+import '../../../core/core.dart';
+import '../../../data/data.dart';
 import '../../application_layer.dart';
 
 class ListOfMaterialsPage extends StatelessWidget {
@@ -158,7 +156,8 @@ class _MaterialsBody extends StatelessWidget {
                                     ])),
                                 const Spacer(),
                                 Text(
-                                    "${LocaleKeys.price.tr()} ${product.getUnit?.price ?? "0.0"}")
+                                    //TODO: change the price depending if the invoice is sale or purchase
+                                    "${LocaleKeys.price.tr()} ${formatCurrency(product.salePriceUnit)}")
                               ],
                             ),
                           ),
@@ -207,7 +206,7 @@ class _MaterialsBody extends StatelessWidget {
 }
 
 class MaterialSearchDelegate extends SearchDelegate {
-  final List<FullProduct> materials;
+  final List<ProductModel> materials;
 
   MaterialSearchDelegate(this.materials);
   @override

@@ -46,6 +46,7 @@ enum StorageKeys {
   settingsAlwaysBackup(StoredType.bool),
   settingsAddQuantity(StoredType.bool),
   settingsUseBox(StoredType.bool),
+  settingsUsePricingPolicy(StoredType.bool),
   settingsSellLestThanCost(StoredType.bool),
   settingsActivateNotificationOfQuantity(StoredType.bool),
   settingsAllowSellWhenQuantityIsZero(StoredType.bool),
@@ -55,6 +56,8 @@ enum StorageKeys {
   settingsShowFrozenProducts(StoredType.bool),
   settingsShowFrozenAccounts(StoredType.bool),
   settingsUpdateAllUnitsInInvoice(StoredType.bool),
+  settingsShowDebtDialog(StoredType.bool),
+  settingsRememberDebtOption(StoredType.bool),
   ;
 
   final StoredType type;

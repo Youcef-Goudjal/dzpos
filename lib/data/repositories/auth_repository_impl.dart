@@ -1,6 +1,6 @@
-import 'package:dzpos/data/data.dart';
-import 'package:dzpos/domain/entities/user_entity.dart';
-import "package:dzpos/domain/repositories/auth_repository.dart";
+import '../data.dart';
+import '../../domain/entities/user_entity.dart';
+import "../../domain/repositories/auth_repository.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthRepositoryImpl implements AuthRepository {

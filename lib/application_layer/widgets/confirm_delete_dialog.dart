@@ -1,4 +1,4 @@
-import 'package:dzpos/core/extensions/extensions.dart';
+import '../../core/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
 Future<String?> confirmDeleteDialog(BuildContext context, {String? msg}) async {

@@ -1,15 +1,11 @@
-import 'package:dzpos/application_layer/application_layer.dart';
-import 'package:dzpos/application_layer/auth/utils.dart';
-import 'package:dzpos/core/extensions/extensions.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/manager/language/locale_keys.g.dart';
-import '../../../core/manager/route/routes.dart';
-import '../../../core/services/database.dart';
+import '../../../core/core.dart';
+import '../../application_layer.dart';
 
 class NewAccountPage extends StatelessWidget {
   final Account? account;
